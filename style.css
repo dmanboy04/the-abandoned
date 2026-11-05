@@ -627,3 +627,20 @@ footer p {
 @media (max-width: 600px) {
     .project-file { padding: 25px 20px; }
 }
+.camera-controls {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.camera-button {
+    position: relative;
+    z-index: 11;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.camera-screen {
+    position: relative;
+    z-index: 1;
+}
