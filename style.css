@@ -390,3 +390,65 @@ footer .copyright {
     }
 }
 
+/* HORROR ATMOSPHERE UPGRADE */
+
+.section {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Moving atmospheric light */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(
+        350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(120, 30, 30, 0.18),
+        transparent 75%
+    );
+}
+
+/* Creepy red glow */
+.hero h1 span {
+    animation: redPulse 4s infinite alternate;
+}
+
+@keyframes redPulse {
+    from {
+        text-shadow: 0 0 10px #9d292930;
+    }
+    to {
+        text-shadow: 0 0 35px #d43b3b90;
+    }
+}
+
+/* Feature card animation */
+.feature {
+    position: relative;
+    overflow: hidden;
+}
+
+.feature::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #d43b3b;
+    transition: width .4s ease;
+}
+
+.feature:hover::after {
+    width: 100%;
+}
+
