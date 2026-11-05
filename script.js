@@ -387,97 +387,78 @@ document.addEventListener("DOMContentLoaded", () => {
             if (status) status.textContent = "UNKNOWN CALLER IS CALLING...";
         }, 4000);
     });
-/* ===== SECRET ELEVATOR ===== */
+/* ============================================
+   SECRET ELEVATOR — WORKING VERSION
+   ============================================ */
 
-(() => {
-    const codes = {
-        "1": "1010",
-        "2": "2020",
-        "3": "1313",
-        "B": "0427"
-    };
+const elevatorCodes = {
+    "1": "1010",
+    "2": "2020",
+    "3": "1313",
+    "B": "0427"
+};
 
-    let selectedFloor = null;
-    let enteredCode = "";
+let selectedFloor = null;
 
-    const display = document.getElementById("elevatorDisplay");
-    const result = document.getElementById("elevatorResult");
-    const buttons = document.querySelectorAll(".elevator-buttons button");
+const elevatorDisplay = document.getElementById("elevatorDisplay");
+const elevatorResult = document.getElementById("elevatorResult");
+const elevatorCodeInput = document.getElementById("elevatorCodeInput");
 
-    function updateDisplay() {
-        if (display) {
-            display.textContent = selectedFloor
-                ? `FLOOR ${selectedFloor} | ${enteredCode || "_ _ _ _"}`
-                : "SELECT FLOOR";
-        }
+document.querySelectorAll(".elevator-buttons [data-value]").forEach(button => {
+    button.addEventListener("click", () => {
+        selectedFloor = button.dataset.value;
+
+        elevatorDisplay.textContent = "FLOOR " + selectedFloor;
+
+        elevatorResult.textContent =
+            "FLOOR " + selectedFloor + " SELECTED. ENTER ACCESS CODE.";
+
+        elevatorCodeInput.value = "";
+        elevatorCodeInput.focus();
+
+        document.querySelectorAll(".elevator-buttons [data-value]")
+            .forEach(btn => btn.classList.toggle(
+                "active",
+                btn === button
+            ));
+    });
+});
+
+document.getElementById("elevatorEnter").addEventListener("click", () => {
+    if (!selectedFloor) {
+        elevatorResult.textContent = "SELECT A FLOOR FIRST.";
+        return;
     }
 
-    buttons.forEach(button => {
-        button.addEventListener("click", () => {
-            const value = button.dataset.value;
+    const enteredCode = elevatorCodeInput.value;
 
-            if (["1", "2", "3", "B"].includes(value)) {
-                selectedFloor = value;
-                enteredCode = "";
+    if (enteredCode === elevatorCodes[selectedFloor]) {
+        elevatorDisplay.textContent = "ACCESS GRANTED";
 
-                if (result) {
-                    result.textContent = `FLOOR ${value} SELECTED. ENTER ACCESS CODE.`;
-                }
+        elevatorResult.textContent =
+            "FLOOR " + selectedFloor + " UNLOCKED. ELEVATOR MOVING...";
 
-                updateDisplay();
-                return;
-            }
+        document.querySelectorAll(".elevator-buttons [data-value]")
+            .forEach(button => button.classList.remove("active"));
 
-            if (value === "CLEAR") {
-                enteredCode = "";
-                updateDisplay();
+        selectedFloor = null;
+        elevatorCodeInput.value = "";
+    } else {
+        elevatorResult.textContent = "ACCESS DENIED. INCORRECT CODE.";
+        elevatorCodeInput.value = "";
+        elevatorCodeInput.focus();
+    }
+});
 
-                if (result) result.textContent = "CODE CLEARED.";
-                return;
-            }
+document.getElementById("elevatorClear").addEventListener("click", () => {
+    selectedFloor = null;
+    elevatorCodeInput.value = "";
+    elevatorDisplay.textContent = "SELECT FLOOR";
+    elevatorResult.textContent = "ELEVATOR RESET.";
 
-            if (value === "ENTER") {
-                if (!selectedFloor) {
-                    if (result) result.textContent = "SELECT A FLOOR FIRST.";
-                    return;
-                }
-
-                if (enteredCode === codes[selectedFloor]) {
-                    if (result) {
-                        result.textContent =
-                            `ACCESS GRANTED. FLOOR ${selectedFloor} UNLOCKED.`;
-                    }
-
-                    if (display) {
-                        display.textContent = `FLOOR ${selectedFloor} UNLOCKED`;
-                    }
-
-                    selectedFloor = null;
-                    enteredCode = "";
-                } else {
-                    if (result) {
-                        result.textContent = "ACCESS DENIED. WRONG CODE.";
-                    }
-
-                    enteredCode = "";
-                    updateDisplay();
-                }
-
-                return;
-            }
-
-            if (selectedFloor && enteredCode.length < 4) {
-                enteredCode += value;
-                updateDisplay();
-
-                if (result) result.textContent = "ENTER ACCESS CODE.";
-            }
-        });
-    });
-
-    updateDisplay();
-})();
-
+    document.querySelectorAll(".elevator-buttons [data-value]")
+        .forEach(button => button.classList.remove("active"));
+});
     /* ============================================
        EMERGENCY BROADCAST
        ============================================ */
