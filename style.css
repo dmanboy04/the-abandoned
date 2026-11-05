@@ -1078,3 +1078,74 @@ footer p {
 .secret-file[hidden] {
   display: none !important;
 }
+
+/* PROJECT ABANDONED ARCHIVE */
+.project-archive {
+    background: radial-gradient(ellipse at center, #351010 0%, #100909 60%, #070a08 100%);
+    border-top: 1px solid #a52b2b;
+    text-align: center;
+}
+
+.project-archive[hidden] {
+    display: none !important;
+}
+
+.project-file {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 40px;
+    background: #090909;
+    border: 1px solid #792020;
+    box-shadow: 0 0 45px #a52b2b25;
+    text-align: left;
+    line-height: 2;
+}
+
+.project-file h3 {
+    color: #e04444;
+    letter-spacing: 3px;
+    margin: 20px 0;
+}
+
+.project-file p {
+    color: #b4b4b4;
+    font-family: 'Special Elite', monospace;
+    margin: 12px 0;
+}
+
+.project-warning {
+    color: #e04444 !important;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.project-stamp {
+    display: inline-block;
+    color: #e04444;
+    border: 2px solid #e04444;
+    padding: 8px 15px;
+    letter-spacing: 4px;
+    transform: rotate(-3deg);
+    margin-bottom: 25px;
+}
+
+.project-file hr {
+    border: 0;
+    border-top: 1px solid #542020;
+    margin: 25px 0;
+}
+
+.project-fragment {
+    color: #ff4141 !important;
+    font-weight: bold;
+    letter-spacing: 4px;
+    border-top: 1px solid #542020;
+    padding-top: 15px;
+    margin-top: 25px !important;
+}
+
+@media (max-width: 600px) {
+    .project-file {
+        padding: 25px 20px;
+    }
+}
