@@ -1,34 +1,565 @@
-// ==========================================
-// THE ABANDONED - INTERACTIVE SYSTEM
-// ==========================================
+/* =========================================
+   THE ABANDONED — MAIN JAVASCRIPT
+   ========================================= */
 
-const ROBLOX_URL = "https://www.roblox.com/games/116357638869409/The-Abandoned";
+/* ---------- HELPERS ---------- */
 
-// ==========================================
-// SCROLL ANIMATIONS
-// ==========================================
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => document.querySelectorAll(selector);
 
-const sections = document.querySelectorAll(".section");
+function addTerminalMessage(message) {
+    const output = $("#terminalOutput");
+    if (!output) return;
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add("visible");
-    });
-}, { threshold: 0.12 });
-
-sections.forEach((section) => observer.observe(section));
-
-function revealSection(element, extraClass = "") {
-    if (!element) return;
-    element.hidden = false;
-    element.classList.add("visible");
-    if (extraClass) element.classList.add(extraClass);
-    observer.observe(element);
+    const line = document.createElement("div");
+    line.textContent = message;
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
 }
 
-// ==========================================
-// SECRET CODE DEFINITIONS
-// ==========================================
+function revealSection(section) {
+    if (!section) return;
+    section.classList.add("visible");
+    section.style.display = "block";
+}
+
+function closeModal() {
+    $$(".modal.active").forEach(modal => {
+        modal.classList.remove("active");
+    });
+}
+
+/* ---------- SECTION ANIMATIONS ---------- */
+
+const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+        }
+    });
+}, {
+    threshold: 0.1
+});
+
+$$(".section").forEach(section => {
+    sectionObserver.observe(section);
+});
+
+/* ---------- CLASSIFIED FILES ---------- */
+
+$$("[data-modal]").forEach(button => {
+    button.addEventListener("click", () => {
+        const modalId = button.dataset.modal;
+        const modal = document.getElementById(modalId);
+
+        if (modal) modal.classList.add("active");
+    });
+});
+
+$$(".close-modal").forEach(button => {
+    button.addEventListener("click", closeModal);
+});
+
+$$(".modal").forEach(modal => {
+    modal.addEventListener("click", event => {
+        if (event.target === modal) {
+            modal.classList.remove("active");
+        }
+    });
+});
+
+/* ---------- CAMERA SYSTEM ---------- */
+
+const cameraData = {
+    CAM01: {
+        name: "MAIN ENTRANCE",
+        description: "The main entrance appears empty.",
+        status: "SIGNAL STABLE"
+    },
+    CAM02: {
+        name: "NORTH HALLWAY",
+        description: "A light is flickering at the end of the hallway.",
+        status: "LOW SIGNAL"
+    },
+    CAM03: {
+        name: "PATIENT WARD",
+        description: "Several beds are visible. One appears occupied.",
+        status: "MOTION DETECTED"
+    },
+    CAM04: {
+        name: "BASEMENT",
+        description: "The basement camera is covered in static.",
+        status: "SIGNAL UNSTABLE"
+    },
+    CAM05: {
+        name: "ROOM 13",
+        description: "Someone is standing in the corner. Do not look away.",
+        status: "UNKNOWN ACTIVITY"
+    }
+};
+
+function selectCamera(cameraId) {
+    const camera = cameraData[cameraId];
+    if (!camera) return;
+
+    const screen = $("#cameraScreen");
+    if (!screen) return;
+
+    const label = screen.querySelector(".camera-label");
+    const description = screen.querySelector("span");
+    const time = screen.querySelector(".camera-time");
+
+    if (label) label.textContent = camera.name;
+    if (description) description.textContent = camera.description;
+    if (time) time.textContent = camera.status;
+
+    $$(".camera-controls button").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.camera === cameraId
+        );
+    });
+
+    addTerminalMessage(`[CAMERA] Switched to ${cameraId}`);
+
+    if (cameraId === "CAM05") {
+        setTimeout(() => {
+            if (description) {
+                description.textContent = "IT KNOWS YOU ARE WATCHING.";
+            }
+        }, 4500);
+    }
+}
+
+const cameraControls = $(".camera-controls");
+
+if (cameraControls) {
+    cameraControls.addEventListener("click", event => {
+        const button = event.target.closest("[data-camera]");
+        if (!button) return;
+
+        selectCamera(button.dataset.camera);
+    });
+}
+
+/* ---------- NIGHT VISION ---------- */
+
+const nightVisionToggle = $("#nightVisionToggle");
+
+if (nightVisionToggle) {
+    nightVisionToggle.addEventListener("click", () => {
+        document.body.classList.toggle("night-vision");
+
+        const active = document.body.classList.contains("night-vision");
+
+        nightVisionToggle.textContent = active
+            ? "DISABLE NIGHT VISION"
+            : "ENABLE NIGHT VISION";
+
+        addTerminalMessage(
+            active
+                ? "[SYSTEM] Night vision activated."
+                : "[SYSTEM] Night vision disabled."
+        );
+    });
+}
+
+/* ---------- CAMERA CONTROL ROOM ---------- */
+
+const controlRoomToggle = $("#controlRoomToggle");
+const controlRoom = $("#controlRoom");
+
+if (controlRoomToggle && controlRoom) {
+    controlRoomToggle.addEventListener("click", () => {
+        controlRoom.classList.toggle("active");
+
+        const active = controlRoom.classList.contains("active");
+
+        controlRoomToggle.textContent = active
+            ? "CLOSE CONTROL ROOM"
+            : "OPEN CONTROL ROOM";
+    });
+}
+
+$$(".mini-camera").forEach(camera => {
+    camera.addEventListener("click", () => {
+        const cameraId = camera.dataset.camera;
+
+        if (cameraId) {
+            selectCamera(cameraId);
+
+            $("#cameraScreen")?.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+    });
+});
+
+/* ---------- LIVE FEED ---------- */
+
+const liveEvents = [
+    "CAM 02: Movement detected in north hallway.",
+    "SYSTEM: Door opened in restricted area.",
+    "CAM 04: Signal interruption detected.",
+    "SECURITY: Unknown person detected.",
+    "CAM 03: Patient count does not match records.",
+    "SYSTEM: Access attempt detected at ROOM 13.",
+    "CAM 05: No movement detected. Something is still there.",
+    "WARNING: A camera has moved without authorization.",
+    "SYSTEM: Please remain inside the building.",
+    "CAM 01: Someone is standing outside the entrance."
+];
+
+const liveFeedContent = $("#liveFeedContent");
+
+function addLiveEvent() {
+    if (!liveFeedContent) return;
+
+    const event = liveEvents[
+        Math.floor(Math.random() * liveEvents.length)
+    ];
+
+    const time = new Date().toLocaleTimeString();
+
+    const line = document.createElement("p");
+    line.textContent = `[${time}] ${event}`;
+
+    liveFeedContent.prepend(line);
+
+    while (liveFeedContent.children.length > 7) {
+        liveFeedContent.lastElementChild.remove();
+    }
+}
+
+addLiveEvent();
+setInterval(addLiveEvent, 12000);
+
+/* ---------- PATIENT DATABASE ---------- */
+
+const patients = [
+    {
+        id: "001",
+        name: "ELLIOT GRAVES",
+        age: "34",
+        status: "MISSING",
+        details: "Patient admitted on October 13. Disappeared from a locked room. No signs of forced entry."
+    },
+    {
+        id: "002",
+        name: "MARCUS REED",
+        age: "51",
+        status: "DECEASED",
+        details: "Official cause of death: unknown. Medical records have been partially erased."
+    },
+    {
+        id: "003",
+        name: "ANNA VALE",
+        age: "27",
+        status: "TRANSFERRED",
+        details: "Transferred to another facility. No receiving hospital is listed."
+    },
+    {
+        id: "004",
+        name: "JONAH BLACK",
+        age: "42",
+        status: "UNKNOWN",
+        details: "Patient file repeatedly changes after midnight. Staff have been instructed not to access it."
+    },
+    {
+        id: "005",
+        name: "SUBJECT 13",
+        age: "UNKNOWN",
+        status: "CLASSIFIED",
+        details: "This patient does not appear in the official admission records. Do not attempt contact."
+    },
+    {
+        id: "006",
+        name: "SARAH HOLLOW",
+        age: "19",
+        status: "MISSING",
+        details: "Last seen near the basement elevator. Her last recorded message was: 'It followed me upstairs.'"
+    }
+];
+
+const patientList = $("#patientList");
+const patientSearch = $("#patientSearch");
+
+function renderPatients(search = "") {
+    if (!patientList) return;
+
+    patientList.innerHTML = "";
+
+    const filtered = patients.filter(patient => {
+        const text = (
+            patient.name + " " +
+            patient.id + " " +
+            patient.status
+        ).toLowerCase();
+
+        return text.includes(search.toLowerCase());
+    });
+
+    if (filtered.length === 0) {
+        patientList.textContent = "NO MATCHING RECORDS FOUND.";
+        return;
+    }
+
+    filtered.forEach(patient => {
+        const record = document.createElement("div");
+        record.className = "patient-record";
+
+        const name = document.createElement("strong");
+        name.textContent = patient.name;
+
+        const info = document.createElement("span");
+        info.textContent = `ID: ${patient.id} | ${patient.status}`;
+
+        record.append(name, info);
+
+        record.addEventListener("click", () => {
+            showPatientDetails(patient);
+        });
+
+        patientList.appendChild(record);
+    });
+}
+
+function showPatientDetails(patient) {
+    const details = $("#patientDetails");
+    if (!details) return;
+
+    details.classList.add("active");
+    details.innerHTML = "";
+
+    const heading = document.createElement("h3");
+    heading.textContent = patient.name;
+
+    const id = document.createElement("p");
+    id.textContent = `PATIENT ID: ${patient.id}`;
+
+    const age = document.createElement("p");
+    age.textContent = `AGE: ${patient.age}`;
+
+    const status = document.createElement("p");
+    status.textContent = `STATUS: ${patient.status}`;
+
+    const description = document.createElement("p");
+    description.textContent = patient.details;
+
+    details.append(heading, id, age, status, description);
+}
+
+if (patientSearch) {
+    patientSearch.addEventListener("input", () => {
+        renderPatients(patientSearch.value);
+    });
+}
+
+renderPatients();
+
+/* ---------- UNKNOWN CALLER ---------- */
+
+const callerMessages = [
+    "You should not have come back.",
+    "They told me you were dead.",
+    "Do not use the elevator. It is already upstairs."
+];
+
+const callerAnswer = $("#answerCall");
+const callerReject = $("#rejectCall");
+const callerStatus = $("#callerStatus");
+
+if (callerAnswer) {
+    callerAnswer.addEventListener("click", () => {
+        const message = callerMessages[
+            Math.floor(Math.random() * callerMessages.length)
+        ];
+
+        if (callerStatus) {
+            callerStatus.textContent = `"${message}"`;
+        }
+
+        callerAnswer.disabled = true;
+
+        setTimeout(() => {
+            if (callerStatus) {
+                callerStatus.textContent = "CALL DISCONNECTED.";
+            }
+
+            callerAnswer.disabled = false;
+        }, 5000);
+    });
+}
+
+if (callerReject) {
+    callerReject.addEventListener("click", () => {
+        if (callerStatus) {
+            callerStatus.textContent =
+                "CALL REJECTED. INCOMING CALL DETECTED AGAIN.";
+        }
+
+        setTimeout(() => {
+            if (callerStatus) {
+                callerStatus.textContent =
+                    "UNKNOWN CALLER IS CALLING...";
+            }
+        }, 4000);
+    });
+}
+
+/* ---------- SECRET ELEVATOR ---------- */
+
+const elevatorCodes = {
+    "1": "1010",
+    "2": "2020",
+    "3": "1313",
+    "B": "0427"
+};
+
+let elevatorInput = "";
+
+const elevatorDisplay = $("#elevatorDisplay");
+const elevatorStatus = $("#elevatorStatus");
+
+function updateElevatorDisplay() {
+    if (elevatorDisplay) {
+        elevatorDisplay.textContent = elevatorInput || "_ _ _ _";
+    }
+}
+
+$$(".elevator-buttons button").forEach(button => {
+    button.addEventListener("click", () => {
+        const value = button.dataset.value;
+
+        if (value === "CLEAR") {
+            elevatorInput = "";
+            updateElevatorDisplay();
+            return;
+        }
+
+        if (value === "ENTER") {
+            const floor = Object.keys(elevatorCodes).find(
+                key => elevatorCodes[key] === elevatorInput
+            );
+
+            if (floor) {
+                if (elevatorStatus) {
+                    elevatorStatus.textContent =
+                        `ACCESS GRANTED. ELEVATOR MOVING TO FLOOR ${floor}.`;
+                }
+
+                if (floor === "B") {
+                    setTimeout(() => {
+                        addTerminalMessage(
+                            "[ELEVATOR] Basement access granted."
+                        );
+                    }, 1000);
+                }
+            } else {
+                if (elevatorStatus) {
+                    elevatorStatus.textContent =
+                        "ACCESS DENIED. INCORRECT CODE.";
+                }
+            }
+
+            elevatorInput = "";
+            updateElevatorDisplay();
+            return;
+        }
+
+        if (elevatorInput.length < 4) {
+            elevatorInput += value;
+            updateElevatorDisplay();
+        }
+    });
+});
+
+/* ---------- EMERGENCY BROADCAST ---------- */
+
+const broadcastMessages = [
+    "ATTENTION. ALL STAFF MUST REPORT TO THE MAIN HALLWAY.",
+    "DO NOT ENTER ROOM 13. THE ROOM IS NOT EMPTY.",
+    "ALL PATIENTS MUST REMAIN IN THEIR ROOMS.",
+    "IF YOU HEAR SOMEONE CALLING YOUR NAME, DO NOT RESPOND.",
+    "THE BUILDING IS UNDER LOCKDOWN. DO NOT ATTEMPT TO LEAVE."
+];
+
+const broadcastScreen = $("#broadcastScreen");
+const broadcastButton = $("#broadcastButton");
+const broadcastAlert = $("#broadcastAlert");
+
+function triggerBroadcast() {
+    const message = broadcastMessages[
+        Math.floor(Math.random() * broadcastMessages.length)
+    ];
+
+    if (broadcastScreen) {
+        broadcastScreen.textContent = message;
+    }
+
+    if (broadcastAlert) {
+        const alertText = broadcastAlert.querySelector("p");
+
+        if (alertText) alertText.textContent = message;
+
+        broadcastAlert.classList.add("active");
+    }
+
+    addTerminalMessage("[EMERGENCY] Broadcast transmission received.");
+}
+
+function closeBroadcast() {
+    broadcastAlert?.classList.remove("active");
+}
+
+if (broadcastButton) {
+    broadcastButton.addEventListener("click", triggerBroadcast);
+}
+
+$("#closeBroadcast")?.addEventListener("click", closeBroadcast);
+
+/* ---------- SYSTEM CORRUPTION ---------- */
+
+function triggerCorruption() {
+    document.body.classList.add("corrupted");
+
+    addTerminalMessage("[WARNING] SYSTEM CORRUPTION DETECTED.");
+
+    setTimeout(() => {
+        document.body.classList.remove("corrupted");
+    }, 3500);
+}
+
+setInterval(() => {
+    if (Math.random() < 0.45) {
+        triggerCorruption();
+    }
+}, 35000);
+
+/* ---------- EMERGENCY MODE ---------- */
+
+const emergencyToggle = $("#emergencyToggle");
+
+if (emergencyToggle) {
+    emergencyToggle.addEventListener("click", () => {
+        document.body.classList.toggle("emergency-mode");
+
+        const active = document.body.classList.contains("emergency-mode");
+
+        emergencyToggle.textContent = active
+            ? "DISABLE EMERGENCY MODE"
+            : "ENABLE EMERGENCY MODE";
+
+        addTerminalMessage(
+            active
+                ? "[SYSTEM] EMERGENCY MODE ENABLED."
+                : "[SYSTEM] Emergency mode disabled."
+        );
+    });
+}
+
+/* ---------- SECRET ARCHIVE CODES ---------- */
 
 const secretCodes = {
     THEPATIENT: "filePatient",
@@ -38,688 +569,291 @@ const secretCodes = {
     THEST4LKER: "fileStalker"
 };
 
-function unlockSecretCode(code) {
-    const normalizedCode = code.trim().toUpperCase();
-    const fileId = secretCodes[normalizedCode];
-
+function revealSecretFile(code) {
+    const fileId = secretCodes[code];
     if (!fileId) return false;
 
-    const archive = document.getElementById("secretArchives");
     const file = document.getElementById(fileId);
+    const archive = $("#secretArchives");
 
-    if (!archive || !file) return false;
+    if (file) {
+        file.classList.add("visible");
+    }
 
-    revealSection(archive);
-    file.hidden = false;
+    if (archive) {
+        revealSection(archive);
+    }
 
-    localStorage.setItem("secret_" + normalizedCode, "true");
+    localStorage.setItem(`secret_${code}`, "true");
 
-    setTimeout(() => {
-        file.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 100);
-
-    showSecret("SECRET FILE RECOVERED: " + normalizedCode);
+    addTerminalMessage(`[ARCHIVE] SECRET FILE UNLOCKED: ${code}`);
 
     return true;
 }
 
 function restoreSecretFiles() {
-    let foundAny = false;
-
-    Object.keys(secretCodes).forEach((code) => {
-        if (localStorage.getItem("secret_" + code) === "true") {
+    Object.keys(secretCodes).forEach(code => {
+        if (localStorage.getItem(`secret_${code}`) === "true") {
             const file = document.getElementById(secretCodes[code]);
-
-            if (file) {
-                file.hidden = false;
-                foundAny = true;
-            }
+            if (file) file.classList.add("visible");
         }
     });
 
-    if (foundAny) {
-        revealSection(document.getElementById("secretArchives"));
+    const allUnlocked = Object.keys(secretCodes).every(code => {
+        return localStorage.getItem(`secret_${code}`) === "true";
+    });
+
+    if (allUnlocked) {
+        const archive = $("#secretArchives");
+        if (archive) revealSection(archive);
     }
 }
 
 restoreSecretFiles();
 
-// ==========================================
-// CLASSIFIED FILE MODAL
-// ==========================================
-
-const documents = {
-    patient: {
-        title: "PATIENT RECORDS // FILE 001",
-        text: `PATIENT: UNKNOWN
-
-STATUS: MISSING
-
-LOCATION: LOWER HOSPITAL WING
-
-NOTES:
-The patient was last seen near the elevator at 03:17 AM.
-
-Security footage has been removed.
-
-A handwritten note was found:
-
-"IT KNOWS MY NAME."
-
-[ADDITIONAL INFORMATION REDACTED]`
-    },
-
-    experiment: {
-        title: "EXPERIMENT LOG // FILE 002",
-        text: `PROJECT: UNKNOWN
-
-LOCATION: RESTRICTED LABORATORY
-
-STATUS: TERMINATED
-
-NOTES:
-Unusual sounds were reported beneath the hospital.
-
-Staff members refused to enter the lower floors.
-
-The final recording contains only breathing.
-
-[RECORDING LOST]`
-    },
-
-    incident: {
-        title: "INCIDENT REPORT // FILE 003",
-        text: `INCIDENT: 03:17 AM
-
-LOCATION: MAIN HALL
-
-ALL STAFF: UNACCOUNTED FOR
-
-NOTES:
-Emergency lights activated.
-
-All exits were locked.
-
-Camera 03 recorded movement after the building was evacuated.
-
-No explanation was provided.
-
-[REPORT SEALED]`
-    }
-};
-
-const fileModal = document.getElementById("fileModal");
-const modalTitle = document.getElementById("modalTitle");
-const modalText = document.getElementById("modalText");
-
-function openFile(fileId) {
-    const file = documents[fileId];
-
-    if (!file || !fileModal) return;
-
-    modalTitle.textContent = file.title;
-    modalText.textContent = file.text;
-
-    fileModal.hidden = false;
-    document.body.style.overflow = "hidden";
-
-    showSecret("CONFIDENTIAL FILE ACCESSED");
-}
-
-document.querySelectorAll(".file-button").forEach((button) => {
-    button.addEventListener("click", () => {
-        openFile(button.dataset.file);
-    });
-});
-
-function closeFile() {
-    if (!fileModal) return;
-
-    fileModal.hidden = true;
-    document.body.style.overflow = "";
-}
-
-const closeModalButton = document.getElementById("closeModal");
-
-if (closeModalButton) {
-    closeModalButton.addEventListener("click", closeFile);
-}
-
-if (fileModal) {
-    fileModal.addEventListener("click", (event) => {
-        if (event.target === fileModal) closeFile();
-    });
-
-    document.body.appendChild(fileModal);
-}
-
-// ==========================================
-// SECURITY CAMERA SYSTEM
-// ==========================================
-
-const cameraData = [
-    {
-        name: "CAM 01 // MAIN HALL",
-        message: "SIGNAL CONNECTED",
-        status: "SYSTEM ONLINE"
-    },
-    {
-        name: "CAM 02 // PATIENT WING",
-        message: "MOVEMENT DETECTED",
-        status: "SIGNAL UNSTABLE"
-    },
-    {
-        name: "CAM 03 // LOWER FLOOR",
-        message: "NO SIGNAL",
-        status: "CONNECTION LOST"
-    },
-    {
-        name: "CAM 04 // RESTRICTED ROOM",
-        message: "UNKNOWN ENTITY",
-        status: "WARNING"
-    },
-    {
-        name: "CAM 05 // SEALED WARD",
-        message: "SUBJECT STANDING STILL",
-        status: "SIGNAL COMPROMISED"
-    }
-];
-
-const cameraScreen = document.getElementById("cameraScreen");
-const cameraName = document.getElementById("cameraName");
-const cameraMessage = document.getElementById("cameraMessage");
-const cameraStatus = document.getElementById("cameraStatus");
-const cameraButtons = document.querySelectorAll(".camera-button");
-
-function selectCamera(index) {
-    const camera = cameraData[index];
-
-    if (!camera || !cameraScreen) return;
-
-    cameraScreen.dataset.camera = String(index);
-
-    if (cameraName) cameraName.textContent = camera.name;
-    if (cameraMessage) cameraMessage.textContent = camera.message;
-    if (cameraStatus) cameraStatus.textContent = camera.status;
-
-    cameraButtons.forEach((button) => {
-        button.classList.toggle(
-            "active",
-            Number(button.dataset.camera) === index
-        );
-    });
-
-    if (index === 3) {
-        showSecret("SOMETHING IS WATCHING.");
-    }
-
-    if (index === 4) {
-        showSecret("CAMERA 05 WAS DISCONNECTED FOR A REASON.");
-        cameraScreen.classList.add("camera-five-active");
-    } else {
-        cameraScreen.classList.remove("camera-five-active");
-    }
-}
-
-document.querySelector(".camera-controls")?.addEventListener("click", (event) => {
-    const button = event.target.closest(".camera-button");
-
-    if (!button) return;
-
-    const index = Number(button.dataset.camera);
-
-    if (Number.isInteger(index) && index >= 0 && index < cameraData.length) {
-        selectCamera(index);
-    }
-});
-
-// ==========================================
-// TERMINAL + WARD 13 + PROJECT ARCHIVE
-// ==========================================
-
-const terminalForm = document.getElementById("terminalForm");
-const terminalInput = document.getElementById("terminalInput");
-const terminalOutput = document.getElementById("terminalOutput");
-
-let terminalUnlocked = localStorage.getItem("ward13Unlocked") === "true";
-
-function printLine(message, type = "") {
-    if (!terminalOutput) return;
-
-    const line = document.createElement("p");
-    line.textContent = message;
-
-    if (type) line.className = type;
-
-    terminalOutput.appendChild(line);
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-}
-
-function printPlayLink() {
-    if (!terminalOutput) return;
-
-    const line = document.createElement("p");
-    const link = document.createElement("a");
-
-    link.href = ROBLOX_URL;
-    link.target = "_blank";
-    link.rel = "noopener";
-    link.textContent = "OPEN THE ABANDONED ON ROBLOX ↗";
-    link.style.color = "#83d98d";
-
-    line.appendChild(link);
-    terminalOutput.appendChild(line);
-
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-}
+/* ---------- WARD 13 ---------- */
 
 function unlockWard13() {
-    terminalUnlocked = true;
+    const ward = $("#ward13");
+    if (!ward) return;
 
-    localStorage.setItem("ward13Unlocked", "true");
+    revealSection(ward);
+    localStorage.setItem("ward13_unlocked", "true");
 
-    const archive = document.getElementById("ward13Archive");
-
-    if (archive) {
-        revealSection(archive, "ward13-unlocked");
-
-        setTimeout(() => {
-            archive.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }, 120);
-    }
-
-    showSecret("WARD 13 UNLOCKED. ACCESS GRANTED.");
+    addTerminalMessage("[ACCESS GRANTED] WARD 13 ARCHIVE UNLOCKED.");
 }
 
+if (localStorage.getItem("ward13_unlocked") === "true") {
+    const ward = $("#ward13");
+    if (ward) revealSection(ward);
+}
+
+/* ---------- PROJECT ABANDONED ---------- */
+
 function unlockProjectArchive() {
-    const allUnlocked = Object.keys(secretCodes).every((code) => {
-        return localStorage.getItem("secret_" + code) === "true";
+    const allUnlocked = Object.keys(secretCodes).every(code => {
+        return localStorage.getItem(`secret_${code}`) === "true";
     });
 
     if (!allUnlocked) {
-        printLine("ACCESS DENIED.", "terminal-red");
-        printLine("FIVE SECRET FILES MUST BE RECOVERED FIRST.");
+        addTerminalMessage(
+            "[ACCESS DENIED] ALL FIVE FRAGMENTS ARE REQUIRED."
+        );
         return;
     }
 
-    const project = document.getElementById("projectAbandoned");
+    const archive = $("#projectArchive");
 
-    if (!project) {
-        printLine("PROJECT FILE NOT FOUND.", "terminal-red");
-        return;
-    }
-
-    revealSection(project);
-
-    localStorage.setItem("projectAbandonedUnlocked", "true");
-
-    printLine("ACCESS GRANTED.", "terminal-green");
-    printLine("PROJECT ABANDONED UNLOCKED.");
-
-    setTimeout(() => {
-        project.scrollIntoView({
+    if (archive) {
+        revealSection(archive);
+        archive.scrollIntoView({
             behavior: "smooth",
             block: "center"
         });
-    }, 120);
-
-    showSecret("YOU FOUND PROJECT ABANDONED.");
-}
-
-function restoreUnlockedSections() {
-    if (terminalUnlocked) {
-        const ward = document.getElementById("ward13Archive");
-
-        if (ward) revealSection(ward);
     }
 
-    if (localStorage.getItem("projectAbandonedUnlocked") === "true") {
-        const project = document.getElementById("projectAbandoned");
+    localStorage.setItem("project_unlocked", "true");
 
-        if (project) revealSection(project);
+    addTerminalMessage(
+        "[ACCESS GRANTED] PROJECT ABANDONED FILES DECLASSIFIED."
+    );
+}
+
+if (localStorage.getItem("project_unlocked") === "true") {
+    const archive = $("#projectArchive");
+    if (archive) revealSection(archive);
+}
+
+/* ---------- TERMINAL ---------- */
+
+const terminalInput = $("#terminalInput");
+
+const terminalCommands = {
+    help: () => {
+        addTerminalMessage("AVAILABLE COMMANDS:");
+        addTerminalMessage("HELP - SHOW COMMANDS");
+        addTerminalMessage("STATUS - SYSTEM STATUS");
+        addTerminalMessage("FILES - SHOW SECRET FILE CODES");
+        addTerminalMessage("CAMERAS - CAMERA INFORMATION");
+        addTerminalMessage("DATABASE - PATIENT DATABASE");
+        addTerminalMessage("ELEVATOR - ELEVATOR INFORMATION");
+        addTerminalMessage("CALLER - UNKNOWN CALLER");
+        addTerminalMessage("BROADCAST - EMERGENCY BROADCAST");
+        addTerminalMessage("CORRUPT - TRIGGER SYSTEM CORRUPTION");
+        addTerminalMessage("WARD13 - OPEN WARD 13 ARCHIVE");
+        addTerminalMessage("PROJECT - OPEN PROJECT ARCHIVE");
+        addTerminalMessage("EMERGENCY - TOGGLE EMERGENCY MODE");
+        addTerminalMessage("CLEAR - CLEAR TERMINAL");
+        addTerminalMessage("WAKE UP - ...");
+    },
+
+    status: () => {
+        addTerminalMessage("SYSTEM STATUS: UNSTABLE");
+        addTerminalMessage("BUILDING STATUS: LOCKDOWN");
+        addTerminalMessage("CAMERA STATUS: PARTIALLY ONLINE");
+        addTerminalMessage("PATIENT STATUS: UNKNOWN");
+        addTerminalMessage("STAFF STATUS: UNACCOUNTED FOR");
+    },
+
+    files: () => {
+        addTerminalMessage("SECRET FILES REQUIRE ACCESS CODES.");
+        addTerminalMessage("FIVE FRAGMENTS FORM A WORD.");
+        addTerminalMessage("FIND THE WORD. DO NOT TRUST THE RECORDS.");
+    },
+
+    cameras: () => {
+        addTerminalMessage("CAM 01 - MAIN ENTRANCE");
+        addTerminalMessage("CAM 02 - NORTH HALLWAY");
+        addTerminalMessage("CAM 03 - PATIENT WARD");
+        addTerminalMessage("CAM 04 - BASEMENT");
+        addTerminalMessage("CAM 05 - ROOM 13");
+    },
+
+    database: () => {
+        $("#patientSearch")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        addTerminalMessage("PATIENT DATABASE OPENED.");
+    },
+
+    elevator: () => {
+        addTerminalMessage("ELEVATOR ACCESS CODES REQUIRED.");
+        addTerminalMessage("FLOOR 1: UNKNOWN");
+        addTerminalMessage("FLOOR 2: UNKNOWN");
+        addTerminalMessage("FLOOR 3: RESTRICTED");
+        addTerminalMessage("BASEMENT: CLASSIFIED");
+    },
+
+    caller: () => {
+        addTerminalMessage("INCOMING CALL: UNKNOWN NUMBER.");
+        $("#callerStatus")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    },
+
+    broadcast: () => {
+        triggerBroadcast();
+    },
+
+    corrupt: () => {
+        triggerCorruption();
+    },
+
+    ward13: () => {
+        unlockWard13();
+    },
+
+    project: () => {
+        unlockProjectArchive();
+    },
+
+    emergency: () => {
+        document.body.classList.toggle("emergency-mode");
+        addTerminalMessage("[SYSTEM] EMERGENCY MODE TOGGLED.");
+    },
+
+    play: () => {
+        addTerminalMessage("AUDIO TRANSMISSION NOT AVAILABLE.");
+    },
+
+    clear: () => {
+        const output = $("#terminalOutput");
+        if (output) output.innerHTML = "";
+    },
+
+    "wake up": () => {
+        addTerminalMessage("YOU ARE NOT SUPPOSED TO BE HERE.");
+        setTimeout(() => {
+            addTerminalMessage("LOOK BEHIND YOU.");
+        }, 1500);
     }
-}
+};
 
-restoreUnlockedSections();
-
-const readSecretButton = document.getElementById("readSecret");
-
-if (readSecretButton) {
-    readSecretButton.addEventListener("click", () => {
-        const entry = document.getElementById("secretEntry");
-
-        if (entry) entry.hidden = false;
-
-        readSecretButton.hidden = true;
-    });
-}
-
-// ==========================================
-// TERMINAL COMMANDS
-// ==========================================
-
-function runCommand(rawCommand) {
+function runTerminalCommand(rawCommand) {
     const command = rawCommand.trim().toUpperCase();
 
     if (!command) return;
 
-    printLine("GUEST@FACILITY:~$ " + rawCommand);
+    addTerminalMessage(`> ${command}`);
 
-    // Secret codes are checked before normal terminal commands.
-    if (unlockSecretCode(command)) {
-        printLine("ACCESS GRANTED.", "terminal-green");
-        printLine("SECRET FILE RECOVERED.");
+    if (secretCodes[command]) {
+        revealSecretFile(command);
         return;
     }
 
-    switch (command.toLowerCase()) {
-        case "help":
-            printLine("AVAILABLE COMMANDS:");
-            printLine("help     - Show commands");
-            printLine("status   - Facility status");
-            printLine("files    - List classified files");
-            printLine("cameras  - Surveillance overview");
-            printLine("play     - Open Roblox game");
-            printLine("clear    - Clear terminal");
-            printLine("wake up  - Unknown command");
-            printLine("ward13   - Restricted access");
-            printLine("project  - Level 5 archive (requires all five secret files)");
-            printLine("emergency - Toggle emergency protocol");
-            break;
+    if (command === "PROJECT") {
+        unlockProjectArchive();
+        return;
+    }
 
-        case "status":
-            printLine("FACILITY STATUS: CRITICAL");
-            printLine("LIGHTING: UNSTABLE");
-            printLine("SECURITY: COMPROMISED");
-            printLine("EXIT DOORS: LOCKED");
-            printLine("LIFE SIGNS: UNKNOWN");
-            break;
+    const action = terminalCommands[command.toLowerCase()];
 
-        case "files":
-            printLine("AVAILABLE DOCUMENTS:");
-            printLine("FILE 001 - PATIENT RECORDS");
-            printLine("FILE 002 - EXPERIMENT LOG");
-            printLine("FILE 003 - INCIDENT REPORT");
-            printLine("Enter the recovered secret codes to unlock hidden files.");
-            break;
-
-        case "cameras":
-            printLine("SURVEILLANCE NETWORK:");
-            printLine("CAM 01 - MAIN HALL");
-            printLine("CAM 02 - PATIENT WING");
-            printLine("CAM 03 - LOWER FLOOR");
-            printLine("CAM 04 - RESTRICTED ROOM");
-            printLine("CAM 05 - SEALED WARD // SIGNAL COMPROMISED");
-            break;
-
-        case "play":
-            printLine("OPENING GAME ACCESS...");
-            printPlayLink();
-            break;
-
-        case "clear":
-            if (terminalOutput) terminalOutput.replaceChildren();
-            printLine("TERMINAL CLEARED.");
-            break;
-
-        case "wake up":
-            printLine("...");
-            printLine("YOU ARE NOT SUPPOSED TO BE HERE.", "terminal-red");
-            printLine("SOMETHING HAS NOTICED YOU.", "terminal-red");
-            showSecret("DON'T TURN AROUND.");
-            break;
-
-        case "ward13":
-            if (!terminalUnlocked) {
-                unlockWard13();
-
-                printLine("ACCESS GRANTED.", "terminal-green");
-                printLine("WELCOME TO WARD 13.");
-                printLine("THEY NEVER LEFT.");
-                printLine("SECRET ARCHIVE UNLOCKED.");
-            } else {
-                printLine("WARD 13 ACCESS ALREADY GRANTED.");
-                printLine("THE SECRET ARCHIVE IS AVAILABLE.");
-            }
-            break;
-
-        case "project":
-            unlockProjectArchive();
-            break;
-
-        case "emergency":
-            toggleEmergencyMode();
-            break;
-
-        default:
-            printLine("UNKNOWN COMMAND.", "terminal-red");
-            printLine("TYPE HELP TO SEE AVAILABLE COMMANDS.");
+    if (action) {
+        action();
+    } else {
+        addTerminalMessage("UNKNOWN COMMAND. TYPE HELP.");
     }
 }
 
-if (terminalForm) {
-    terminalForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const command = terminalInput ? terminalInput.value : "";
-
-        runCommand(command);
-
-        if (terminalInput) {
+if (terminalInput) {
+    terminalInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            runTerminalCommand(terminalInput.value);
             terminalInput.value = "";
-            terminalInput.focus();
         }
     });
 }
 
-// ==========================================
-// LIVE SYSTEM FEED
-// ==========================================
+/* ---------- KEYBOARD SHORTCUTS ---------- */
 
-const liveFeedLog = document.getElementById("liveFeedLog");
-const liveFeedClock = document.getElementById("liveFeedClock");
-
-const liveFeedEvents = [
-    ["NOTICE", "NORTH WING LIGHTS FLICKERING."],
-    ["WARNING", "MOTION DETECTED // CORRIDOR 02."],
-    ["SYSTEM", "BACKUP GENERATOR: UNSTABLE."],
-    ["WARNING", "UNIDENTIFIED ACCESS CARD USED."],
-    ["ERROR", "CAMERA 05 TRANSMITTING UNKNOWN SIGNAL."],
-    ["NOTICE", "NO STAFF RESPONDING TO RADIO CHECK."],
-    ["CRITICAL", "SOMETHING MOVED INSIDE THE SEALED WARD."],
-    ["SYSTEM", "DO NOT ATTEMPT TO RESTORE THE ELEVATOR."]
-];
-
-let liveFeedIndex = 0;
-
-function updateLiveFeedClock() {
-    if (!liveFeedClock) return;
-
-    liveFeedClock.textContent = new Date().toLocaleTimeString([], {
-        hour12: false
-    });
-}
-
-function addLiveFeedEvent() {
-    if (!liveFeedLog) return;
-
-    const [type, message] = liveFeedEvents[
-        liveFeedIndex % liveFeedEvents.length
-    ];
-
-    liveFeedIndex++;
-
-    const line = document.createElement("p");
-    const time = document.createElement("time");
-    const label = document.createElement("span");
-
-    time.textContent = new Date().toLocaleTimeString([], {
-        hour12: false
-    });
-
-    label.textContent = type + " // ";
-    label.className = "feed-" + type.toLowerCase();
-
-    line.append(time, label, document.createTextNode(message));
-
-    liveFeedLog.appendChild(line);
-
-    while (liveFeedLog.children.length > 6) {
-        liveFeedLog.removeChild(liveFeedLog.firstElementChild);
-    }
-
-    liveFeedLog.scrollTop = liveFeedLog.scrollHeight;
-}
-
-updateLiveFeedClock();
-setInterval(updateLiveFeedClock, 1000);
-setInterval(addLiveFeedEvent, 5200);
-
-// ==========================================
-// EMERGENCY MODE
-// ==========================================
-
-const emergencyToggle = document.getElementById("emergencyToggle");
-const emergencyBanner = document.getElementById("emergencyBanner");
-
-let emergencyModeActive = false;
-
-function toggleEmergencyMode(forceState) {
-    emergencyModeActive = typeof forceState === "boolean"
-        ? forceState
-        : !emergencyModeActive;
-
-    document.body.classList.toggle(
-        "emergency-mode",
-        emergencyModeActive
-    );
-
-    if (emergencyToggle) {
-        emergencyToggle.setAttribute(
-            "aria-pressed",
-            String(emergencyModeActive)
-        );
-
-        emergencyToggle.classList.toggle(
-            "active",
-            emergencyModeActive
-        );
-
-        emergencyToggle.innerHTML = emergencyModeActive
-            ? '<span class="emergency-light"></span> DISABLE EMERGENCY'
-            : '<span class="emergency-light"></span> EMERGENCY MODE';
-    }
-
-    if (emergencyBanner) {
-        emergencyBanner.hidden = !emergencyModeActive;
-    }
-
-    if (emergencyModeActive) {
-        showSecret("EMERGENCY PROTOCOL INITIATED.");
-
-        if (typeof printLine === "function") {
-            printLine("!!! EMERGENCY PROTOCOL ACTIVE !!!", "terminal-red");
-        }
-    } else {
-        showSecret("EMERGENCY PROTOCOL DISABLED.");
-    }
-}
-
-if (emergencyToggle) {
-    emergencyToggle.addEventListener("click", () => {
-        toggleEmergencyMode();
-    });
-}
-
-// ==========================================
-// EASTER EGG SYSTEM
-// ==========================================
-
-const secretMessage = document.getElementById("secretMessage");
-
-let secretTimeout;
-
-function showSecret(message) {
-    if (!secretMessage) return;
-
-    secretMessage.textContent = message;
-    secretMessage.classList.add("show");
-
-    clearTimeout(secretTimeout);
-
-    secretTimeout = setTimeout(() => {
-        secretMessage.classList.remove("show");
-    }, 3500);
-}
-
-// Click the logo five times.
-const logo = document.getElementById("logo");
-
-let logoClicks = 0;
-let logoTimer;
-
-if (logo) {
-    logo.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        logoClicks++;
-
-        clearTimeout(logoTimer);
-
-        logoTimer = setTimeout(() => {
-            logoClicks = 0;
-        }, 2000);
-
-        if (logoClicks >= 5) {
-            logoClicks = 0;
-
-            showSecret("YOU FOUND THE FIRST SECRET.");
-            runCommand("wake up");
-        }
-    });
-}
-
-// Secret keyboard sequence: A B A N D O N
-const secretSequence = ["a", "b", "a", "n", "d", "o", "n"];
-
-let sequencePosition = 0;
-
-document.addEventListener("keydown", (event) => {
-    if (
-        event.target &&
-        (event.target.matches("input") || event.target.matches("textarea"))
-    ) {
-        return;
-    }
-
-    if (event.key === "Escape" && fileModal && !fileModal.hidden) {
-        closeFile();
-    }
-
-    const key = event.key.toLowerCase();
-
-    if (key === secretSequence[sequencePosition]) {
-        sequencePosition++;
-
-        if (sequencePosition === secretSequence.length) {
-            sequencePosition = 0;
-
-            showSecret("THE HOSPITAL REMEMBERS YOU.");
-            runCommand("ward13");
-        }
-    } else {
-        sequencePosition = key === "a" ? 1 : 0;
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeModal();
+        closeBroadcast();
+        $("#secret-message")?.classList.remove("active");
     }
 });
 
-// ==========================================
-// STARTUP
-// ==========================================
+/* ---------- SECRET MESSAGE ---------- */
 
-console.log("THE ABANDONED SYSTEM INITIALIZED.");
-console.log("ACCESS CODE: WARD13");
-console.log("DO NOT TRUST CAMERA 04.");
-console.log("CAMERA 05 IS NOT PART OF THE ORIGINAL NETWORK.");
+let secretKeySequence = "";
+
+document.addEventListener("keydown", event => {
+    if (event.key.length !== 1) return;
+
+    secretKeySequence += event.key.toUpperCase();
+
+    if (secretKeySequence.length > 20) {
+        secretKeySequence = secretKeySequence.slice(-20);
+    }
+
+    if (secretKeySequence.includes("ABANDONED")) {
+        const secretMessage = $("#secret-message");
+
+        if (secretMessage) {
+            secretMessage.classList.add("active");
+        }
+
+        secretKeySequence = "";
+    }
+});
+
+/* ---------- AUTOMATIC BROADCAST ---------- */
+
+setInterval(() => {
+    if (Math.random() < 0.3) {
+        triggerBroadcast();
+    }
+}, 90000);
+
+/* ---------- INITIALIZATION ---------- */
+
+addTerminalMessage("THE ABANDONED SECURITY TERMINAL");
+addTerminalMessage("CONNECTION ESTABLISHED.");
+addTerminalMessage("WARNING: UNAUTHORIZED ACCESS IS LOGGED.");
+addTerminalMessage("TYPE HELP TO VIEW AVAILABLE COMMANDS.");
+
+console.log("THE ABANDONED — SYSTEM ONLINE.");
