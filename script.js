@@ -1,11 +1,21 @@
-
 // ==========================================
-// THE ABANDONED - INTERACTIVE SYSTEM
+// THE ABANDONED - COMPLETE INTERACTIVE SYSTEM
 // ==========================================
 
 const ROBLOX_URL =
     "https://www.roblox.com/games/116357638869409/The-Abandoned";
 
+// ==========================================
+// SECRET CODES
+// ==========================================
+
+const secretCodes = {
+    THEPATIENT: "filePatient",
+    NIGHTSHIFT: "fileNightshift",
+    "0427": "file0427",
+    DONTLOOK: "fileDontlook",
+    THEST4LKER: "fileStalker"
+};
 
 // ==========================================
 // SCROLL ANIMATIONS
@@ -14,7 +24,7 @@ const ROBLOX_URL =
 const sections = document.querySelectorAll(".section");
 
 const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
+    entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add("visible");
         }
@@ -25,13 +35,28 @@ const observer = new IntersectionObserver((entries) => {
 
 sections.forEach(section => observer.observe(section));
 
+// ==========================================
+// SECRET MESSAGE
+// ==========================================
+
+const secretMessage = document.getElementById("secretMessage");
+
+let secretTimeout;
+
+function showSecret(message) {
+    secretMessage.textContent = message;
+    secretMessage.classList.add("show");
+
+    clearTimeout(secretTimeout);
+
+    secretTimeout = setTimeout(() => {
+        secretMessage.classList.remove("show");
+    }, 3500);
+}
 
 // ==========================================
 // CLASSIFIED FILES
 // ==========================================
-
-// These are fictional website documents,
-// not actual Roblox game records.
 
 const documents = {
     patient: {
@@ -132,24 +157,22 @@ document.getElementById("closeModal").addEventListener(
     closeFile
 );
 
-fileModal.addEventListener("click", (event) => {
+fileModal.addEventListener("click", event => {
     if (event.target === fileModal) {
         closeFile();
     }
 });
 
-document.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", event => {
     if (event.key === "Escape" && !fileModal.hidden) {
         closeFile();
     }
 });
 
-// Move modal to body so fixed positioning works correctly.
 document.body.appendChild(fileModal);
 
-
 // ==========================================
-// SECURITY CAMERA SYSTEM
+// SECURITY CAMERAS
 // ==========================================
 
 const cameraData = [
@@ -210,65 +233,119 @@ cameraButtons.forEach(button => {
     });
 });
 
+// ==========================================
+// ARCHIVE UNLOCKING
+// ==========================================
+
+function showArchive(archive) {
+    if (!archive) return;
+
+    archive.hidden = false;
+    archive.classList.add("visible");
+
+    observer.observe(archive);
+}
+
+function unlockWard13() {
+    localStorage.setItem("ward13Unlocked", "true");
+
+    const archive = document.getElementById("ward13Archive");
+
+    if (archive) {
+        showArchive(archive);
+        archive.classList.add("ward13-unlocked");
+
+        archive.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+
+    showSecret("WARD 13 UNLOCKED. ACCESS GRANTED.");
+}
+
+function unlockSecretCode(code) {
+    const normalizedCode = code.trim().toUpperCase();
+    const fileId = secretCodes[normalizedCode];
+
+    if (!fileId) return false;
+
+    const archive = document.getElementById("secretArchives");
+    const file = document.getElementById(fileId);
+
+    if (!archive || !file) return false;
+
+    showArchive(archive);
+
+    file.hidden = false;
+
+    localStorage.setItem("secret_" + normalizedCode, "true");
+
+    file.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    return true;
+}
 
 // ==========================================
-// INTERACTIVE TERMINAL
+// RESTORE SAVED UNLOCKS
+// ==========================================
+
+function restoreArchives() {
+
+    if (localStorage.getItem("ward13Unlocked") === "true") {
+        showArchive(document.getElementById("ward13Archive"));
+    }
+
+    Object.keys(secretCodes).forEach(code => {
+
+        if (localStorage.getItem("secret_" + code) === "true") {
+
+            const archive = document.getElementById("secretArchives");
+            const file = document.getElementById(secretCodes[code]);
+
+            showArchive(archive);
+
+            if (file) {
+                file.hidden = false;
+            }
+        }
+    });
+
+    if (localStorage.getItem("projectAbandonedUnlocked") === "true") {
+        showArchive(document.getElementById("projectAbandoned"));
+    }
+}
+
+restoreArchives();
+
+// ==========================================
+// WARD 13 PATIENT JOURNAL
+// ==========================================
+
+document.getElementById("readSecret").addEventListener("click", () => {
+
+    const entry = document.getElementById("secretEntry");
+    const button = document.getElementById("readSecret");
+
+    entry.hidden = false;
+    button.hidden = true;
+
+    showSecret("FINAL PATIENT RECORD ACCESSED.");
+});
+
+// ==========================================
+// TERMINAL
 // ==========================================
 
 const terminalForm = document.getElementById("terminalForm");
 const terminalInput = document.getElementById("terminalInput");
 const terminalOutput = document.getElementById("terminalOutput");
 
-let terminalUnlocked = localStorage.getItem("ward13Unlocked") === "true";
-
-function unlockWard13() {
-    terminalUnlocked = true;
-
-    localStorage.setItem("ward13Unlocked", "true");
-
-    const archive = document.getElementById("ward13Archive");
-
-    if (archive) {
-        archive.hidden = false;
-        observer.observe(archive);
-
-        archive.classList.add("visible", "ward13-unlocked");
-
-        setTimeout(() => {
-            archive.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }, 150);
-    }
-
-    showSecret("WARD 13 UNLOCKED. ACCESS GRANTED.");
-}
-
-function restoreWard13() {
-    if (!terminalUnlocked) return;
-
-    const archive = document.getElementById("ward13Archive");
-
-    if (archive) {
-        archive.hidden = false;
-        archive.classList.add("visible");
-        observer.observe(archive);
-    }
-}
-
-restoreWard13();
-
-document.getElementById("readSecret").addEventListener("click", () => {
-    const entry = document.getElementById("secretEntry");
-
-    entry.hidden = false;
-
-    document.getElementById("readSecret").hidden = true;
-});
-
-
 function printLine(message, type = "") {
+
     const line = document.createElement("p");
 
     line.textContent = message;
@@ -278,10 +355,12 @@ function printLine(message, type = "") {
     }
 
     terminalOutput.appendChild(line);
+
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
 }
 
 function printPlayLink() {
+
     const line = document.createElement("p");
     const link = document.createElement("a");
 
@@ -297,21 +376,88 @@ function printPlayLink() {
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
 }
 
+// ==========================================
+// PROJECT ABANDONED
+// ==========================================
+
+function allSecretFilesFound() {
+
+    return Object.keys(secretCodes).every(code =>
+        localStorage.getItem("secret_" + code) === "true"
+    );
+}
+
+function unlockProjectAbandoned() {
+
+    if (!allSecretFilesFound()) {
+
+        printLine("ACCESS DENIED.", "terminal-red");
+        printLine("FIVE SECRET FILES ARE REQUIRED.");
+
+        return;
+    }
+
+    const archive = document.getElementById("projectAbandoned");
+
+    if (!archive) {
+        printLine("PROJECT ARCHIVE NOT FOUND.", "terminal-red");
+        return;
+    }
+
+    showArchive(archive);
+
+    localStorage.setItem("projectAbandonedUnlocked", "true");
+
+    printLine("ALL FRAGMENTS VERIFIED.", "terminal-green");
+    printLine("PROJECT ABANDONED UNLOCKED.", "terminal-green");
+    printLine("YOU HAVE FOUND THE FINAL ARCHIVE.");
+
+    archive.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    showSecret("PROJECT ABANDONED // ACCESS GRANTED");
+}
+
+// ==========================================
+// COMMAND HANDLER
+// ==========================================
+
 function runCommand(rawCommand) {
+
     const command = rawCommand.trim().toLowerCase();
 
     if (!command) return;
 
-   printLine("GUEST@FACILITY:~$ " + rawCommand);
+    printLine("GUEST@FACILITY:~$ " + rawCommand);
 
-// CHECK SECRET CODES
-if (unlockSecretCode(command)) {
-    printLine("ACCESS GRANTED.", "terminal-green");
-    printLine("SECRET FILE RECOVERED.");
-    return;
-}
+    // SECRET CODES
 
-switch (command) {
+    if (unlockSecretCode(command)) {
+
+        printLine("ACCESS GRANTED.", "terminal-green");
+        printLine("SECRET FILE RECOVERED.");
+
+        if (allSecretFilesFound()) {
+            printLine("ALL FIVE FRAGMENTS RECOVERED.");
+            printLine("FINAL CODE DISCOVERED: PROJECT");
+        }
+
+        return;
+    }
+
+    // FINAL PROJECT CODE
+
+    if (command === "project") {
+        unlockProjectAbandoned();
+        return;
+    }
+
+    // NORMAL COMMANDS
+
+    switch (command) {
+
         case "help":
             printLine("AVAILABLE COMMANDS:");
             printLine("help     - Show commands");
@@ -365,33 +511,24 @@ switch (command) {
             showSecret("DON'T TURN AROUND.");
             break;
 
-        
-case "ward13":
-    if (!terminalUnlocked) {
-        unlockWard13();
+        case "ward13":
 
-        printLine("ACCESS GRANTED.", "terminal-green");
-        printLine("WELCOME TO WARD 13.");
-        printLine("THEY NEVER LEFT.");
-        printLine("SECRET ARCHIVE UNLOCKED.");
+            if (localStorage.getItem("ward13Unlocked") !== "true") {
 
-    } else {
-        printLine("WARD 13 ACCESS ALREADY GRANTED.");
-        printLine("THE SECRET ARCHIVE IS AVAILABLE.");
-    }
-    break;
-
-            if (!terminalUnlocked) {
-                terminalUnlocked = true;
+                unlockWard13();
 
                 printLine("ACCESS GRANTED.", "terminal-green");
                 printLine("WELCOME TO WARD 13.");
                 printLine("THEY NEVER LEFT.");
-                printLine("SECRET DOCUMENT UNLOCKED.");
-                showSecret("WARD 13 HAS BEEN UNLOCKED.");
+                printLine("SECRET ARCHIVE UNLOCKED.");
+
             } else {
+
                 printLine("WARD 13 ACCESS ALREADY GRANTED.");
+                printLine("THE SECRET ARCHIVE IS AVAILABLE.");
+
             }
+
             break;
 
         default:
@@ -400,7 +537,12 @@ case "ward13":
     }
 }
 
-terminalForm.addEventListener("submit", (event) => {
+// ==========================================
+// TERMINAL INPUT
+// ==========================================
+
+terminalForm.addEventListener("submit", event => {
+
     event.preventDefault();
 
     const command = terminalInput.value;
@@ -411,35 +553,17 @@ terminalForm.addEventListener("submit", (event) => {
     terminalInput.focus();
 });
 
-
 // ==========================================
-// EASTER EGG SYSTEM
+// SECRET LOGO CLICK
 // ==========================================
-
-const secretMessage = document.getElementById("secretMessage");
-
-let secretTimeout;
-
-function showSecret(message) {
-    secretMessage.textContent = message;
-    secretMessage.classList.add("show");
-
-    clearTimeout(secretTimeout);
-
-    secretTimeout = setTimeout(() => {
-        secretMessage.classList.remove("show");
-    }, 3500);
-}
-
-
-// Click the logo five times.
 
 const logo = document.getElementById("logo");
 
 let logoClicks = 0;
 let logoTimer;
 
-logo.addEventListener("click", (event) => {
+logo.addEventListener("click", event => {
+
     event.preventDefault();
 
     logoClicks++;
@@ -451,6 +575,7 @@ logo.addEventListener("click", (event) => {
     }, 2000);
 
     if (logoClicks >= 5) {
+
         logoClicks = 0;
 
         showSecret("YOU FOUND THE FIRST SECRET.");
@@ -458,8 +583,9 @@ logo.addEventListener("click", (event) => {
     }
 });
 
-
-// Secret keyboard sequence: A B A N D O N
+// ==========================================
+// SECRET KEYBOARD SEQUENCE
+// ==========================================
 
 const secretSequence = [
     "a", "b", "a", "n", "d", "o", "n"
@@ -467,25 +593,30 @@ const secretSequence = [
 
 let sequencePosition = 0;
 
-document.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", event => {
+
     if (event.target.matches("input")) return;
 
     const key = event.key.toLowerCase();
 
     if (key === secretSequence[sequencePosition]) {
+
         sequencePosition++;
 
         if (sequencePosition === secretSequence.length) {
+
             sequencePosition = 0;
 
             showSecret("THE HOSPITAL REMEMBERS YOU.");
             runCommand("ward13");
         }
+
     } else {
+
         sequencePosition = key === "a" ? 1 : 0;
+
     }
 });
-
 
 // ==========================================
 // STARTUP
@@ -494,73 +625,4 @@ document.addEventListener("keydown", (event) => {
 console.log("THE ABANDONED SYSTEM INITIALIZED.");
 console.log("ACCESS CODE: WARD13");
 console.log("DO NOT TRUST CAMERA 04.");
-
-// WARD 13 VISIBILITY TEST
-
-window.addEventListener("load", () => {
-    const archive = document.getElementById("ward13Archive");
-
-    console.log("WARD13 ARCHIVE:", archive);
-
-    if (localStorage.getItem("ward13Unlocked") === "true" && archive) {
-        archive.hidden = false;
-        archive.style.display = "block";
-        archive.style.opacity = "1";
-        archive.style.transform = "none";
-        archive.classList.add("visible");
-
-        console.log("WARD 13 FORCED VISIBLE");
-    }
-});
-// ADDITIONAL SECRET CODES
-
-const secretCodes = {
-  THEPATIENT: "filePatient",
-  NIGHTSHIFT: "fileNightshift",
-  "0427": "file0427",
-  DONTLOOK: "fileDontlook",
-  THEST4LKER: "fileStalker"
-};
-
-function unlockSecretCode(code) {
-  const normalizedCode = code.trim().toUpperCase();
-  const fileId = secretCodes[normalizedCode];
-
-  if (!fileId) {
-    return false;
-  }
-
-  const archive = document.getElementById("secretArchives");
-  const file = document.getElementById(fileId);
-
-  if (!archive || !file) {
-    return false;
-  }
-
-  archive.hidden = false;
-  file.hidden = false;
-
-  localStorage.setItem("secret_" + normalizedCode, "true");
-
-  file.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-
-  return true;
-}
-
-// Restore previously unlocked files
-document.addEventListener("DOMContentLoaded", () => {
-  Object.keys(secretCodes).forEach(code => {
-    if (localStorage.getItem("secret_" + code) === "true") {
-      const archive = document.getElementById("secretArchives");
-      const file = document.getElementById(secretCodes[code]);
-
-      if (archive && file) {
-        archive.hidden = false;
-        file.hidden = false;
-      }
-    }
-  });
-});
+console.log("PROJECT ABANDONED IS WAITING.");
