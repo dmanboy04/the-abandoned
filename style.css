@@ -956,3 +956,95 @@ footer p {
         transition: none !important;
     }
 }
+
+/* WARD 13 SECRET ARCHIVE */
+
+.ward13-section {
+    background:
+        radial-gradient(ellipse at center, #351010 0%, #100b0b 65%, #070a08 100%);
+    border-top: 1px solid #9d292955;
+    text-align: center;
+}
+
+.ward13-section[hidden],
+#secretEntry[hidden] {
+    display: none !important;
+}
+
+.ward13-panel {
+    position: relative;
+    max-width: 650px;
+    margin: 40px auto 0;
+    padding: 45px 30px;
+    background: #090c0a;
+    border: 1px solid #9d2929;
+    box-shadow: 0 0 55px #a52b2b20;
+    text-align: left;
+}
+
+.ward13-stamp {
+    display: inline-block;
+    border: 2px solid #c63b3b;
+    color: #e04444;
+    padding: 8px 15px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    transform: rotate(-4deg);
+    margin-bottom: 30px;
+}
+
+.ward13-panel h3 {
+    color: #e04444;
+    letter-spacing: 3px;
+    margin: 20px 0;
+}
+
+.ward13-panel p {
+    color: #aab3aa;
+    font-family: 'Special Elite', monospace;
+    line-height: 2;
+    font-size: 13px;
+}
+
+.ward13-divider {
+    height: 1px;
+    background: #9d292955;
+    margin: 25px 0;
+}
+
+.ward13-warning {
+    color: #e04444 !important;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin: 25px 0;
+}
+
+#readSecret {
+    margin-top: 20px;
+    border: 0;
+    cursor: pointer;
+}
+
+#secretEntry {
+    border-top: 1px solid #9d292955;
+    margin-top: 30px;
+    padding-top: 20px;
+    animation: reveal 1s ease both;
+}
+
+#secretEntry p {
+    margin: 15px 0;
+}
+
+.ward13-unlocked {
+    animation: wardGlitch .5s steps(2, end) 3;
+}
+
+@keyframes wardGlitch {
+    0% { transform: translateX(0); filter: none; }
+    25% { transform: translateX(-5px); filter: hue-rotate(90deg); }
+    50% { transform: translateX(5px); filter: contrast(2); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0); filter: none; }
+}
