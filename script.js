@@ -302,10 +302,16 @@ function runCommand(rawCommand) {
 
     if (!command) return;
 
-    printLine("GUEST@FACILITY:~$ " + rawCommand);
+   printLine("GUEST@FACILITY:~$ " + rawCommand);
 
-    switch (command) {
+// CHECK SECRET CODES
+if (unlockSecretCode(command)) {
+    printLine("ACCESS GRANTED.", "terminal-green");
+    printLine("SECRET FILE RECOVERED.");
+    return;
+}
 
+switch (command) {
         case "help":
             printLine("AVAILABLE COMMANDS:");
             printLine("help     - Show commands");
