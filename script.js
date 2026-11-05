@@ -261,10 +261,16 @@ function selectCamera(index) {
     }
 }
 
-cameraButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-        selectCamera(Number(button.dataset.camera));
-    });
+document.querySelector(".camera-controls")?.addEventListener("click", (event) => {
+    const button = event.target.closest(".camera-button");
+
+    if (!button) return;
+
+    const index = Number(button.dataset.camera);
+
+    if (Number.isInteger(index) && index >= 0 && index < cameraData.length) {
+        selectCamera(index);
+    }
 });
 
 // ==========================================
