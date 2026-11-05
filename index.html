@@ -251,83 +251,33 @@
         </div>
         <label for="elevatorCode">ENTER FLOOR ACCESS CODE</label>
         <input id="elevatorCode" type="password" maxlength="20" placeholder="ACCESS CODE">
-        /* ============================================
-   SECRET ELEVATOR — FIXED VERSION
-   ============================================ */
+<div class="elevator-display" id="elevatorDisplay">
+    SELECT FLOOR
+</div>
 
-(() => {
-    const codes = {
-        "1": "1010",
-        "2": "2020",
-        "3": "1313",
-        "B": "0427"
-    };
+<div class="elevator-buttons">
+    <button data-value="1">FLOOR 1</button>
+    <button data-value="2">FLOOR 2</button>
+    <button data-value="3">FLOOR 3</button>
+    <button data-value="B">BASEMENT</button>
+</div>
 
-    let enteredCode = "";
+<input
+    type="password"
+    id="elevatorCodeInput"
+    maxlength="4"
+    inputmode="numeric"
+    placeholder="ENTER ACCESS CODE"
+>
 
-    const display = document.getElementById("elevatorDisplay");
-    const result = document.getElementById("elevatorResult");
+<div class="elevator-buttons">
+    <button id="elevatorEnter">ENTER</button>
+    <button id="elevatorClear">CLEAR</button>
+</div>
 
-    const buttons = document.querySelectorAll(
-        ".elevator-buttons button"
-    );
-
-    function updateDisplay() {
-        if (display) {
-            display.textContent =
-                enteredCode.split("").join(" ") || "_ _ _ _";
-        }
-    }
-
-    buttons.forEach(button => {
-        button.addEventListener("click", () => {
-            const value = button.dataset.value;
-
-            if (!value) return;
-
-            if (value === "CLEAR") {
-                enteredCode = "";
-                if (result) result.textContent = "CODE CLEARED.";
-                updateDisplay();
-                return;
-            }
-
-            if (value === "ENTER") {
-                const floor = Object.keys(codes).find(
-                    key => codes[key] === enteredCode
-                );
-
-                if (floor) {
-                    if (result) {
-                        result.textContent =
-                            `ACCESS GRANTED — FLOOR ${floor} UNLOCKED.`;
-                    }
-                } else {
-                    if (result) {
-                        result.textContent =
-                            "ACCESS DENIED — INCORRECT CODE.";
-                    }
-                }
-
-                enteredCode = "";
-                updateDisplay();
-                return;
-            }
-
-            if (enteredCode.length < 4) {
-                enteredCode += value;
-                updateDisplay();
-
-                if (result) {
-                    result.textContent = "ENTER YOUR ACCESS CODE.";
-                }
-            }
-        });
-    });
-
-    updateDisplay();
-})();
-</section>
+<div class="elevator-result" id="elevatorResult">
+    SELECT A FLOOR TO BEGIN.
+</div>
 
 <section class="section broadcast-section" id="broadcast">
     <p class="eyebrow">FACILITY PUBLIC ADDRESS SYSTEM</p>
