@@ -506,4 +506,55 @@ window.addEventListener("load", () => {
         console.log("WARD 13 FORCED VISIBLE");
     }
 });
+// ADDITIONAL SECRET CODES
 
+const secretCodes = {
+  THEPATIENT: "filePatient",
+  NIGHTSHIFT: "fileNightshift",
+  "0427": "file0427",
+  DONTLOOK: "fileDontlook",
+  THEST4LKER: "fileStalker"
+};
+
+function unlockSecretCode(code) {
+  const normalizedCode = code.trim().toUpperCase();
+  const fileId = secretCodes[normalizedCode];
+
+  if (!fileId) {
+    return false;
+  }
+
+  const archive = document.getElementById("secretArchives");
+  const file = document.getElementById(fileId);
+
+  if (!archive || !file) {
+    return false;
+  }
+
+  archive.hidden = false;
+  file.hidden = false;
+
+  localStorage.setItem("secret_" + normalizedCode, "true");
+
+  file.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+
+  return true;
+}
+
+// Restore previously unlocked files
+document.addEventListener("DOMContentLoaded", () => {
+  Object.keys(secretCodes).forEach(code => {
+    if (localStorage.getItem("secret_" + code) === "true") {
+      const archive = document.getElementById("secretArchives");
+      const file = document.getElementById(secretCodes[code]);
+
+      if (archive && file) {
+        archive.hidden = false;
+        file.hidden = false;
+      }
+    }
+  });
+});
