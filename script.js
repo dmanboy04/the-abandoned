@@ -1,391 +1,428 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#080b09">
+// ==========================================
+// THE ABANDONED - INTERACTIVE SYSTEM
+// ==========================================
 
-    <title>THE ABANDONED | Official Horror Experience</title>
+const ROBLOX_URL =
+    "https://www.roblox.com/games/116357638869409/The-Abandoned";
 
-    <meta name="description" content="Enter The Abandoned. An abandoned hospital, unknown creatures, and one way out.">
 
-    <link rel="stylesheet" href="style.css">
+// ==========================================
+// SCROLL ANIMATIONS
+// ==========================================
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Special+Elite&display=swap" rel="stylesheet">
-</head>
+const sections = document.querySelectorAll(".section");
 
-<body>
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+        }
+    });
+}, {
+    threshold: 0.12
+});
 
-<div class="background">
-    <div class="fog fog-one"></div>
-    <div class="fog fog-two"></div>
-    <div class="particles"></div>
-</div>
+sections.forEach(section => observer.observe(section));
 
-<div class="noise"></div>
-<div class="vignette"></div>
 
-<header>
-    <a href="#home" class="logo" id="logo">
-        THE<span>ABANDONED</span>
-    </a>
+// ==========================================
+// CLASSIFIED FILES
+// ==========================================
 
-    <nav>
-        <a href="#about">ABOUT</a>
-        <a href="#files">CLASSIFIED</a>
-        <a href="#cameras">CAMERAS</a>
-        <a href="#terminal">TERMINAL</a>
-    </nav>
+// These are fictional website documents,
+// not actual Roblox game records.
 
-    <a class="nav-play"
-       href="https://www.roblox.com/games/116357638869409/The-Abandoned"
-       target="_blank" rel="noopener">
-       PLAY GAME ↗
-    </a>
-</header>
+const documents = {
+    patient: {
+        title: "PATIENT RECORDS // FILE 001",
+        text: `PATIENT: UNKNOWN
 
-<main>
+STATUS: MISSING
 
-    <!-- HERO -->
+LOCATION: LOWER HOSPITAL WING
 
-    <section class="hero" id="home">
+NOTES:
+The patient was last seen near the
+elevator at 03:17 AM.
 
-        <div class="hero-content">
+Security footage has been removed.
 
-            <p class="eyebrow">CLASSIFIED FACILITY // ACCESS RESTRICTED</p>
+A handwritten note was found:
 
-            <h1 class="glitch" data-text="THE ABANDONED">
-                THE<br>
-                <span>ABANDONED</span>
-            </h1>
+"IT KNOWS MY NAME."
 
-            <p class="subtitle">YOU WERE NEVER SUPPOSED TO WAKE UP.</p>
+[ADDITIONAL INFORMATION REDACTED]`
+    },
 
-            <p class="description">
-                An abandoned hospital. Unknown creatures.
-                One mission: find a way out.
-            </p>
+    experiment: {
+        title: "EXPERIMENT LOG // FILE 002",
+        text: `PROJECT: UNKNOWN
 
-            <div class="hero-buttons">
+LOCATION: RESTRICTED LABORATORY
 
-                <a class="primary-button"
-                   href="https://www.roblox.com/games/116357638869409/The-Abandoned"
-                   target="_blank" rel="noopener">
-                    ENTER THE HOSPITAL ↗
-                </a>
+STATUS: TERMINATED
 
-                <a class="secondary-button" href="#about">
-                    INVESTIGATE
-                </a>
+NOTES:
+Unusual sounds were reported
+beneath the hospital.
 
-            </div>
+Staff members refused to enter
+the lower floors.
 
-            <div class="warning">
-                ⚠ SURVIVAL IS NOT GUARANTEED
-            </div>
+The final recording contains
+only breathing.
 
-        </div>
+[RECORDING LOST]`
+    },
 
-        <div class="hero-status">
-            <span class="status-dot"></span>
-            FACILITY STATUS: UNKNOWN
-        </div>
+    incident: {
+        title: "INCIDENT REPORT // FILE 003",
+        text: `INCIDENT: 03:17 AM
 
-        <div class="scroll-indicator">
-            SCROLL TO EXPLORE ↓
-        </div>
+LOCATION: MAIN HALL
 
-    </section>
+ALL STAFF: UNACCOUNTED FOR
 
+NOTES:
+Emergency lights activated.
 
-    <!-- ABOUT -->
+All exits were locked.
 
-    <section class="section about" id="about">
+Camera 03 recorded movement
+after the building was evacuated.
 
-        <p class="eyebrow">WELCOME TO YOUR WORST NIGHTMARE</p>
+No explanation was provided.
 
-        <h2>THERE IS NO <span>ESCAPE.</span></h2>
+[REPORT SEALED]`
+    }
+};
 
-        <p>
-            You wake up inside an abandoned hospital.
-            The corridors are empty. The lights are dying.
-            Something is watching you from the darkness.
-        </p>
+const fileModal = document.getElementById("fileModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalText = document.getElementById("modalText");
+
+function openFile(fileId) {
+    const file = documents[fileId];
+
+    if (!file) return;
+
+    modalTitle.textContent = file.title;
+    modalText.textContent = file.text;
+
+    fileModal.hidden = false;
+    document.body.style.overflow = "hidden";
+
+    showSecret("CONFIDENTIAL FILE ACCESSED");
+}
+
+document.querySelectorAll(".file-button").forEach(button => {
+    button.addEventListener("click", () => {
+        openFile(button.dataset.file);
+    });
+});
+
+function closeFile() {
+    fileModal.hidden = true;
+    document.body.style.overflow = "";
+}
+
+document.getElementById("closeModal").addEventListener(
+    "click",
+    closeFile
+);
+
+fileModal.addEventListener("click", (event) => {
+    if (event.target === fileModal) {
+        closeFile();
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !fileModal.hidden) {
+        closeFile();
+    }
+});
+
+// Move modal to body so fixed positioning works correctly.
+document.body.appendChild(fileModal);
+
+
+// ==========================================
+// SECURITY CAMERA SYSTEM
+// ==========================================
+
+const cameraData = [
+    {
+        name: "CAM 01 // MAIN HALL",
+        message: "SIGNAL CONNECTED",
+        status: "SYSTEM ONLINE"
+    },
+    {
+        name: "CAM 02 // PATIENT WING",
+        message: "MOVEMENT DETECTED",
+        status: "SIGNAL UNSTABLE"
+    },
+    {
+        name: "CAM 03 // LOWER FLOOR",
+        message: "NO SIGNAL",
+        status: "CONNECTION LOST"
+    },
+    {
+        name: "CAM 04 // RESTRICTED ROOM",
+        message: "UNKNOWN ENTITY",
+        status: "WARNING"
+    }
+];
+
+const cameraScreen = document.getElementById("cameraScreen");
+const cameraName = document.getElementById("cameraName");
+const cameraMessage = document.getElementById("cameraMessage");
+const cameraStatus = document.getElementById("cameraStatus");
+
+const cameraButtons = document.querySelectorAll(".camera-button");
+
+function selectCamera(index) {
+    const camera = cameraData[index];
+
+    if (!camera) return;
+
+    cameraScreen.dataset.camera = index;
+    cameraName.textContent = camera.name;
+    cameraMessage.textContent = camera.message;
+    cameraStatus.textContent = camera.status;
+
+    cameraButtons.forEach(button => {
+        button.classList.toggle(
+            "active",
+            Number(button.dataset.camera) === index
+        );
+    });
+
+    if (index === 3) {
+        showSecret("SOMETHING IS WATCHING.");
+    }
+}
+
+cameraButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        selectCamera(Number(button.dataset.camera));
+    });
+});
+
+
+// ==========================================
+// INTERACTIVE TERMINAL
+// ==========================================
+
+const terminalForm = document.getElementById("terminalForm");
+const terminalInput = document.getElementById("terminalInput");
+const terminalOutput = document.getElementById("terminalOutput");
+
+let terminalUnlocked = false;
+
+function printLine(message, type = "") {
+    const line = document.createElement("p");
+
+    line.textContent = message;
+
+    if (type) {
+        line.className = type;
+    }
+
+    terminalOutput.appendChild(line);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+}
+
+function printPlayLink() {
+    const line = document.createElement("p");
+    const link = document.createElement("a");
+
+    link.href = ROBLOX_URL;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = "OPEN THE ABANDONED ON ROBLOX ↗";
+    link.style.color = "#83d98d";
+
+    line.appendChild(link);
+    terminalOutput.appendChild(line);
+
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+}
+
+function runCommand(rawCommand) {
+    const command = rawCommand.trim().toLowerCase();
+
+    if (!command) return;
+
+    printLine("GUEST@FACILITY:~$ " + rawCommand);
+
+    switch (command) {
+
+        case "help":
+            printLine("AVAILABLE COMMANDS:");
+            printLine("help     - Show commands");
+            printLine("status   - Facility status");
+            printLine("files    - List classified files");
+            printLine("cameras  - Surveillance overview");
+            printLine("play     - Open Roblox game");
+            printLine("clear    - Clear terminal");
+            printLine("wake up  - Unknown command");
+            printLine("WARD13   - Restricted access");
+            break;
+
+        case "status":
+            printLine("FACILITY STATUS: CRITICAL");
+            printLine("LIGHTING: UNSTABLE");
+            printLine("SECURITY: COMPROMISED");
+            printLine("EXIT DOORS: LOCKED");
+            printLine("LIFE SIGNS: UNKNOWN");
+            break;
+
+        case "files":
+            printLine("AVAILABLE DOCUMENTS:");
+            printLine("FILE 001 - PATIENT RECORDS");
+            printLine("FILE 002 - EXPERIMENT LOG");
+            printLine("FILE 003 - INCIDENT REPORT");
+            printLine("Use the Classified Files section to open them.");
+            break;
+
+        case "cameras":
+            printLine("SURVEILLANCE NETWORK:");
+            printLine("CAM 01 - MAIN HALL");
+            printLine("CAM 02 - PATIENT WING");
+            printLine("CAM 03 - LOWER FLOOR");
+            printLine("CAM 04 - RESTRICTED ROOM");
+            break;
+
+        case "play":
+            printLine("OPENING GAME ACCESS...");
+            printPlayLink();
+            break;
+
+        case "clear":
+            terminalOutput.replaceChildren();
+            printLine("TERMINAL CLEARED.");
+            break;
+
+        case "wake up":
+            printLine("...");
+            printLine("YOU ARE NOT SUPPOSED TO BE HERE.", "terminal-red");
+            printLine("SOMETHING HAS NOTICED YOU.", "terminal-red");
+            showSecret("DON'T TURN AROUND.");
+            break;
 
-        <p>
-            Explore the hospital, survive what hunts you
-            and find a way out before it's too late.
-        </p>
-
-    </section>
-
-
-    <!-- CLASSIFIED FILES -->
-
-    <section class="section classified" id="files">
-
-        <p class="eyebrow">RESTRICTED INFORMATION // LEVEL 4</p>
-
-        <h2>CLASSIFIED <span>FILES</span></h2>
-
-        <p class="section-description">
-            Some things were never meant to be discovered.
-        </p>
-
-        <div class="file-grid">
-
-            <article class="file-card">
-                <div class="file-top">
-                    <span>FILE #001</span>
-                    <span class="classified-label">CLASSIFIED</span>
-                </div>
-
-                <div class="file-icon">▤</div>
-
-                <h3>PATIENT RECORDS</h3>
-
-                <p>Archived patient information. Several records are missing.</p>
-
-                <button class="file-button"
-                        data-file="patient"
-                        type="button">
-                    OPEN FILE →
-                </button>
-            </article>
-
-
-            <article class="file-card">
-                <div class="file-top">
-                    <span>FILE #002</span>
-                    <span class="classified-label">TOP SECRET</span>
-                </div>
-
-                <div class="file-icon">◈</div>
-
-                <h3>EXPERIMENT LOG</h3>
-
-                <p>Unusual experiments were conducted beneath the hospital.</p>
-
-                <button class="file-button"
-                        data-file="experiment"
-                        type="button">
-                    OPEN FILE →
-                </button>
-            </article>
-
-
-            <article class="file-card">
-                <div class="file-top">
-                    <span>FILE #003</span>
-                    <span class="classified-label">REDACTED</span>
-                </div>
-
-                <div class="file-icon">◉</div>
-
-                <h3>INCIDENT REPORT</h3>
-
-                <p>An incident occurred. Nobody agrees on what happened.</p>
-
-                <button class="file-button"
-                        data-file="incident"
-                        type="button">
-                    OPEN FILE →
-                </button>
-            </article>
-
-        </div>
-
-        <div class="file-modal" id="fileModal" hidden>
-
-            <div class="modal-content">
-
-                <button class="modal-close" id="closeModal" type="button">
-                    ✕
-                </button>
-
-                <p class="eyebrow">CONFIDENTIAL DOCUMENT</p>
-
-                <h3 id="modalTitle">DOCUMENT</h3>
-
-                <div id="modalText"></div>
-
-                <p class="redacted">
-                    UNAUTHORIZED ACCESS WILL BE REPORTED.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- SECURITY CAMERAS -->
-
-    <section class="section cameras" id="cameras">
-
-        <p class="eyebrow">LIVE SURVEILLANCE NETWORK</p>
-
-        <h2>SECURITY <span>CAMERAS</span></h2>
-
-        <p class="section-description">
-            The cameras are still running. Something is moving.
-        </p>
-
-        <div class="monitor">
-
-            <div class="monitor-header">
-                <span>● SURVEILLANCE SYSTEM</span>
-                <span id="cameraStatus">SYSTEM ONLINE</span>
-            </div>
-
-            <div class="camera-screen" id="cameraScreen">
-
-                <div class="camera-scanlines"></div>
-
-                <div class="camera-info">
-                    <span id="cameraName">CAM 01 // MAIN HALL</span>
-                    <span id="cameraTime">REC ●</span>
-                </div>
-
-                <div class="camera-message" id="cameraMessage">
-                    SIGNAL CONNECTED
-                </div>
-
-                <div class="camera-crosshair">+</div>
-
-            </div>
-
-            <div class="camera-controls">
-
-                <button class="camera-button active"
-                        data-camera="0" type="button">
-                    CAM 01
-                </button>
-
-                <button class="camera-button"
-                        data-camera="1" type="button">
-                    CAM 02
-                </button>
-
-                <button class="camera-button"
-                        data-camera="2" type="button">
-                    CAM 03
-                </button>
-
-                <button class="camera-button"
-                        data-camera="3" type="button">
-                    CAM 04
-                </button>
-
-            </div>
-
-            <p class="monitor-footer">
-                WARNING: CAMERA FEEDS ARE SIMULATED.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- TERMINAL -->
-
-    <section class="section terminal-section" id="terminal">
-
-        <p class="eyebrow">INTERNAL SYSTEM // ROOT ACCESS</p>
-
-        <h2>FACILITY <span>TERMINAL</span></h2>
-
-        <p class="section-description">
-            Someone left the terminal running.
-            Maybe it knows something.
-        </p>
-
-        <div class="terminal-window">
-
-            <div class="terminal-header">
-                <span>◉ FACILITY_TERMINAL.exe</span>
-                <span>SECURE CONNECTION</span>
-            </div>
-
-            <div class="terminal-output" id="terminalOutput">
-
-                <p>THE ABANDONED // INTERNAL SYSTEM</p>
-                <p>-----------------------------------</p>
-                <p>Connection established...</p>
-                <p>Type <span class="terminal-green">help</span> for available commands.</p>
-
-            </div>
-
-            <form id="terminalForm" class="terminal-input-row">
-
-                <label for="terminalInput">GUEST@FACILITY:~$</label>
-
-                <input
-                    id="terminalInput"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="Enter command..."
-                    maxlength="80"
-                >
-
-                <button type="submit">EXECUTE</button>
-
-            </form>
-
-        </div>
-
-        <p class="terminal-hint">
-            TRY: help / status / files / cameras / play
-        </p>
-
-    </section>
-
-
-    <!-- FINAL CTA -->
-
-    <section class="section final-section">
-
-        <p class="eyebrow">YOUR NIGHTMARE STARTS HERE</p>
-
-        <h2>WILL YOU <span>SURVIVE?</span></h2>
-
-        <p>The hospital is waiting for you.</p>
-
-        <a class="primary-button"
-           href="https://www.roblox.com/games/116357638869409/The-Abandoned"
-           target="_blank" rel="noopener">
-            PLAY THE ABANDONED ↗
-        </a>
-
-    </section>
-
-</main>
-
-
-<footer>
-
-    <a href="#home" class="logo">
-        THE<span>ABANDONED</span>
-    </a>
-
-    <p>A ROBLOX HORROR EXPERIENCE</p>
-
-    <p class="copyright">
-        © 2026 THE ABANDONED. ALL RIGHTS RESERVED.
-    </p>
-
-</footer>
-
-
-<div class="secret-message" id="secretMessage">
-    YOU SHOULD NOT HAVE FOUND THIS.
-</div>
-
-<script src="script.js"></script>
-
-</body>
-</html>
+        case "ward13":
+            if (!terminalUnlocked) {
+                terminalUnlocked = true;
+
+                printLine("ACCESS GRANTED.", "terminal-green");
+                printLine("WELCOME TO WARD 13.");
+                printLine("THEY NEVER LEFT.");
+                printLine("SECRET DOCUMENT UNLOCKED.");
+                showSecret("WARD 13 HAS BEEN UNLOCKED.");
+            } else {
+                printLine("WARD 13 ACCESS ALREADY GRANTED.");
+            }
+            break;
+
+        default:
+            printLine("UNKNOWN COMMAND.", "terminal-red");
+            printLine("TYPE HELP TO SEE AVAILABLE COMMANDS.");
+    }
+}
+
+terminalForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const command = terminalInput.value;
+
+    runCommand(command);
+
+    terminalInput.value = "";
+    terminalInput.focus();
+});
+
+
+// ==========================================
+// EASTER EGG SYSTEM
+// ==========================================
+
+const secretMessage = document.getElementById("secretMessage");
+
+let secretTimeout;
+
+function showSecret(message) {
+    secretMessage.textContent = message;
+    secretMessage.classList.add("show");
+
+    clearTimeout(secretTimeout);
+
+    secretTimeout = setTimeout(() => {
+        secretMessage.classList.remove("show");
+    }, 3500);
+}
+
+
+// Click the logo five times.
+
+const logo = document.getElementById("logo");
+
+let logoClicks = 0;
+let logoTimer;
+
+logo.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    logoClicks++;
+
+    clearTimeout(logoTimer);
+
+    logoTimer = setTimeout(() => {
+        logoClicks = 0;
+    }, 2000);
+
+    if (logoClicks >= 5) {
+        logoClicks = 0;
+
+        showSecret("YOU FOUND THE FIRST SECRET.");
+        runCommand("wake up");
+    }
+});
+
+
+// Secret keyboard sequence: A B A N D O N
+
+const secretSequence = [
+    "a", "b", "a", "n", "d", "o", "n"
+];
+
+let sequencePosition = 0;
+
+document.addEventListener("keydown", (event) => {
+    if (event.target.matches("input")) return;
+
+    const key = event.key.toLowerCase();
+
+    if (key === secretSequence[sequencePosition]) {
+        sequencePosition++;
+
+        if (sequencePosition === secretSequence.length) {
+            sequencePosition = 0;
+
+            showSecret("THE HOSPITAL REMEMBERS YOU.");
+            runCommand("ward13");
+        }
+    } else {
+        sequencePosition = key === "a" ? 1 : 0;
+    }
+});
+
+
+// ==========================================
+// STARTUP
+// ==========================================
+
+console.log("THE ABANDONED SYSTEM INITIALIZED.");
+console.log("ACCESS CODE: WARD13");
+console.log("DO NOT TRUST CAMERA 04.");
