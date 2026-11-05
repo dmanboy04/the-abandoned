@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,6 @@
     <meta name="theme-color" content="#080b09">
 
     <title>THE ABANDONED | Official Horror Experience</title>
-
     <meta name="description" content="Enter The Abandoned. An abandoned hospital, unknown creatures, and one way out.">
 
     <link rel="stylesheet" href="style.css">
@@ -49,11 +47,8 @@
 <main>
 
     <!-- HERO -->
-
     <section class="hero" id="home">
-
         <div class="hero-content">
-
             <p class="eyebrow">CLASSIFIED FACILITY // ACCESS RESTRICTED</p>
 
             <h1 class="glitch" data-text="THE ABANDONED">
@@ -69,7 +64,6 @@
             </p>
 
             <div class="hero-buttons">
-
                 <a class="primary-button"
                    href="https://www.roblox.com/games/116357638869409/The-Abandoned"
                    target="_blank" rel="noopener">
@@ -79,13 +73,11 @@
                 <a class="secondary-button" href="#about">
                     INVESTIGATE
                 </a>
-
             </div>
 
             <div class="warning">
                 ⚠ SURVIVAL IS NOT GUARANTEED
             </div>
-
         </div>
 
         <div class="hero-status">
@@ -96,14 +88,10 @@
         <div class="scroll-indicator">
             SCROLL TO EXPLORE ↓
         </div>
-
     </section>
 
-
     <!-- ABOUT -->
-
     <section class="section about" id="about">
-
         <p class="eyebrow">WELCOME TO YOUR WORST NIGHTMARE</p>
 
         <h2>THERE IS NO <span>ESCAPE.</span></h2>
@@ -118,14 +106,10 @@
             Explore the hospital, survive what hunts you
             and find a way out before it's too late.
         </p>
-
     </section>
 
-
     <!-- CLASSIFIED FILES -->
-
     <section class="section classified" id="files">
-
         <p class="eyebrow">RESTRICTED INFORMATION // LEVEL 4</p>
 
         <h2>CLASSIFIED <span>FILES</span></h2>
@@ -148,13 +132,10 @@
 
                 <p>Archived patient information. Several records are missing.</p>
 
-                <button class="file-button"
-                        data-file="patient"
-                        type="button">
+                <button class="file-button" data-file="patient" type="button">
                     OPEN FILE →
                 </button>
             </article>
-
 
             <article class="file-card">
                 <div class="file-top">
@@ -168,13 +149,10 @@
 
                 <p>Unusual experiments were conducted beneath the hospital.</p>
 
-                <button class="file-button"
-                        data-file="experiment"
-                        type="button">
+                <button class="file-button" data-file="experiment" type="button">
                     OPEN FILE →
                 </button>
             </article>
-
 
             <article class="file-card">
                 <div class="file-top">
@@ -188,9 +166,7 @@
 
                 <p>An incident occurred. Nobody agrees on what happened.</p>
 
-                <button class="file-button"
-                        data-file="incident"
-                        type="button">
+                <button class="file-button" data-file="incident" type="button">
                     OPEN FILE →
                 </button>
             </article>
@@ -198,34 +174,24 @@
         </div>
 
         <div class="file-modal" id="fileModal" hidden>
-
             <div class="modal-content">
-
                 <button class="modal-close" id="closeModal" type="button">
                     ✕
                 </button>
 
                 <p class="eyebrow">CONFIDENTIAL DOCUMENT</p>
-
                 <h3 id="modalTitle">DOCUMENT</h3>
-
                 <div id="modalText"></div>
 
                 <p class="redacted">
                     UNAUTHORIZED ACCESS WILL BE REPORTED.
                 </p>
-
             </div>
-
         </div>
-
     </section>
 
-
     <!-- SECURITY CAMERAS -->
-
     <section class="section cameras" id="cameras">
-
         <p class="eyebrow">LIVE SURVEILLANCE NETWORK</p>
 
         <h2>SECURITY <span>CAMERAS</span></h2>
@@ -235,14 +201,12 @@
         </p>
 
         <div class="monitor">
-
             <div class="monitor-header">
                 <span>● SURVEILLANCE SYSTEM</span>
                 <span id="cameraStatus">SYSTEM ONLINE</span>
             </div>
 
             <div class="camera-screen" id="cameraScreen">
-
                 <div class="camera-scanlines"></div>
 
                 <div class="camera-info">
@@ -255,46 +219,23 @@
                 </div>
 
                 <div class="camera-crosshair">+</div>
-
             </div>
 
             <div class="camera-controls">
-
-                <button class="camera-button active"
-                        data-camera="0" type="button">
-                    CAM 01
-                </button>
-
-                <button class="camera-button"
-                        data-camera="1" type="button">
-                    CAM 02
-                </button>
-
-                <button class="camera-button"
-                        data-camera="2" type="button">
-                    CAM 03
-                </button>
-
-                <button class="camera-button"
-                        data-camera="3" type="button">
-                    CAM 04
-                </button>
-
+                <button class="camera-button active" data-camera="0" type="button">CAM 01</button>
+                <button class="camera-button" data-camera="1" type="button">CAM 02</button>
+                <button class="camera-button" data-camera="2" type="button">CAM 03</button>
+                <button class="camera-button" data-camera="3" type="button">CAM 04</button>
             </div>
 
             <p class="monitor-footer">
                 WARNING: CAMERA FEEDS ARE SIMULATED.
             </p>
-
         </div>
-
     </section>
 
-
     <!-- TERMINAL -->
-
     <section class="section terminal-section" id="terminal">
-
         <p class="eyebrow">INTERNAL SYSTEM // ROOT ACCESS</p>
 
         <h2>FACILITY <span>TERMINAL</span></h2>
@@ -305,23 +246,19 @@
         </p>
 
         <div class="terminal-window">
-
             <div class="terminal-header">
                 <span>◉ FACILITY_TERMINAL.exe</span>
                 <span>SECURE CONNECTION</span>
             </div>
 
             <div class="terminal-output" id="terminalOutput">
-
                 <p>THE ABANDONED // INTERNAL SYSTEM</p>
                 <p>-----------------------------------</p>
                 <p>Connection established...</p>
                 <p>Type <span class="terminal-green">help</span> for available commands.</p>
-
             </div>
 
             <form id="terminalForm" class="terminal-input-row">
-
                 <label for="terminalInput">GUEST@FACILITY:~$</label>
 
                 <input
@@ -333,124 +270,160 @@
                 >
 
                 <button type="submit">EXECUTE</button>
-
             </form>
-
         </div>
 
         <p class="terminal-hint">
             TRY: help / status / files / cameras / play
         </p>
-
     </section>
 
+    <!-- SECRET WARD 13 ARCHIVE -->
+    <section class="section ward13-section" id="ward13Archive" hidden>
+        <p class="eyebrow">UNAUTHORIZED ACCESS DETECTED</p>
 
-<!-- SECRET WARD 13 ARCHIVE -->
+        <h2>WELCOME TO <span>WARD 13</span></h2>
 
-<section class="section ward13-section" id="ward13Archive" hidden>
-
-    <p class="eyebrow">UNAUTHORIZED ACCESS DETECTED</p>
-
-    <h2>WELCOME TO <span>WARD 13</span></h2>
-
-    <p class="section-description">
-        You found something that was never meant to be discovered.
-    </p>
-
-    <div class="ward13-panel">
-
-        <div class="ward13-stamp">RESTRICTED</div>
-
-        <h3>PATIENT 013</h3>
-
-        <p>STATUS: UNKNOWN</p>
-        <p>LOCATION: WARD 13</p>
-        <p>LAST SEEN: 03:17 AM</p>
-
-        <div class="ward13-divider"></div>
-
-        <p class="ward13-warning">
-            THE PATIENT IS STILL INSIDE.
+        <p class="section-description">
+            You found something that was never meant to be discovered.
         </p>
 
-        <button id="readSecret" class="primary-button" type="button">
-            READ FINAL ENTRY
-        </button>
+        <div class="ward13-panel">
+            <div class="ward13-stamp">RESTRICTED</div>
 
-        <div id="secretEntry" hidden>
-            <h3>FINAL PATIENT ENTRY</h3>
+            <h3>PATIENT 013</h3>
 
-            <p>
-                I can hear them outside the door.
-                The lights have stopped working.
-                Nobody is answering the phone.
-            </p>
+            <p>STATUS: UNKNOWN</p>
+            <p>LOCATION: WARD 13</p>
+            <p>LAST SEEN: 03:17 AM</p>
 
-            <p>
-                I thought I was alone.
-                But something just whispered my name.
-            </p>
+            <div class="ward13-divider"></div>
 
             <p class="ward13-warning">
-                IF YOU ARE READING THIS, DO NOT OPEN THE DOOR.
+                THE PATIENT IS STILL INSIDE.
             </p>
+
+            <button id="readSecret" class="primary-button" type="button">
+                READ FINAL ENTRY
+            </button>
+
+            <div id="secretEntry" hidden>
+                <h3>FINAL PATIENT ENTRY</h3>
+
+                <p>
+                    I can hear them outside the door.
+                    The lights have stopped working.
+                    Nobody is answering the phone.
+                </p>
+
+                <p>
+                    I thought I was alone.
+                    But something just whispered my name.
+                </p>
+
+                <p class="ward13-warning">
+                    IF YOU ARE READING THIS, DO NOT OPEN THE DOOR.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECRET ARCHIVES -->
+    <section class="section secret-archive" id="secretArchives" hidden>
+        <div class="section-label">CLASSIFIED // RESTRICTED ACCESS</div>
+        <h2>RECOVERED FILES</h2>
+
+        <div class="secret-file" id="filePatient" hidden>
+            <h3>THE PATIENT</h3>
+            <p>Audio recording recovered from Room 13.</p>
+            <p>"He keeps asking for a doctor. There are no doctors left."</p>
+            <p class="warning">RECORDING TERMINATED.</p>
+            <p class="project-fragment">RECOVERED FRAGMENT: P</p>
         </div>
 
-    </div>
+        <div class="secret-file" id="fileNightshift" hidden>
+            <h3>NIGHT SHIFT LOG</h3>
+            <p>03:17 AM — Movement detected in the eastern hallway.</p>
+            <p>03:19 AM — Camera disconnected.</p>
+            <p>03:21 AM — Someone knocked on the security room door.</p>
+            <p class="warning">NO STAFF WERE SCHEDULED.</p>
+            <p class="project-fragment">RECOVERED FRAGMENT: R</p>
+        </div>
 
-</section>
-<!-- SECRET ARCHIVES -->
+        <div class="secret-file" id="file0427" hidden>
+            <h3>FILE 0427</h3>
+            <p>Patient status: UNKNOWN.</p>
+            <p>Room: 0427.</p>
+            <p>Last known location: Basement.</p>
+            <p class="warning">DO NOT SEARCH FOR THIS PATIENT.</p>
+            <p class="project-fragment">RECOVERED FRAGMENT: O</p>
+        </div>
 
-<section class="section secret-archive" id="secretArchives" hidden>
+        <div class="secret-file" id="fileDontlook" hidden>
+            <h3>FINAL WARNING</h3>
+            <p>It is standing behind you.</p>
+            <p>Do not turn around.</p>
+            <p>It knows you are reading this.</p>
+            <p class="warning">DON'T LOOK.</p>
+            <p class="project-fragment">RECOVERED FRAGMENT: J</p>
+        </div>
 
-  <div class="section-label">CLASSIFIED // RESTRICTED ACCESS</div>
-  <h2>RECOVERED FILES</h2>
+        <div class="secret-file" id="fileStalker" hidden>
+            <h3>SUBJECT: THE STALKER</h3>
+            <p>It has been following patients throughout the facility.</p>
+            <p>It does not attack when watched.</p>
+            <p>It moves when the lights go out.</p>
+            <p class="warning">SUBJECT LOCATION: UNKNOWN.</p>
+            <p class="warning">IT MAY BE WATCHING YOU.</p>
+            <p class="project-fragment">RECOVERED FRAGMENT: ECT</p>
+        </div>
+    </section>
 
-  <div class="secret-file" id="filePatient" hidden>
-    <h3>THE PATIENT</h3>
-    <p>Audio recording recovered from Room 13.</p>
-    <p>"He keeps asking for a doctor. There are no doctors left."</p>
-    <p class="warning">RECORDING TERMINATED.</p>
-  </div>
+    <!-- PROJECT ABANDONED -->
+    <section class="section project-archive" id="projectAbandoned" hidden>
+        <p class="eyebrow">ULTRA CLASSIFIED // LEVEL 5</p>
 
-  <div class="secret-file" id="fileNightshift" hidden>
-    <h3>NIGHT SHIFT LOG</h3>
-    <p>03:17 AM — Movement detected in the eastern hallway.</p>
-    <p>03:19 AM — Camera disconnected.</p>
-    <p>03:21 AM — Someone knocked on the security room door.</p>
-    <p class="warning">NO STAFF WERE SCHEDULED.</p>
-  </div>
+        <h2>PROJECT <span>ABANDONED</span></h2>
 
-  <div class="secret-file" id="file0427" hidden>
-    <h3>FILE 0427</h3>
-    <p>Patient status: UNKNOWN.</p>
-    <p>Room: 0427.</p>
-    <p>Last known location: Basement.</p>
-    <p class="warning">DO NOT SEARCH FOR THIS PATIENT.</p>
-  </div>
+        <p class="project-warning">
+            WARNING: UNAUTHORIZED ACCESS DETECTED
+        </p>
 
-  <div class="secret-file" id="fileDontlook" hidden>
-    <h3>FINAL WARNING</h3>
-    <p>It is standing behind you.</p>
-    <p>Do not turn around.</p>
-    <p>It knows you are reading this.</p>
-    <p class="warning">DON'T LOOK.</p>
-  </div>
+        <div class="project-file">
+            <div class="project-stamp">TOP SECRET</div>
 
-  <div class="secret-file" id="fileStalker" hidden>
-    <h3>SUBJECT: THE STALKER</h3>
-    <p>It has been following patients throughout the facility.</p>
-    <p>It does not attack when watched.</p>
-    <p>It moves when the lights go out.</p>
-    <p class="warning">SUBJECT LOCATION: UNKNOWN.</p>
-    <p class="warning">IT MAY BE WATCHING YOU.</p>
-  </div>
+            <h3>PROJECT REPORT // 000</h3>
 
-</section>
+            <p>PROJECT STATUS: ACTIVE</p>
+            <p>LOCATION: UNKNOWN</p>
+            <p>ALL STAFF: MISSING</p>
+
+            <hr>
+
+            <p>The hospital was never built to treat patients.</p>
+            <p>It was built to contain something.</p>
+            <p>The experiments were successful.</p>
+            <p>The containment was not.</p>
+
+            <p class="project-warning">
+                THE FACILITY MUST NEVER BE REOPENED.
+            </p>
+
+            <hr>
+
+            <h3>FINAL MESSAGE</h3>
+
+            <p>If you found this file, you have gone too far.</p>
+            <p>They know you are here.</p>
+
+            <p class="project-warning">
+                PROJECT ABANDONED IS NOT OVER.
+            </p>
+        </div>
+    </section>
+
     <!-- FINAL CTA -->
-
     <section class="section final-section">
-
         <p class="eyebrow">YOUR NIGHTMARE STARTS HERE</p>
 
         <h2>WILL YOU <span>SURVIVE?</span></h2>
@@ -462,14 +435,11 @@
            target="_blank" rel="noopener">
             PLAY THE ABANDONED ↗
         </a>
-
     </section>
 
 </main>
 
-
 <footer>
-
     <a href="#home" class="logo">
         THE<span>ABANDONED</span>
     </a>
@@ -479,9 +449,7 @@
     <p class="copyright">
         © 2026 THE ABANDONED. ALL RIGHTS RESERVED.
     </p>
-
 </footer>
-
 
 <div class="secret-message" id="secretMessage">
     YOU SHOULD NOT HAVE FOUND THIS.
@@ -491,4 +459,3 @@
 
 </body>
 </html>
-
