@@ -1,45 +1,100 @@
+
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min hemsida</title>
-
-    <style>
-        body {
-            background: #111827;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 100px 20px;
-        }
-
-        h1 {
-            font-size: 50px;
-        }
-
-        p {
-            color: #9ca3af;
-        }
-
-        button {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-    </style>
+    <meta name="theme-color" content="#080b09">
+    <title>THE ABANDONED | Roblox Horror</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <h1>Välkommen till min hemsida!</h1>
-    <p>Min första hemsida är nu under utveckling.</p>
+    <div class="noise"></div>
+    <div class="vignette"></div>
 
-    <button onclick="alert('Hej!')">
-        Klicka här
-    </button>
+    <header>
+        <a href="#" class="logo">THE<span>ABANDONED</span></a>
+        <nav>
+            <a href="#about">ABOUT</a>
+            <a href="#experience">EXPERIENCE</a>
+            <a href="#story">THE STORY</a>
+        </nav>
+        <a class="nav-play" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank">PLAY GAME ↗</a>
+    </header>
 
+    <main>
+        <section class="hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <p class="eyebrow">AN UNFORGETTABLE HORROR EXPERIENCE</p>
+                <h1>THE<br><span>ABANDONED</span></h1>
+                <p class="subtitle">YOU WERE NEVER SUPPOSED TO WAKE UP.</p>
+                <p class="description">
+                    An abandoned hospital. Unknown creatures.
+                    One mission: find a way out.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" class="primary-button">ENTER THE HOSPITAL ↗</a>
+                    <a href="#about" class="secondary-button">DISCOVER MORE</a>
+                </div>
+                <div class="warning">⚠ SURVIVAL IS NOT GUARANTEED</div>
+            </div>
+            <div class="scroll-indicator">SCROLL TO EXPLORE ↓</div>
+        </section>
+
+        <section class="about section" id="about">
+            <p class="eyebrow">WELCOME TO YOUR WORST NIGHTMARE</p>
+            <h2>THERE IS NO <span>ESCAPE.</span></h2>
+            <p>
+                You wake up inside an abandoned hospital.
+                The corridors are empty. The lights are dying.
+                Something is watching you from the darkness.
+            </p>
+            <p>
+                Explore the hospital, survive what hunts you
+                and find a way out before it's too late.
+            </p>
+        </section>
+
+        <section class="experience section" id="experience">
+            <p class="eyebrow">WHAT AWAITS YOU</p>
+            <h2>ENTER THE <span>DARKNESS</span></h2>
+            <div class="feature-grid">
+                <article class="feature">
+                    <span>01</span>
+                    <h3>THE HOSPITAL</h3>
+                    <p>Explore unsettling corridors and forgotten rooms.</p>
+                </article>
+                <article class="feature">
+                    <span>02</span>
+                    <h3>THE CREATURES</h3>
+                    <p>Something is hiding in the darkness. Stay alert.</p>
+                </article>
+                <article class="feature">
+                    <span>03</span>
+                    <h3>FIND A WAY OUT</h3>
+                    <p>Your only objective is to survive and escape.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="story section" id="story">
+            <p class="eyebrow">YOUR NIGHTMARE STARTS HERE</p>
+            <h2>WILL YOU <span>SURVIVE?</span></h2>
+            <p>Don't wait. The hospital is waiting for you.</p>
+            <a href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" class="primary-button">PLAY THE ABANDONED ↗</a>
+        </section>
+    </main>
+
+    <footer>
+        <a href="#" class="logo">THE<span>ABANDONED</span></a>
+        <p>A ROBLOX HORROR EXPERIENCE</p>
+        <p class="copyright">© 2026 THE ABANDONED. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
