@@ -388,67 +388,65 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 4000);
     });
 
-    /* ============================================
-       SECRET ELEVATOR
-       ============================================ */
+  /* SECRET ELEVATOR — FIXED */
 
-    const elevatorCodes = {
-        "1": "1010",
-        "2": "2020",
-        "3": "1313",
-        "B": "0427"
-    };
+const elevatorCodes = {
+    "1": "1010",
+    "2": "2020",
+    "3": "1313",
+    "B": "0427"
+};
 
-    let elevatorInput = "";
+let elevatorInput = "";
 
-    function updateElevator() {
-        const display = $("#elevatorDisplay");
-        if (display) display.textContent = elevatorInput || "_ _ _ _";
+const elevatorDisplay = document.getElementById("elevatorDisplay");
+const elevatorStatus = document.getElementById("elevatorStatus");
+
+function updateElevatorDisplay() {
+    if (elevatorDisplay) {
+        elevatorDisplay.textContent =
+            elevatorInput.split("").join(" ") || "_ _ _ _";
     }
+}
 
-    $$(".elevator-buttons button").forEach(button => {
-        button.addEventListener("click", () => {
-            const value = button.dataset.value;
+document.querySelectorAll(".elevator-buttons button").forEach(button => {
+    button.addEventListener("click", () => {
+        const value = button.dataset.value;
 
-            if (!value) return;
+        if (!value) return;
 
-            if (value === "CLEAR") {
-                elevatorInput = "";
-                updateElevator();
-                return;
+        if (value === "CLEAR") {
+            elevatorInput = "";
+            updateElevatorDisplay();
+            return;
+        }
+
+        if (value === "ENTER") {
+            const floor = Object.keys(elevatorCodes).find(
+                key => elevatorCodes[key] === elevatorInput
+            );
+
+            if (floor) {
+                elevatorStatus.textContent =
+                    "ACCESS GRANTED — FLOOR " + floor + " UNLOCKED.";
+            } else {
+                elevatorStatus.textContent =
+                    "ACCESS DENIED — WRONG CODE.";
             }
 
-            if (value === "ENTER") {
-                const floor = Object.keys(elevatorCodes).find(
-                    key => elevatorCodes[key] === elevatorInput
-                );
+            elevatorInput = "";
+            updateElevatorDisplay();
+            return;
+        }
 
-                const status = $("#elevatorStatus");
-
-                if (floor) {
-                    if (status) {
-                        status.textContent =
-                            `ACCESS GRANTED. ELEVATOR MOVING TO FLOOR ${floor}.`;
-                    }
-
-                    log(`[ELEVATOR] Floor ${floor} unlocked.`);
-                } else {
-                    if (status) {
-                        status.textContent = "ACCESS DENIED. INCORRECT CODE.";
-                    }
-                }
-
-                elevatorInput = "";
-                updateElevator();
-                return;
-            }
-
-            if (elevatorInput.length < 4) {
-                elevatorInput += value;
-                updateElevator();
-            }
-        });
+        if (elevatorInput.length < 4) {
+            elevatorInput += value;
+            updateElevatorDisplay();
+        }
     });
+});
+
+updateElevatorDisplay();
 
     /* ============================================
        EMERGENCY BROADCAST
