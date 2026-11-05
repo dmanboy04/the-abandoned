@@ -219,7 +219,54 @@ const terminalForm = document.getElementById("terminalForm");
 const terminalInput = document.getElementById("terminalInput");
 const terminalOutput = document.getElementById("terminalOutput");
 
-let terminalUnlocked = false;
+let terminalUnlocked = localStorage.getItem("ward13Unlocked") === "true";
+
+function unlockWard13() {
+    terminalUnlocked = true;
+
+    localStorage.setItem("ward13Unlocked", "true");
+
+    const archive = document.getElementById("ward13Archive");
+
+    if (archive) {
+        archive.hidden = false;
+        observer.observe(archive);
+
+        archive.classList.add("visible", "ward13-unlocked");
+
+        setTimeout(() => {
+            archive.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }, 150);
+    }
+
+    showSecret("WARD 13 UNLOCKED. ACCESS GRANTED.");
+}
+
+function restoreWard13() {
+    if (!terminalUnlocked) return;
+
+    const archive = document.getElementById("ward13Archive");
+
+    if (archive) {
+        archive.hidden = false;
+        archive.classList.add("visible");
+        observer.observe(archive);
+    }
+}
+
+restoreWard13();
+
+document.getElementById("readSecret").addEventListener("click", () => {
+    const entry = document.getElementById("secretEntry");
+
+    entry.hidden = false;
+
+    document.getElementById("readSecret").hidden = true;
+});
+
 
 function printLine(message, type = "") {
     const line = document.createElement("p");
@@ -312,7 +359,22 @@ function runCommand(rawCommand) {
             showSecret("DON'T TURN AROUND.");
             break;
 
-        case "ward13":
+        
+case "ward13":
+    if (!terminalUnlocked) {
+        unlockWard13();
+
+        printLine("ACCESS GRANTED.", "terminal-green");
+        printLine("WELCOME TO WARD 13.");
+        printLine("THEY NEVER LEFT.");
+        printLine("SECRET ARCHIVE UNLOCKED.");
+
+    } else {
+        printLine("WARD 13 ACCESS ALREADY GRANTED.");
+        printLine("THE SECRET ARCHIVE IS AVAILABLE.");
+    }
+    break;
+
             if (!terminalUnlocked) {
                 terminalUnlocked = true;
 
