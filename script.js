@@ -488,3 +488,22 @@ document.addEventListener("keydown", (event) => {
 console.log("THE ABANDONED SYSTEM INITIALIZED.");
 console.log("ACCESS CODE: WARD13");
 console.log("DO NOT TRUST CAMERA 04.");
+
+// WARD 13 VISIBILITY TEST
+
+window.addEventListener("load", () => {
+    const archive = document.getElementById("ward13Archive");
+
+    console.log("WARD13 ARCHIVE:", archive);
+
+    if (localStorage.getItem("ward13Unlocked") === "true" && archive) {
+        archive.hidden = false;
+        archive.style.display = "block";
+        archive.style.opacity = "1";
+        archive.style.transform = "none";
+        archive.classList.add("visible");
+
+        console.log("WARD 13 FORCED VISIBLE");
+    }
+});
+
