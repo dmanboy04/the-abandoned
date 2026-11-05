@@ -251,17 +251,82 @@
         </div>
         <label for="elevatorCode">ENTER FLOOR ACCESS CODE</label>
         <input id="elevatorCode" type="password" maxlength="20" placeholder="ACCESS CODE">
-        <div class="floor-buttons">
-         <div class="elevator-buttons">
-    <button data-value="1">1</button>
-    <button data-value="2">2</button>
-    <button data-value="3">3</button>
-    <button data-value="B">B</button>
-    <button data-value="CLEAR">CLEAR</button>
-    <button data-value="ENTER">ENTER</button>
-</div>
-        <div class="elevator-result" id="elevatorResult">SELECT A FLOOR TO BEGIN.</div>
-    </div>
+        /* ============================================
+   SECRET ELEVATOR — FIXED VERSION
+   ============================================ */
+
+(() => {
+    const codes = {
+        "1": "1010",
+        "2": "2020",
+        "3": "1313",
+        "B": "0427"
+    };
+
+    let enteredCode = "";
+
+    const display = document.getElementById("elevatorDisplay");
+    const result = document.getElementById("elevatorResult");
+
+    const buttons = document.querySelectorAll(
+        ".elevator-buttons button"
+    );
+
+    function updateDisplay() {
+        if (display) {
+            display.textContent =
+                enteredCode.split("").join(" ") || "_ _ _ _";
+        }
+    }
+
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            const value = button.dataset.value;
+
+            if (!value) return;
+
+            if (value === "CLEAR") {
+                enteredCode = "";
+                if (result) result.textContent = "CODE CLEARED.";
+                updateDisplay();
+                return;
+            }
+
+            if (value === "ENTER") {
+                const floor = Object.keys(codes).find(
+                    key => codes[key] === enteredCode
+                );
+
+                if (floor) {
+                    if (result) {
+                        result.textContent =
+                            `ACCESS GRANTED — FLOOR ${floor} UNLOCKED.`;
+                    }
+                } else {
+                    if (result) {
+                        result.textContent =
+                            "ACCESS DENIED — INCORRECT CODE.";
+                    }
+                }
+
+                enteredCode = "";
+                updateDisplay();
+                return;
+            }
+
+            if (enteredCode.length < 4) {
+                enteredCode += value;
+                updateDisplay();
+
+                if (result) {
+                    result.textContent = "ENTER YOUR ACCESS CODE.";
+                }
+            }
+        });
+    });
+
+    updateDisplay();
+})();
 </section>
 
 <section class="section broadcast-section" id="broadcast">
