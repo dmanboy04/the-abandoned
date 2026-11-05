@@ -1048,3 +1048,33 @@ footer p {
     75% { transform: translateX(-2px); }
     100% { transform: translateX(0); filter: none; }
 }
+.secret-archive {
+  border-top: 1px solid #551515;
+  background: #090909;
+  padding: 60px 25px;
+}
+
+.secret-file {
+  background: #111;
+  border: 1px solid #542020;
+  padding: 25px;
+  margin: 20px 0;
+  color: #c4c4c4;
+  box-shadow: 0 0 20px rgba(120, 0, 0, 0.12);
+}
+
+.secret-file h3 {
+  color: #a52b2b;
+  letter-spacing: 3px;
+}
+
+.secret-file .warning {
+  color: #d22;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-top: 15px;
+}
+
+.secret-file[hidden] {
+  display: none !important;
+}
