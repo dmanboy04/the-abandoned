@@ -1224,3 +1224,40 @@ footer a {
         padding: 22px;
     }
 }
+/* FIX: EMERGENCY BROADCAST OVERLAY */
+
+#broadcastAlert[hidden],
+#broadcastAlert:not(.active) {
+    display: none !important;
+}
+
+#broadcastAlert.active {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.88);
+}
+
+.broadcast-alert-inner {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+    padding: 40px 25px;
+    text-align: center;
+    background: #101612;
+    border: 1px solid #a52b2b;
+    box-shadow: 0 0 50px #000;
+}
+
+.broadcast-alert-inner button {
+    margin-top: 25px;
+    padding: 14px 25px;
+    background: #632424;
+    color: white;
+    border: 1px solid #e04444;
+    cursor: pointer;
+}
