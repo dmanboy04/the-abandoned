@@ -387,78 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (status) status.textContent = "UNKNOWN CALLER IS CALLING...";
         }, 4000);
     });
-/* ============================================
-   SECRET ELEVATOR — WORKING VERSION
-   ============================================ */
 
-const elevatorCodes = {
-    "1": "1010",
-    "2": "2020",
-    "3": "1313",
-    "B": "0427"
-};
-
-let selectedFloor = null;
-
-const elevatorDisplay = document.getElementById("elevatorDisplay");
-const elevatorResult = document.getElementById("elevatorResult");
-const elevatorCodeInput = document.getElementById("elevatorCodeInput");
-
-document.querySelectorAll(".elevator-buttons [data-value]").forEach(button => {
-    button.addEventListener("click", () => {
-        selectedFloor = button.dataset.value;
-
-        elevatorDisplay.textContent = "FLOOR " + selectedFloor;
-
-        elevatorResult.textContent =
-            "FLOOR " + selectedFloor + " SELECTED. ENTER ACCESS CODE.";
-
-        elevatorCodeInput.value = "";
-        elevatorCodeInput.focus();
-
-        document.querySelectorAll(".elevator-buttons [data-value]")
-            .forEach(btn => btn.classList.toggle(
-                "active",
-                btn === button
-            ));
-    });
-});
-
-document.getElementById("elevatorEnter").addEventListener("click", () => {
-    if (!selectedFloor) {
-        elevatorResult.textContent = "SELECT A FLOOR FIRST.";
-        return;
-    }
-
-    const enteredCode = elevatorCodeInput.value;
-
-    if (enteredCode === elevatorCodes[selectedFloor]) {
-        elevatorDisplay.textContent = "ACCESS GRANTED";
-
-        elevatorResult.textContent =
-            "FLOOR " + selectedFloor + " UNLOCKED. ELEVATOR MOVING...";
-
-        document.querySelectorAll(".elevator-buttons [data-value]")
-            .forEach(button => button.classList.remove("active"));
-
-        selectedFloor = null;
-        elevatorCodeInput.value = "";
-    } else {
-        elevatorResult.textContent = "ACCESS DENIED. INCORRECT CODE.";
-        elevatorCodeInput.value = "";
-        elevatorCodeInput.focus();
-    }
-});
-
-document.getElementById("elevatorClear").addEventListener("click", () => {
-    selectedFloor = null;
-    elevatorCodeInput.value = "";
-    elevatorDisplay.textContent = "SELECT FLOOR";
-    elevatorResult.textContent = "ELEVATOR RESET.";
-
-    document.querySelectorAll(".elevator-buttons [data-value]")
-        .forEach(button => button.classList.remove("active"));
-});
     /* ============================================
        EMERGENCY BROADCAST
        ============================================ */
