@@ -388,51 +388,95 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 4000);
     });
 
-    /* ============================================
-       EMERGENCY BROADCAST
-       ============================================ */
 
-    const broadcastMessages = [
-        "ATTENTION. ALL STAFF MUST REPORT TO THE MAIN HALLWAY.",
-        "DO NOT ENTER WARD 13. THE ROOM IS NOT EMPTY.",
+/* ==========================================
+   THE ABANDONED - EMERGENCY WARNING SYSTEM
+   ========================================== */
+
+(() => {
+    const alertBox = document.getElementById("broadcastAlert");
+    const headline = document.getElementById("alertHeadline");
+    const message = document.getElementById("alertMessage");
+    const closeButton = document.getElementById("closeBroadcastAlert");
+    const broadcastButton = document.getElementById("broadcastButton");
+
+    if (!alertBox || !headline || !message || !closeButton) {
+        console.error("EMERGENCY SYSTEM: HTML ELEMENTS NOT FOUND.");
+        return;
+    }
+
+    const warnings = [
+        "ALL STAFF MUST REPORT TO THE MAIN HALLWAY.",
+        "DO NOT ENTER ROOM 13. THE ROOM IS NOT EMPTY.",
         "ALL PATIENTS MUST REMAIN IN THEIR ROOMS.",
         "IF YOU HEAR SOMEONE CALLING YOUR NAME, DO NOT RESPOND.",
-        "THE BUILDING IS UNDER LOCKDOWN. DO NOT ATTEMPT TO LEAVE."
+        "THE BUILDING IS UNDER LOCKDOWN. DO NOT ATTEMPT TO LEAVE.",
+        "UNKNOWN MOVEMENT DETECTED IN THE BASEMENT.",
+        "CAMERA CONNECTION LOST. DO NOT INVESTIGATE.",
+        "PLEASE IGNORE ANY VOICES COMING FROM EMPTY ROOMS."
     ];
 
-    function closeBroadcast() {
-    const alert = $("#broadcastAlert");
-    if (!alert) return;
+    let warningOpen = false;
+    let warningTimer = null;
 
-    alert.classList.remove("active");
-    alert.hidden = true;
-}
+    function showWarning(customMessage = null) {
+        if (warningOpen) return;
+
+        warningOpen = true;
+
+        headline.textContent = "FACILITY ALERT";
+
+        message.textContent = customMessage ||
+            warnings[Math.floor(Math.random() * warnings.length)];
+
+        alertBox.hidden = false;
+        alertBox.classList.add("active");
+
+        document.body.style.overflow = "hidden";
+
+        console.log("[EMERGENCY] WARNING DISPLAYED.");
     }
 
-    function triggerBroadcast() {
-        const message = broadcastMessages[
-            Math.floor(Math.random() * broadcastMessages.length)
-        ];
+    function closeWarning() {
+        if (!warningOpen) return;
 
-        const screen = $("#broadcastScreen");
-        const alert = $("#broadcastAlert");
+        warningOpen = false;
 
-        if (screen) screen.textContent = message;
+        alertBox.classList.remove("active");
+        alertBox.hidden = true;
 
-       if (alert) {
-    const text = alert.querySelector("p");
-    if (text) text.textContent = message;
+        document.body.style.overflow = "";
 
-    alert.hidden = false;
-    alert.classList.add("active");
-}
+        console.log("[EMERGENCY] WARNING ACKNOWLEDGED.");
+    }
+
+    closeButton.addEventListener("click", closeWarning);
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && warningOpen) {
+            closeWarning();
         }
+    });
 
-        log("[EMERGENCY] Broadcast transmission received.");
+    if (broadcastButton) {
+        broadcastButton.addEventListener("click", () => {
+            showWarning();
+        });
     }
 
-    $("#broadcastButton")?.addEventListener("click", triggerBroadcast);
-  $("#closeBroadcastAlert")?.addEventListener("click", closeBroadcast);
+    // Automatic warnings every 90 seconds.
+    warningTimer = setInterval(() => {
+        if (!warningOpen && Math.random() < 0.7) {
+            showWarning();
+        }
+    }, 90000);
+
+    // Optional access for other scripts.
+    window.showFacilityWarning = showWarning;
+    window.closeFacilityWarning = closeWarning;
+
+    console.log("EMERGENCY WARNING SYSTEM: ONLINE.");
+})();
 
     /* ============================================
        SYSTEM CORRUPTION
