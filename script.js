@@ -401,7 +401,12 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     function closeBroadcast() {
-        $("#broadcastAlert")?.classList.remove("active");
+    const alert = $("#broadcastAlert");
+    if (!alert) return;
+
+    alert.classList.remove("active");
+    alert.hidden = true;
+}
     }
 
     function triggerBroadcast() {
