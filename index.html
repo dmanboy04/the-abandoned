@@ -239,18 +239,27 @@
 </section>
 
 
-<section class="section broadcast-section" id="broadcast">
-    <p class="eyebrow">FACILITY PUBLIC ADDRESS SYSTEM</p>
-    <h2>EMERGENCY <span>BROADCAST</span></h2>
-    <p class="section-description">Listen to the last recorded announcements from the hospital.</p>
-    <div class="broadcast-panel">
-        <div class="broadcast-light"><span></span> BROADCAST SYSTEM</div>
-        <h3 id="broadcastTitle">NO ACTIVE BROADCAST</h3>
-        <p id="broadcastText">The facility public address system is waiting.</p>
-        <button id="broadcastButton" class="primary-button">PLAY EMERGENCY BROADCAST</button>
-    </div>
-</section>
+<!-- EMERGENCY BROADCAST -->
 
+<div id="broadcastAlert" hidden>
+    <div class="broadcast-alert-inner">
+
+        <div class="alert-symbol">⚠</div>
+
+        <p class="alert-label">EMERGENCY BROADCAST</p>
+
+        <h2 id="alertHeadline">FACILITY ALERT</h2>
+
+        <p id="alertMessage">
+            PLEASE REMAIN CALM.
+        </p>
+
+        <button id="closeBroadcastAlert" type="button">
+            ACKNOWLEDGE
+        </button>
+
+    </div>
+</div>
 <section class="section ward13-section" id="ward13Archive" hidden>
     <p class="eyebrow">UNAUTHORIZED ACCESS DETECTED</p>
     <h2>WELCOME TO <span>WARD 13</span></h2>
