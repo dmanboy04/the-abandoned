@@ -1,125 +1,161 @@
-/* ==========================================================
+
+/* =====================================================
    THE ABANDONED // FACILITY CONTROL SYSTEM
-   Interactive website controller — no external dependencies
-   ========================================================== */
+   Complete repaired website controller
+   ===================================================== */
+
 (() => {
   "use strict";
 
-  const $ = (selector, root = document) => root.querySelector(selector);
-  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-  const GAME_URL = "https://www.roblox.com/games/116357638869409/The-Abandoned";
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+  const GAME_URL =
+    "https://www.roblox.com/games/116357638869409/The-Abandoned";
+
+  // -----------------------------------------------------
+  // STORAGE
+  // -----------------------------------------------------
 
   const storage = {
-    get(key) { try { return localStorage.getItem(key); } catch { return null; } },
-    set(key, value) { try { localStorage.setItem(key, value); return true; } catch { return false; } }
+    get(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    },
+
+    set(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch {
+        // Website still works if storage is unavailable.
+      }
+    }
   };
 
   const state = {
-    selectedCamera: 0,
-    nightVision: false,
     emergency: false,
-    warningOpen: false,
-    modalOpen: false,
-    sequenceIndex: 0,
-    logoClicks: 0
+    nightVision: false,
+    selectedCamera: 0,
+    sequence: 0
   };
 
-  const timers = new Set();
-  const intervals = new Set();
-  const later = (fn, ms) => {
-    const id = window.setTimeout(() => { timers.delete(id); fn(); }, ms);
-    timers.add(id);
-    return id;
-  };
-  const every = (fn, ms) => {
-    const id = window.setInterval(fn, ms);
-    intervals.add(id);
-    return id;
-  };
+  // -----------------------------------------------------
+  // GENERAL HELPERS
+  // -----------------------------------------------------
+
+  const toast = $("#toast");
+  let toastTimer;
+
+  function showToast(message) {
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.add("is-visible");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("is-visible");
+    }, 3500);
+  }
+
+  function reveal(element, scroll = false) {
+    if (!element) return;
+
+    element.hidden = false;
+    element.classList.add("is-visible");
+
+    if (scroll) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  }
 
   function safeText(element, value) {
     if (element) element.textContent = value;
   }
 
-  // Reveal only when observed; hidden archives stay hidden until unlocked.
-  const revealObserver = "IntersectionObserver" in window
-    ? new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add("is-visible");
-        });
-      }, { threshold: 0.08 })
-    : null;
+  // -----------------------------------------------------
+  // NAVIGATION
+  // -----------------------------------------------------
 
-  $$(".reveal").forEach(section => {
-    if (revealObserver) revealObserver.observe(section);
-    else section.classList.add("is-visible");
+  const menuButton = $("#menuButton");
+  const navigation = $("#navigation");
+
+  menuButton?.addEventListener("click", () => {
+    const isOpen = navigation?.classList.toggle("is-open");
+
+    menuButton.setAttribute(
+      "aria-expanded",
+      String(Boolean(isOpen))
+    );
   });
 
-  function reveal(element, scroll = false) {
-    if (!element) return;
-    element.hidden = false;
-    element.classList.add("is-visible");
-    if (revealObserver) revealObserver.observe(element);
-    if (scroll) later(() => element.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
-  }
-
-  // Mobile navigation
-  const menuToggle = $("#menuToggle");
-  const primaryNav = $("#primaryNav");
-  menuToggle?.addEventListener("click", () => {
-    const expanded = menuToggle.getAttribute("aria-expanded") === "true";
-    menuToggle.setAttribute("aria-expanded", String(!expanded));
-    primaryNav?.classList.toggle("is-open", !expanded);
+  $$("#navigation a").forEach(link => {
+    link.addEventListener("click", () => {
+      navigation?.classList.remove("is-open");
+      menuButton?.setAttribute("aria-expanded", "false");
+    });
   });
-  $$("#primaryNav a").forEach(link => link.addEventListener("click", () => {
-    primaryNav?.classList.remove("is-open");
-    menuToggle?.setAttribute("aria-expanded", "false");
-  }));
 
-  // Toast / secret message
-  const toast = $("#secretMessage");
-  let toastTimer;
-  function showToast(message) {
-    if (!toast) return;
-    safeText(toast, message);
-    toast.classList.add("is-visible");
-    window.clearTimeout(toastTimer);
-    toastTimer = later(() => toast.classList.remove("is-visible"), 3600);
-  }
+  // -----------------------------------------------------
+  // TERMINAL
+  // -----------------------------------------------------
 
-  // Terminal
-  const terminalOutput = $("#terminalOutput");
   const terminalForm = $("#terminalForm");
   const terminalInput = $("#terminalInput");
+  const terminalOutput = $("#terminalOutput");
 
   function printLine(message, type = "") {
     if (!terminalOutput) return;
-    const p = document.createElement("p");
-    p.textContent = message;
-    if (type) p.classList.add(type);
-    terminalOutput.appendChild(p);
-    while (terminalOutput.children.length > 90) terminalOutput.firstElementChild.remove();
+
+    const line = document.createElement("p");
+    line.textContent = message;
+
+    if (type) {
+      line.classList.add(type);
+    }
+
+    terminalOutput.appendChild(line);
+
+    while (terminalOutput.children.length > 90) {
+      terminalOutput.firstElementChild.remove();
+    }
+
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
   }
 
   function printGameLink() {
     if (!terminalOutput) return;
-    const p = document.createElement("p");
-    const a = document.createElement("a");
-    a.href = GAME_URL;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.textContent = "OPEN THE ABANDONED ON ROBLOX ↗";
-    p.appendChild(a);
-    terminalOutput.appendChild(p);
+
+    const line = document.createElement("p");
+    const link = document.createElement("a");
+
+    link.href = GAME_URL;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "OPEN THE ABANDONED ON ROBLOX ↗";
+
+    line.appendChild(link);
+    terminalOutput.appendChild(line);
+
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
   }
 
-  // Document modal
+  // -----------------------------------------------------
+  // CLASSIFIED FILES
+  // -----------------------------------------------------
+
   const fileModal = $("#fileModal");
   const modalTitle = $("#modalTitle");
   const modalText = $("#modalText");
-  const closeModalButton = $("#closeModal");
+  const closeModal = $("#closeModal");
+
   const documents = {
     patient: {
       title: "PATIENT RECORDS // FILE 001",
@@ -133,10 +169,11 @@ Security footage has been removed.
 
 A handwritten note was found:
 
-“IT KNOWS MY NAME.”
+"IT KNOWS MY NAME."
 
 [ADDITIONAL INFORMATION REDACTED]`
     },
+
     experiment: {
       title: "EXPERIMENT LOG // FILE 002",
       text: `PROJECT: UNKNOWN
@@ -151,6 +188,7 @@ The final recording contains only breathing.
 
 [RECORDING LOST]`
     },
+
     incident: {
       title: "INCIDENT REPORT // FILE 003",
       text: `INCIDENT: 03:17 AM
@@ -169,34 +207,48 @@ No explanation was provided.
   };
 
   function openFile(id) {
-    const data = documents[id];
-    if (!data || !fileModal) return;
-    safeText(modalTitle, data.title);
-    safeText(modalText, data.text);
+    const documentData = documents[id];
+
+    if (!documentData || !fileModal) {
+      printLine("DOCUMENT NOT FOUND.", "terminal-red");
+      return;
+    }
+
+    safeText(modalTitle, documentData.title);
+    safeText(modalText, documentData.text);
+
     fileModal.hidden = false;
-    state.modalOpen = true;
     document.body.classList.add("has-overlay");
-    closeModalButton?.focus();
+
+    closeModal?.focus();
   }
 
   function closeFile() {
     if (!fileModal) return;
+
     fileModal.hidden = true;
-    state.modalOpen = false;
     document.body.classList.remove("has-overlay");
   }
 
+  // IMPORTANT: Your HTML uses data-file, not .file-button.
   $$("[data-file]").forEach(button => {
-    button.addEventListener("click", () => openFile(button.dataset.file));
+    button.addEventListener("click", () => {
+      openFile(button.dataset.file);
+    });
   });
 
-  closeModalButton?.addEventListener("click", closeFile);
+  closeModal?.addEventListener("click", closeFile);
 
   fileModal?.addEventListener("click", event => {
-    if (event.target === fileModal) closeFile();
+    if (event.target === fileModal) {
+      closeFile();
+    }
   });
 
-  // Camera network
+  // -----------------------------------------------------
+  // SECURITY CAMERAS
+  // -----------------------------------------------------
+
   const cameras = [
     {
       name: "CAM 01 // MAIN HALL",
@@ -235,13 +287,14 @@ No explanation was provided.
   const cameraName = $("#cameraName");
   const cameraMessage = $("#cameraMessage");
   const cameraStatus = $("#cameraStatus");
-  const cameraTime = $("#cameraTime");
 
   function selectCamera(index, announce = true) {
     const camera = cameras[index];
+
     if (!camera || !cameraScreen) return;
 
     state.selectedCamera = index;
+
     cameraScreen.dataset.camera = String(index);
     cameraScreen.dataset.scene = camera.scene;
 
@@ -250,13 +303,17 @@ No explanation was provided.
     safeText(cameraStatus, camera.status);
 
     cameraButtons.forEach(button => {
-      const active = Number(button.dataset.camera) === index;
-      button.classList.toggle("is-active", active);
+      const active =
+        Number(button.dataset.camera) === index;
+
+      button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
     });
 
     if (announce) {
-      printLine(`[CAMERA] CONNECTED TO CAM 0${index + 1}.`);
+      printLine(
+        `[CAMERA] CONNECTED TO CAM 0${index + 1}.`
+      );
     }
 
     if (index === 3) {
@@ -274,38 +331,32 @@ No explanation was provided.
     });
   });
 
-  function updateClock() {
-    const now = new Date().toLocaleTimeString([], { hour12: false });
-    safeText(cameraTime, `REC ● ${now}`);
-    safeText($("#liveFeedClock"), now);
-  }
+  selectCamera(0, false);
 
-  updateClock();
-  every(updateClock, 1000);
+  // -----------------------------------------------------
+  // NIGHT VISION
+  // -----------------------------------------------------
 
-  every(() => {
-    if (!cameraScreen || document.hidden || Math.random() > 0.17) return;
-
-    cameraScreen.classList.add("is-interference");
-    later(() => cameraScreen.classList.remove("is-interference"), 520);
-  }, 10500);
-
-  // Night vision
-  const nightVisionButton = $("#nightVisionToggle");
+  const nightVisionButton = $("#nightVisionButton");
 
   function toggleNightVision() {
     state.nightVision = !state.nightVision;
 
-    document.body.classList.toggle("night-vision", state.nightVision);
-
-    nightVisionButton?.setAttribute(
-      "aria-pressed",
-      String(state.nightVision)
+    document.body.classList.toggle(
+      "night-vision",
+      state.nightVision
     );
 
     safeText(
       nightVisionButton,
-      state.nightVision ? "◉ NIGHT VISION: ON" : "◉ NIGHT VISION: OFF"
+      state.nightVision
+        ? "NIGHT VISION: ON"
+        : "NIGHT VISION: OFF"
+    );
+
+    nightVisionButton?.setAttribute(
+      "aria-pressed",
+      String(state.nightVision)
     );
 
     showToast(
@@ -315,9 +366,15 @@ No explanation was provided.
     );
   }
 
-  nightVisionButton?.addEventListener("click", toggleNightVision);
+  nightVisionButton?.addEventListener(
+    "click",
+    toggleNightVision
+  );
 
-  // Secret archive codes
+  // -----------------------------------------------------
+  // SECRET FILES AND CODES
+  // -----------------------------------------------------
+
   const secretCodes = {
     THEPATIENT: "filePatient",
     NIGHTSHIFT: "fileNightshift",
@@ -326,89 +383,156 @@ No explanation was provided.
     THEST4LKER: "fileStalker"
   };
 
-  const secretFragments = [
-    "THEPATIENT",
-    "NIGHTSHIFT",
-    "0427",
-    "DONTLOOK",
-    "THEST4LKER"
-  ];
+  const secretFragments = Object.keys(secretCodes);
 
-  function storageGet(key) {
-    return storage.get(key);
-  }
+  const secretFiles = $("#secretFiles");
 
-  function isAllFragmentsUnlocked() {
-    return secretFragments.every(
-      code => storageGet(`secret_${code}`) === "true"
+  function allFragmentsUnlocked() {
+    return secretFragments.every(code =>
+      storage.get(`secret_${code}`) === "true"
     );
   }
 
+  function unlockProjectArchive(scroll = true) {
+    if (!allFragmentsUnlocked()) {
+      printLine(
+        "ACCESS DENIED // ALL FIVE FRAGMENTS REQUIRED.",
+        "terminal-red"
+      );
+      return false;
+    }
+
+    const project = $("#projectArchive");
+
+    if (!project) {
+      printLine(
+        "PROJECT ARCHIVE NOT FOUND.",
+        "terminal-red"
+      );
+      return false;
+    }
+
+    reveal(project, scroll);
+
+    storage.set("projectAbandonedUnlocked", "true");
+
+    printLine(
+      "PROJECT ABANDONED DECLASSIFIED.",
+      "terminal-green"
+    );
+
+    printLine("ALL CLASSIFIED DATA RECOVERED.");
+
+    showToast("PROJECT ABANDONED UNLOCKED.");
+
+    return true;
+  }
+
   function unlockSecretCode(rawCode) {
-    const code = rawCode.trim().toUpperCase();
+    const code = String(rawCode)
+      .trim()
+      .toUpperCase();
+
     const fileId = secretCodes[code];
 
     if (!fileId) return false;
 
-    const archive = $("#secretFiles");
     const file = document.getElementById(fileId);
 
-    if (!archive || !file) {
-      printLine("ARCHIVE FILE NOT FOUND.", "terminal-red");
+    if (!file || !secretFiles) {
+      printLine(
+        "SECRET FILE NOT FOUND.",
+        "terminal-red"
+      );
       return true;
     }
 
-    reveal(archive, true);
+    reveal(secretFiles);
     file.hidden = false;
     file.classList.add("is-unlocked");
 
     storage.set(`secret_${code}`, "true");
 
     printLine("ACCESS GRANTED.", "terminal-green");
-    printLine(`SECRET FILE RECOVERED: ${code}`, "terminal-green");
+    printLine(
+      `SECRET FILE RECOVERED: ${code}`,
+      "terminal-green"
+    );
 
-    showToast("SECRET FILE RECOVERED.");
+    showToast(`SECRET FILE RECOVERED: ${code}`);
 
-    if (isAllFragmentsUnlocked()) {
-      printLine("ALL FIVE FRAGMENTS RECOVERED.", "terminal-green");
-      printLine("THE PROJECT ARCHIVE IS NOW AVAILABLE.");
+    if (allFragmentsUnlocked()) {
+      printLine(
+        "ALL FIVE FRAGMENTS RECOVERED.",
+        "terminal-green"
+      );
+
+      printLine("PROJECT ARCHIVE UNLOCKED.");
+
       unlockProjectArchive(false);
     }
 
     return true;
   }
 
+  // Restore previously unlocked secret files.
   function restoreSecretFiles() {
-    let any = false;
+    let found = false;
 
-    Object.entries(secretCodes).forEach(([code, id]) => {
-      if (storage.get(`secret_${code}`) !== "true") return;
+    Object.entries(secretCodes).forEach(([code, fileId]) => {
+      if (storage.get(`secret_${code}`) !== "true") {
+        return;
+      }
 
-      const file = document.getElementById(id);
+      const file = document.getElementById(fileId);
 
       if (file) {
         file.hidden = false;
         file.classList.add("is-unlocked");
-        any = true;
+        found = true;
       }
     });
 
-    if (any) reveal($("#secretArchives"));
+    if (found) {
+      reveal(secretFiles);
+    }
+
+    if (
+      storage.get("projectAbandonedUnlocked") === "true" &&
+      allFragmentsUnlocked()
+    ) {
+      reveal($("#projectArchive"));
+    }
   }
 
-  // Ward 13 and final entry
- const ward = $("#ward13");
+  restoreSecretFiles();
 
-  function unlockWard13(shouldScroll = true) {
+  // -----------------------------------------------------
+  // WARD 13
+  // -----------------------------------------------------
+
+  const ward = $("#ward13");
+  const readEntryButton = $("#readEntryButton");
+  const finalEntry = $("#finalEntry");
+
+  function unlockWard13(scroll = true) {
     if (!ward) {
-      printLine("WARD 13 ARCHIVE NOT FOUND.", "terminal-red");
+      printLine(
+        "WARD 13 ARCHIVE NOT FOUND.",
+        "terminal-red"
+      );
       return;
     }
 
-    reveal(ward, shouldScroll);
+    reveal(ward, scroll);
+
     storage.set("ward13Unlocked", "true");
 
-    printLine("ACCESS GRANTED // WELCOME TO WARD 13.", "terminal-green");
+    printLine(
+      "ACCESS GRANTED // WELCOME TO WARD 13.",
+      "terminal-green"
+    );
+
     printLine("THEY NEVER LEFT.");
 
     showToast("WARD 13 UNLOCKED.");
@@ -418,92 +542,51 @@ No explanation was provided.
     reveal(ward);
   }
 
-  const readSecretButton = $("#readSecret");
+  readEntryButton?.addEventListener("click", () => {
+    if (finalEntry) {
+      finalEntry.hidden = false;
+    }
 
-  readSecretButton?.addEventListener("click", () => {
-    const entry = $("#secretEntry");
+    readEntryButton.hidden = true;
 
-    if (entry) entry.hidden = false;
-
-    readSecretButton.hidden = true;
     showToast("FINAL PATIENT ENTRY RECOVERED.");
   });
 
-  // Project archive: requires every secret fragment.
-  function unlockProjectArchive(shouldScroll = true) {
-    if (!isAllFragmentsUnlocked()) {
-      printLine(
-        "ACCESS DENIED // ALL FIVE FRAGMENTS REQUIRED.",
-        "terminal-red"
-      );
-      return false;
-    }
+  // -----------------------------------------------------
+  // EMERGENCY MODE
+  // -----------------------------------------------------
 
-   const project = $("#projectArchive");
-
-    if (!project) {
-      printLine("PROJECT ARCHIVE NOT FOUND.", "terminal-red");
-      return false;
-    }
-
-    reveal(project, shouldScroll);
-    storage.set("projectAbandonedUnlocked", "true");
-
-    printLine("PROJECT ABANDONED DECLASSIFIED.", "terminal-green");
-    showToast("YOU FOUND PROJECT ABANDONED.");
-
-    return true;
-  }
-
-  restoreSecretFiles();
-
-  if (
-    storage.get("projectAbandonedUnlocked") === "true" &&
-    isAllFragmentsUnlocked()
-  ) {
-    reveal($("#projectAbandoned"));
-  }
-
-  // Emergency mode
-  const emergencyToggle = $("#emergencyToggle");
+  const emergencyButton = $("#emergencyButton");
   const emergencyBanner = $("#emergencyBanner");
 
   function toggleEmergency(force) {
-    state.emergency = typeof force === "boolean"
-      ? force
-      : !state.emergency;
+    state.emergency =
+      typeof force === "boolean"
+        ? force
+        : !state.emergency;
 
     document.body.classList.toggle(
       "emergency-mode",
       state.emergency
     );
 
-    emergencyToggle?.setAttribute(
-      "aria-pressed",
-      String(state.emergency)
-    );
-
-    emergencyToggle?.classList.toggle(
-      "is-active",
-      state.emergency
-    );
-
-    if (emergencyToggle) {
-      emergencyToggle.innerHTML =
-        `<span class="status-light"></span> ${
-          state.emergency ? "DISABLE EMERGENCY" : "EMERGENCY MODE"
-        }`;
-    }
-
     if (emergencyBanner) {
       emergencyBanner.hidden = !state.emergency;
+    }
+
+    if (emergencyButton) {
+      emergencyButton.textContent = state.emergency
+        ? "⚠ DISABLE EMERGENCY"
+        : "⚠ EMERGENCY";
     }
 
     printLine(
       state.emergency
         ? "!!! EMERGENCY PROTOCOL ACTIVE !!!"
         : "EMERGENCY PROTOCOL DISABLED.",
-      state.emergency ? "terminal-red" : "terminal-green"
+      state.emergency
+        ? "terminal-red"
+        : "terminal-green"
     );
 
     showToast(
@@ -513,61 +596,16 @@ No explanation was provided.
     );
   }
 
-  emergencyToggle?.addEventListener("click", () => toggleEmergency());
-
-  // Broadcast warning modal. No automatic repeating popup.
-  const broadcast = $("#broadcastAlert");
-  const alertHeadline = $("#alertHeadline");
-  const alertMessage = $("#alertMessage");
-  const closeBroadcast = $("#closeBroadcastAlert");
-
-  const warnings = [
-    "ALL STAFF MUST REPORT TO THE MAIN HALLWAY.",
-    "DO NOT ENTER ROOM 13. THE ROOM IS NOT EMPTY.",
-    "IF YOU HEAR SOMEONE CALLING YOUR NAME, DO NOT RESPOND.",
-    "UNKNOWN MOVEMENT DETECTED IN THE BASEMENT.",
-    "CAMERA CONNECTION LOST. DO NOT INVESTIGATE.",
-    "PLEASE IGNORE ANY VOICES COMING FROM EMPTY ROOMS.",
-    "THE BUILDING IS UNDER LOCKDOWN.",
-    "DO NOT APPROACH THE FIGURE IN THE EASTERN HALL."
-  ];
-
-  function showWarning(customMessage) {
-    if (!broadcast || state.warningOpen) return;
-
-    state.warningOpen = true;
-
-    safeText(alertHeadline, "FACILITY ALERT");
-
-    safeText(
-      alertMessage,
-      customMessage || warnings[Math.floor(Math.random() * warnings.length)]
-    );
-
-    broadcast.hidden = false;
-    document.body.classList.add("has-overlay");
-
-    closeBroadcast?.focus();
-  }
-
-  function closeWarning() {
-    if (!broadcast) return;
-
-    broadcast.hidden = true;
-    state.warningOpen = false;
-
-    document.body.classList.remove("has-overlay");
-  }
-
-  closeBroadcast?.addEventListener("click", closeWarning);
-
-  broadcast?.addEventListener("click", event => {
-    if (event.target === broadcast) closeWarning();
+  emergencyButton?.addEventListener("click", () => {
+    toggleEmergency();
   });
 
-  // Terminal commands
-  function runCommand(raw) {
-    const input = String(raw || "").trim();
+  // -----------------------------------------------------
+  // TERMINAL COMMANDS
+  // -----------------------------------------------------
+
+  function runCommand(rawCommand) {
+    const input = String(rawCommand || "").trim();
 
     if (!input) return;
 
@@ -575,39 +613,51 @@ No explanation was provided.
 
     printLine(`GUEST@FACILITY:~$ ${input}`);
 
-    if (unlockSecretCode(command)) return;
-
-    const camMatch = command.match(/^CAM(?:ERA)?\s*0?([1-5])$/);
-
-    if (camMatch) {
-      selectCamera(Number(camMatch[1]) - 1);
+    // Secret codes are checked first.
+    if (unlockSecretCode(command)) {
       return;
     }
 
-    switch (command.toLowerCase()) {
-      case "help":
+    // Camera commands: CAM 1, CAM 2, CAMERA 03, etc.
+    const cameraMatch = command.match(
+      /^CAM(?:ERA)?\s*0?([1-5])$/
+    );
+
+    if (cameraMatch) {
+      selectCamera(Number(cameraMatch[1]) - 1);
+      return;
+    }
+
+    switch (command) {
+      case "HELP":
         [
           "AVAILABLE COMMANDS:",
-          "HELP       — SHOW THIS LIST",
-          "STATUS     — FACILITY STATUS",
-          "FILES      — CLASSIFIED DOCUMENTS",
-          "CAMERAS    — SURVEILLANCE NETWORK",
-          "CAM 1-5    — SELECT A CAMERA",
-          "NIGHTVISION— TOGGLE NIGHT VISION",
-          "PLAY       — OPEN ROBLOX GAME",
-          "WARD13     — RESTRICTED ARCHIVE",
-          "PROJECT    — LEVEL 5 ARCHIVE (ALL FIVE FRAGMENTS)",
-          "BROADCAST  — EMERGENCY WARNING",
-          "EMERGENCY  — TOGGLE EMERGENCY MODE",
-          "CALLER     — UNKNOWN CALLER LOG",
-          "DATABASE   — PATIENT DATABASE",
-          "WAKE UP    — ...",
-          "CLEAR      — CLEAR TERMINAL",
-          "SECRET CODES: THEPATIENT / NIGHTSHIFT / 0427 / DONTLOOK / THEST4LKER"
+          "HELP       - SHOW COMMANDS",
+          "STATUS     - FACILITY STATUS",
+          "FILES      - CLASSIFIED DOCUMENTS",
+          "CAMERAS    - SURVEILLANCE NETWORK",
+          "CAM 1-5    - SELECT A CAMERA",
+          "NIGHTVISION- TOGGLE NIGHT VISION",
+          "PLAY       - OPEN ROBLOX GAME",
+          "WARD13     - UNLOCK WARD 13",
+          "PROJECT    - PROJECT ARCHIVE",
+          "EMERGENCY  - TOGGLE EMERGENCY MODE",
+          "BROADCAST  - SEND WARNING",
+          "CALLER     - UNKNOWN CALLER LOG",
+          "DATABASE   - PATIENT DATABASE",
+          "WAKE UP    - ...",
+          "CLEAR      - CLEAR TERMINAL",
+          "",
+          "SECRET CODES:",
+          "THEPATIENT",
+          "NIGHTSHIFT",
+          "0427",
+          "DONTLOOK",
+          "THEST4LKER"
         ].forEach(line => printLine(line));
         break;
 
-      case "status":
+      case "STATUS":
         [
           "FACILITY STATUS: CRITICAL",
           "LIGHTING: UNSTABLE",
@@ -618,67 +668,96 @@ No explanation was provided.
         ].forEach(line => printLine(line));
         break;
 
-      case "files":
+      case "FILES":
         [
           "AVAILABLE DOCUMENTS:",
-          "FILE 001 — PATIENT RECORDS",
-          "FILE 002 — EXPERIMENT LOG",
-          "FILE 003 — INCIDENT REPORT",
-          "FIVE ADDITIONAL FILES ARE HIDDEN."
+          "FILE 001 - PATIENT RECORDS",
+          "FILE 002 - EXPERIMENT LOG",
+          "FILE 003 - INCIDENT REPORT",
+          "FIVE ADDITIONAL FILES ARE HIDDEN.",
+          "USE THE FILES SECTION TO OPEN DOCUMENTS."
         ].forEach(line => printLine(line));
+
+        $("#files")?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
         break;
 
-      case "cameras":
-        cameras.forEach(camera => printLine(camera.name));
+      case "CAMERAS":
+        cameras.forEach(camera => {
+          printLine(camera.name);
+        });
+
+        $("#cameras")?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
         break;
 
-      case "nightvision":
-      case "night vision":
+      case "NIGHTVISION":
+      case "NIGHT VISION":
         toggleNightVision();
         break;
 
-      case "play":
+      case "PLAY":
         printLine("OPENING GAME ACCESS...");
         printGameLink();
         break;
 
-      case "ward13":
+      case "WARD13":
+      case "WARD 13":
         unlockWard13();
         break;
 
-      case "project":
+      case "PROJECT":
+      case "PROJECT ABANDONED":
         unlockProjectArchive();
         break;
 
-      case "emergency":
+      case "EMERGENCY":
         toggleEmergency();
         break;
 
-      case "broadcast":
-        showWarning();
-        printLine("EMERGENCY BROADCAST TRANSMITTED.", "terminal-red");
+      case "BROADCAST":
+        printLine(
+          "EMERGENCY BROADCAST TRANSMITTED.",
+          "terminal-red"
+        );
+
+        printLine(
+          "WARNING: UNKNOWN MOVEMENT DETECTED."
+        );
+
+        showToast("EMERGENCY BROADCAST TRANSMITTED.");
         break;
 
-      case "caller":
+      case "CALLER":
         printLine("INCOMING CALL DETECTED.");
         printLine("CALLER ID: UNKNOWN.");
         printLine("DO NOT ANSWER.");
         break;
 
-      case "database":
+      case "DATABASE":
         printLine("PATIENT DATABASE: ACCESS RESTRICTED.");
         printLine("SUBJECT 013: LOCATION UNKNOWN.");
         printLine("SUBJECT 0427: STATUS UNCONFIRMED.");
         break;
 
-      case "wake up":
+      case "WAKE UP":
         printLine("...");
-        printLine("YOU ARE NOT SUPPOSED TO BE HERE.", "terminal-red");
-        printLine("SOMETHING HAS NOTICED YOU.", "terminal-red");
+        printLine(
+          "YOU ARE NOT SUPPOSED TO BE HERE.",
+          "terminal-red"
+        );
+        printLine(
+          "SOMETHING HAS NOTICED YOU.",
+          "terminal-red"
+        );
         showToast("DON'T TURN AROUND.");
         break;
 
-      case "clear":
+      case "CLEAR":
         terminalOutput?.replaceChildren();
         printLine("TERMINAL CLEARED.");
         break;
@@ -686,9 +765,11 @@ No explanation was provided.
       default:
         printLine("UNKNOWN COMMAND.", "terminal-red");
         printLine("TYPE HELP TO SEE AVAILABLE COMMANDS.");
+        break;
     }
   }
 
+  // Prevent the browser from refreshing the page.
   terminalForm?.addEventListener("submit", event => {
     event.preventDefault();
 
@@ -700,8 +781,12 @@ No explanation was provided.
     }
   });
 
-  // Live facility feed
-  const feed = $("#liveFeedLog");
+  // -----------------------------------------------------
+  // LIVE SYSTEM FEED AND CLOCK
+  // -----------------------------------------------------
+
+  const feed = $("#feedOutput");
+  const clock = $("#clock");
 
   const feedEvents = [
     ["NOTICE", "NORTH WING LIGHTS FLICKERING."],
@@ -717,12 +802,23 @@ No explanation was provided.
 
   let feedIndex = 0;
 
+  function updateClock() {
+    const now = new Date().toLocaleTimeString([], {
+      hour12: false
+    });
+
+    safeText(clock, now);
+  }
+
   function addFeedEvent() {
     if (!feed || document.hidden) return;
 
-    const [type, message] = feedEvents[feedIndex++ % feedEvents.length];
+    const [type, message] =
+      feedEvents[feedIndex % feedEvents.length];
 
-    const p = document.createElement("p");
+    feedIndex++;
+
+    const line = document.createElement("p");
     const time = document.createElement("time");
     const label = document.createElement("span");
 
@@ -733,8 +829,14 @@ No explanation was provided.
     label.textContent = `${type} // `;
     label.className = `feed-${type.toLowerCase()}`;
 
-    p.append(time, label, document.createTextNode(message));
-    feed.appendChild(p);
+    line.append(
+      time,
+      document.createTextNode(" "),
+      label,
+      document.createTextNode(message)
+    );
+
+    feed.appendChild(line);
 
     while (feed.children.length > 7) {
       feed.firstElementChild.remove();
@@ -743,38 +845,69 @@ No explanation was provided.
     feed.scrollTop = feed.scrollHeight;
   }
 
+  updateClock();
   addFeedEvent();
-  every(addFeedEvent, 6200);
 
-  // Easter eggs: five logo clicks and keyboard sequence ABANDON.
-  const logo = $("#logo");
+  setInterval(updateClock, 1000);
+  setInterval(addFeedEvent, 6200);
+
+  // -----------------------------------------------------
+  // CAMERA INTERFERENCE
+  // -----------------------------------------------------
+
+  setInterval(() => {
+    if (
+      !cameraScreen ||
+      document.hidden ||
+      Math.random() > 0.17
+    ) {
+      return;
+    }
+
+    cameraScreen.classList.add("is-interference");
+
+    setTimeout(() => {
+      cameraScreen.classList.remove("is-interference");
+    }, 520);
+  }, 10500);
+
+  // -----------------------------------------------------
+  // SECRET EASTER EGGS
+  // -----------------------------------------------------
+
+  const logo = $(".logo");
+  let logoClicks = 0;
   let logoTimer;
 
   logo?.addEventListener("click", () => {
-    state.logoClicks++;
+    logoClicks++;
 
-    window.clearTimeout(logoTimer);
+    clearTimeout(logoTimer);
 
-    logoTimer = later(() => {
-      state.logoClicks = 0;
+    logoTimer = setTimeout(() => {
+      logoClicks = 0;
     }, 2200);
 
-    if (state.logoClicks >= 5) {
-      state.logoClicks = 0;
+    if (logoClicks >= 5) {
+      logoClicks = 0;
+
       showToast("YOU FOUND THE FIRST SECRET.");
+
       runCommand("wake up");
     }
   });
 
-  const secretSequence = ["a", "b", "a", "n", "d", "o", "n"];
+  // Type ABANDON anywhere outside an input.
+  const secretSequence = [
+    "a", "b", "a", "n", "d", "o", "n"
+  ];
 
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
-      if (state.modalOpen) closeFile();
-      if (state.warningOpen) closeWarning();
+      closeFile();
 
-      primaryNav?.classList.remove("is-open");
-      menuToggle?.setAttribute("aria-expanded", "false");
+      navigation?.classList.remove("is-open");
+      menuButton?.setAttribute("aria-expanded", "false");
     }
 
     if (
@@ -786,37 +919,31 @@ No explanation was provided.
 
     const key = event.key.toLowerCase();
 
-    if (key === secretSequence[state.sequenceIndex]) {
-      state.sequenceIndex++;
+    if (key === secretSequence[state.sequence]) {
+      state.sequence++;
 
-      if (state.sequenceIndex === secretSequence.length) {
-        state.sequenceIndex = 0;
+      if (state.sequence === secretSequence.length) {
+        state.sequence = 0;
 
         showToast("THE HOSPITAL REMEMBERS YOU.");
+
         unlockWard13();
       }
     } else {
-      state.sequenceIndex = key === "a" ? 1 : 0;
+      state.sequence = key === "a" ? 1 : 0;
     }
   });
 
-  // Occasional subtle visual corruption; never blocks interaction.
-  every(() => {
-    if (!document.hidden && Math.random() < 0.22) {
-      document.body.classList.add("is-corrupted");
-
-      later(() => {
-        document.body.classList.remove("is-corrupted");
-      }, 420);
-    }
-  }, 52000);
-
-  // Initial state
-  selectCamera(0, false);
+  // -----------------------------------------------------
+  // INITIALIZE
+  // -----------------------------------------------------
 
   printLine("SYSTEM INITIALIZED.", "terminal-green");
   printLine("CONNECTION ESTABLISHED.");
   printLine("TYPE HELP TO CONTINUE.");
 
-  console.info("THE ABANDONED // FACILITY SYSTEM ONLINE");
+  console.info(
+    "THE ABANDONED // FACILITY SYSTEM ONLINE"
+  );
+
 })();
