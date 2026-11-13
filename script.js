@@ -432,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     $("#broadcastButton")?.addEventListener("click", triggerBroadcast);
-    $("#closeBroadcast")?.addEventListener("click", closeBroadcast);
+  $("#closeBroadcastAlert")?.addEventListener("click", closeBroadcast);
 
     /* ============================================
        SYSTEM CORRUPTION
