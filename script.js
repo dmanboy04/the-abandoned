@@ -837,3 +837,15 @@ document.addEventListener("DOMContentLoaded", () => {
     log("TYPE HELP TO VIEW AVAILABLE COMMANDS.");
 
 });
+/* FIX: MAKE ALL WEBSITE SECTIONS VISIBLE */
+.section {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+}
+
+.section.visible {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+}
