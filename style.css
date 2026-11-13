@@ -1,1347 +1,272 @@
-/* =========================================
-   THE ABANDONED — MAIN STYLESHEET
-   ========================================= */
-
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Special+Elite&display=swap');
-
-:root {
-    --bg: #080a09;
-    --panel: #101412;
-    --panel-light: #171d19;
-    --green: #8cae91;
-    --green-bright: #b6d6b8;
-    --red: #9d2929;
-    --text: #c4c9c4;
-    --muted: #68716b;
-    --border: rgba(140, 174, 145, 0.2);
-    --mono: 'Share Tech Mono', monospace;
-    --typewriter: 'Special Elite', monospace;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-    background: var(--bg);
-}
-
-body {
-    min-height: 100vh;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--mono);
-    overflow-x: hidden;
-    transition: background 0.4s, filter 0.4s;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.12;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.35) 3px
-    );
-}
-
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 999;
-    opacity: 0.08;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-button,
-input {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-::selection {
-    background: var(--green);
-    color: #050705;
-}
-
-/* HEADER */
-
-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 75px;
-    padding: 22px 7%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 50;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    background: rgba(5, 8, 6, 0.65);
-    backdrop-filter: blur(8px);
-}
-
-.logo {
-    color: var(--green-bright);
-    font-size: 19px;
-    letter-spacing: 4px;
-    font-weight: bold;
-}
-
-nav {
-    display: flex;
-    gap: 28px;
-}
-
-nav a {
-    color: #8c968e;
-    font-size: 12px;
-    letter-spacing: 2px;
-    transition: 0.3s;
-}
-
-nav a:hover {
-    color: var(--green-bright);
-    text-shadow: 0 0 12px var(--green);
-}
-
-/* GENERAL SECTIONS */
-
-.section {
-    position: relative;
-    padding: 110px 8%;
-    max-width: 1500px;
-    margin: auto;
-    opacity: 0;
-    transform: translateY(25px);
-    transition: opacity 0.8s, transform 0.8s;
-}
-
-.section.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.section h2 {
-    font-family: var(--typewriter);
-    color: var(--green-bright);
-    font-size: clamp(28px, 4vw, 42px);
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-}
-
-.section p {
-    color: #929b94;
-    line-height: 1.8;
-}
-
-.section-label {
-    display: block;
-    color: var(--red);
-    font-size: 11px;
-    letter-spacing: 4px;
-    margin-bottom: 18px;
-}
-
-/* HERO */
-
-.hero {
-    min-height: 100vh;
-    padding: 130px 8% 90px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    position: relative;
-    overflow: hidden;
-    background:
-        radial-gradient(ellipse at 75% 50%, rgba(39, 64, 44, 0.2), transparent 50%),
-        linear-gradient(90deg, #070907 0%, rgba(7, 9, 7, 0.88) 60%, rgba(7, 9, 7, 0.5));
-}
-
-.hero::before {
-    content: "13";
-    position: absolute;
-    right: 9%;
-    top: 18%;
-    font-size: clamp(180px, 30vw, 430px);
-    font-family: var(--typewriter);
-    color: rgba(140, 174, 145, 0.035);
-    pointer-events: none;
-}
-
-.hero h1 {
-    max-width: 900px;
-    font-family: var(--typewriter);
-    font-size: clamp(55px, 10vw, 125px);
-    line-height: 0.95;
-    letter-spacing: 5px;
-    color: #d3ddd4;
-    text-shadow: 0 0 35px rgba(140, 174, 145, 0.15);
-    position: relative;
-    z-index: 2;
-}
-
-.hero h1 span {
-    color: var(--red);
-}
-
-.hero p {
-    max-width: 550px;
-    margin-top: 30px;
-    line-height: 1.9;
-    color: #929b94;
-    font-size: 14px;
-    position: relative;
-    z-index: 2;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 35px;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 2;
-}
-
-.btn {
-    display: inline-block;
-    padding: 14px 25px;
-    border: 1px solid var(--green);
-    color: var(--green-bright);
-    background: transparent;
-    letter-spacing: 2px;
-    font-size: 12px;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: var(--green);
-    color: #080a09;
-    box-shadow: 0 0 25px rgba(140, 174, 145, 0.25);
-}
-
-.btn-danger {
-    border-color: var(--red);
-    color: #d77b7b;
-}
-
-.btn-danger:hover {
-    background: var(--red);
-    color: white;
-}
-
-/* ABOUT */
-
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 55px;
-    align-items: center;
-}
-
-.about-image {
-    min-height: 350px;
-    background:
-        linear-gradient(rgba(5, 10, 6, 0.4), rgba(5, 10, 6, 0.8)),
-        radial-gradient(ellipse, #253c29, #090c09 70%);
-    border: 1px solid var(--border);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: rgba(180, 210, 185, 0.15);
-    font-size: 100px;
-    font-family: var(--typewriter);
-}
-
-/* CLASSIFIED FILES */
-
-.file-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 18px;
-    margin-top: 35px;
-}
-
-.file-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 25px;
-    min-height: 155px;
-    transition: 0.3s;
-}
-
-.file-card:hover {
-    border-color: var(--red);
-    transform: translateY(-5px);
-    background: #151a16;
-}
-
-.file-card h3 {
-    color: var(--green-bright);
-    margin-bottom: 12px;
-    font-size: 16px;
-}
-
-.file-card p {
-    font-size: 12px;
-}
-
-.file-card button {
-    margin-top: 20px;
-    padding: 9px 15px;
-    background: transparent;
-    border: 1px solid var(--red);
-    color: #d77b7b;
-    font-size: 11px;
-    letter-spacing: 1px;
-}
-
-.file-card button:hover {
-    background: var(--red);
-    color: white;
-}
-
-/* MODALS */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background: rgba(0, 0, 0, 0.92);
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.modal.active {
-    display: flex;
-}
-
-.modal-content {
-    width: min(600px, 100%);
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 35px;
-    background: #101512;
-    border: 1px solid var(--green);
-    box-shadow: 0 0 50px rgba(0,0,0,0.8);
-}
-
-.modal-content h2 {
-    color: var(--green-bright);
-    margin-bottom: 20px;
-    font-family: var(--typewriter);
-}
-
-.modal-content p {
-    line-height: 1.8;
-    color: #aab2ab;
-    white-space: pre-line;
-}
-
-.close-modal {
-    float: right;
-    border: 0;
-    background: none;
-    color: var(--red);
-    font-size: 25px;
-}
-
-/* CAMERA SYSTEM */
-
-.camera-layout {
-    display: grid;
-    grid-template-columns: 1fr 220px;
-    gap: 25px;
-    margin-top: 35px;
-}
-
-.camera-screen {
-    position: relative;
-    min-height: 350px;
-    background:
-        linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)),
-        repeating-linear-gradient(0deg, #111713 0px, #111713 2px, #0c100d 3px, #0c100d 5px);
-    border: 1px solid #344238;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.camera-screen::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent 0px,
-        rgba(255,255,255,0.025) 1px,
-        transparent 3px
-    );
-}
-
-.camera-screen span {
-    color: rgba(180, 210, 185, 0.35);
-    font-size: 13px;
-    letter-spacing: 4px;
-}
-
-.camera-label {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    color: var(--green-bright);
-    font-size: 12px;
-    z-index: 2;
-}
-
-.camera-time {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    color: #9baa9c;
-    font-size: 11px;
-    z-index: 2;
-}
-
-.camera-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.camera-controls button {
-    position: relative;
-    z-index: 5;
-    padding: 15px;
-    color: var(--green);
-    background: var(--panel);
-    border: 1px solid var(--border);
-    text-align: left;
-    cursor: pointer;
-    pointer-events: auto;
-    transition: 0.2s;
-}
-
-.camera-controls button:hover,
-.camera-controls button.active {
-    background: #1c2920;
-    border-color: var(--green);
-    color: white;
-}
-
-/* NIGHT VISION */
-
-.night-vision-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.night-vision-controls button,
-#nightVisionToggle,
-#controlRoomToggle {
-    padding: 12px 18px;
-    background: #101712;
-    color: var(--green-bright);
-    border: 1px solid var(--green);
-    letter-spacing: 1px;
-    font-size: 11px;
-    transition: 0.3s;
-}
-
-.night-vision-controls button:hover,
-#nightVisionToggle:hover,
-#controlRoomToggle:hover {
-    background: #263b2b;
-}
-
-body.night-vision .camera-screen {
-    filter: grayscale(1) sepia(1) hue-rotate(75deg) saturate(2.5) brightness(1.4);
-    box-shadow: inset 0 0 70px rgba(70, 255, 90, 0.25);
-}
-
-body.night-vision .camera-screen::before {
-    content: "NIGHT VISION ACTIVE";
-    position: absolute;
-    top: 45px;
-    left: 15px;
-    color: #8cff8c;
-    font-size: 11px;
-    z-index: 5;
-    text-shadow: 0 0 10px #3f4;
-}
-
-/* CAMERA CONTROL ROOM */
-
-.control-room {
-    display: none;
-    margin-top: 30px;
-    padding: 25px;
-    background: #090d0a;
-    border: 1px solid var(--border);
-}
-
-.control-room.active {
-    display: block;
-}
-
-.control-room h3 {
-    color: var(--green-bright);
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-}
-
-.camera-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-}
-
-.mini-camera {
-    min-height: 130px;
-    padding: 12px;
-    background:
-        repeating-linear-gradient(0deg, #101713 0px, #101713 2px, #090d0a 3px, #090d0a 5px);
-    border: 1px solid #354238;
-    color: var(--green);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: 11px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.mini-camera:hover {
-    border-color: var(--green-bright);
-    box-shadow: 0 0 15px rgba(140,174,145,0.12);
-}
-
-.mini-camera strong {
-    color: var(--green-bright);
-}
-
-.mini-camera .camera-status {
-    color: var(--red);
-}
-
-/* LIVE FEED */
-
-.live-feed {
-    margin-top: 35px;
-    padding: 25px;
-    background: #090d0a;
-    border: 1px solid var(--border);
-}
-
-.live-feed h3 {
-    color: var(--green-bright);
-    font-size: 15px;
-    letter-spacing: 3px;
-    margin-bottom: 18px;
-}
-
-.live-feed-content {
-    min-height: 110px;
-    font-size: 12px;
-    line-height: 2;
-    color: #9da99e;
-}
-
-.live-feed-content p {
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    padding: 5px 0;
-}
-
-/* TERMINAL */
-
-.terminal {
-    background: #030504;
-    border: 1px solid #344238;
-    padding: 25px;
-    margin-top: 30px;
-    box-shadow: inset 0 0 40px rgba(0,0,0,0.7);
-}
-
-.terminal-output {
-    height: 230px;
-    overflow-y: auto;
-    color: #9fc5a2;
-    font-size: 12px;
-    line-height: 1.8;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-
-.terminal-input-line {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 15px;
-    border-top: 1px solid var(--border);
-    padding-top: 15px;
-}
-
-.terminal-input-line span {
-    color: var(--green-bright);
-}
-
-.terminal input {
-    flex: 1;
-    min-width: 0;
-    color: var(--green-bright);
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 13px;
-}
-
-/* PATIENT DATABASE */
-
-.database-panel {
-    margin-top: 30px;
-    padding: 25px;
-    background: #0d120e;
-    border: 1px solid var(--border);
-}
-
-.database-panel h3 {
-    color: var(--green-bright);
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-}
-
-#patientSearch {
-    width: 100%;
-    padding: 13px;
-    margin: 10px 0 20px;
-    background: #050806;
-    border: 1px solid #344238;
-    color: var(--green-bright);
-    outline: none;
-}
-
-#patientSearch:focus {
-    border-color: var(--green);
-}
-
-.patient-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-}
-
-.patient-record {
-    padding: 17px;
-    background: #131a15;
-    border: 1px solid rgba(140,174,145,0.15);
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.patient-record:hover {
-    border-color: var(--red);
-    transform: translateY(-2px);
-}
-
-.patient-record strong {
-    display: block;
-    color: var(--green-bright);
-    margin-bottom: 8px;
-}
-
-.patient-record span {
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.patient-details {
-    display: none;
-    margin-top: 20px;
-    padding: 20px;
-    background: #050806;
-    border-left: 2px solid var(--red);
-}
-
-.patient-details.active {
-    display: block;
-}
-
-/* UNKNOWN CALLER */
-
-.phone-panel {
-    max-width: 500px;
-    margin: 35px auto 0;
-    padding: 35px 25px;
-    background: radial-gradient(ellipse at center, #19221b, #080b09 75%);
-    border: 1px solid var(--border);
-    text-align: center;
-}
-
-.phone-icon {
-    width: 85px;
-    height: 85px;
-    margin: 0 auto 25px;
-    border: 1px solid var(--red);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #d66d6d;
-    font-size: 30px;
-    animation: phonePulse 2s infinite;
-}
-
-@keyframes phonePulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(157,41,41,0.2); }
-    50% { box-shadow: 0 0 0 16px rgba(157,41,41,0); }
-}
-
-.phone-panel h3 {
-    color: var(--green-bright);
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-}
-
-.phone-panel p {
-    font-size: 12px;
-}
-
-.phone-actions {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 25px;
-    flex-wrap: wrap;
-}
-
-.phone-actions button {
-    padding: 12px 22px;
-    border: 1px solid var(--green);
-    background: transparent;
-    color: var(--green-bright);
-}
-
-.phone-actions button.reject {
-    border-color: var(--red);
-    color: #d77b7b;
-}
-
-.phone-actions button:hover {
-    background: var(--green);
-    color: #050705;
-}
-
-.phone-actions button.reject:hover {
-    background: var(--red);
-    color: white;
-}
-
-/* SECRET ELEVATOR */
-
-.elevator-panel {
-    max-width: 600px;
-    margin: 35px auto 0;
-    padding: 30px;
-    background: linear-gradient(145deg, #171c18, #090c0a);
-    border: 1px solid #465148;
-}
-
-.elevator-display {
-    padding: 20px;
-    margin-bottom: 25px;
-    background: #020403;
-    border: 1px solid #293b2e;
-    color: #a5d6a8;
-    text-align: center;
-    font-size: 24px;
-    letter-spacing: 5px;
-    text-shadow: 0 0 12px #5f8;
-}
-
-.elevator-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-}
-
-.elevator-buttons button {
-    min-height: 60px;
-    background: #252b26;
-    border: 1px solid #566258;
-    color: #d2dbd3;
-    font-size: 18px;
-    transition: 0.2s;
-}
-
-.elevator-buttons button:hover {
-    background: #3a493d;
-    border-color: var(--green-bright);
-    box-shadow: 0 0 15px rgba(140,174,145,0.15);
-}
-
-.elevator-status {
-    margin-top: 20px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-}
-
-/* EMERGENCY BROADCAST */
-
-.broadcast-panel {
-    margin-top: 35px;
-    padding: 30px;
-    background: #100b0b;
-    border: 1px solid rgba(157,41,41,0.5);
-}
-
-.broadcast-panel h3 {
-    color: #d76d6d;
-    letter-spacing: 3px;
-    margin-bottom: 15px;
-}
-
-.broadcast-screen {
-    padding: 20px;
-    min-height: 100px;
-    background: #050303;
-    border: 1px solid #4a2020;
-    color: #d88a8a;
-    line-height: 1.8;
-    font-size: 13px;
-}
-
-.broadcast-panel button {
-    margin-top: 20px;
-    padding: 12px 20px;
-    background: transparent;
-    border: 1px solid var(--red);
-    color: #e18c8c;
-}
-
-.broadcast-panel button:hover {
-    background: var(--red);
-    color: white;
-}
-
-.broadcast-alert {
-    display: none;
-    position: fixed;
-    z-index: 3000;
-    inset: 0;
-    background: rgba(20,0,0,0.94);
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-    text-align: center;
-}
-
-.broadcast-alert.active {
-    display: flex;
-    animation: alertFlash 0.7s infinite alternate;
-}
-
-.broadcast-alert-content {
-    max-width: 700px;
-}
-
-.broadcast-alert h2 {
-    color: #ff5555;
-    font-size: clamp(30px, 7vw, 65px);
-    margin-bottom: 25px;
-    font-family: var(--typewriter);
-}
-
-.broadcast-alert p {
-    color: #e4caca;
-    line-height: 2;
-}
-
-.broadcast-alert button {
-    margin-top: 30px;
-    padding: 13px 25px;
-    background: transparent;
-    color: white;
-    border: 1px solid #ff5555;
-}
-
-@keyframes alertFlash {
-    from { box-shadow: inset 0 0 0 rgba(180,0,0,0); }
-    to { box-shadow: inset 0 0 100px rgba(180,0,0,0.13); }
-}
-
-/* WARD 13 ARCHIVE */
-
-#ward13,
-#secretArchives,
-#projectArchive {
-    display: none;
-}
-
-#ward13.visible,
-#secretArchives.visible,
-#projectArchive.visible {
-    display: block;
-}
-
-.archive-panel {
-    padding: 35px;
-    background: #0b100c;
-    border: 1px solid var(--border);
-    margin-top: 30px;
-}
-
-.archive-panel h3 {
-    color: var(--green-bright);
-    font-family: var(--typewriter);
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.archive-panel p {
-    margin-bottom: 15px;
-    white-space: pre-line;
-}
-
-/* SECRET FILES */
-
-.secret-file {
-    display: none;
-    padding: 25px;
-    margin-top: 15px;
-    background: #111813;
-    border: 1px solid rgba(140,174,145,0.25);
-}
-
-.secret-file.visible {
-    display: block;
-    animation: fileReveal 0.5s ease;
-}
-
-@keyframes fileReveal {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.secret-file h3 {
-    color: #d2dfd3;
-    margin-bottom: 12px;
-}
-
-.secret-file p {
-    line-height: 1.9;
-}
-
-.fragment {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 8px 14px;
-    color: #e2c18c;
-    background: #211b11;
-    border: 1px solid #5c4828;
-    letter-spacing: 3px;
-}
-
-/* PROJECT ARCHIVE */
-
-#projectArchive {
-    border: 1px solid var(--red);
-    padding: 35px;
-    margin-top: 35px;
-    background: radial-gradient(ellipse at center, #1a1111, #080a09 75%);
-}
-
-#projectArchive h2 {
-    color: #d66c6c;
-    font-family: var(--typewriter);
-    letter-spacing: 4px;
-}
-
-.project-warning {
-    color: #d66c6c;
-    font-size: 11px;
-    letter-spacing: 3px;
-    margin-bottom: 20px;
-}
-
-/* EMERGENCY MODE */
-
-body.emergency-mode {
-    animation: emergencyPulse 1.5s infinite alternate;
-}
-
-body.emergency-mode header {
-    border-bottom-color: var(--red);
-}
-
-body.emergency-mode .logo {
-    color: #e45a5a;
-}
-
-@keyframes emergencyPulse {
-    from { box-shadow: inset 0 0 0 rgba(150,0,0,0); }
-    to { box-shadow: inset 0 0 100px rgba(150,0,0,0.12); }
-}
-
-/* SYSTEM CORRUPTION */
-
-body.corrupted {
-    animation: corruption 0.15s infinite;
-}
-
-body.corrupted::before {
-    opacity: 0.35;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent 0px,
-        transparent 3px,
-        rgba(255,0,0,0.15) 4px
-    );
-}
-
-body.corrupted .section,
-body.corrupted header {
-    filter: hue-rotate(90deg) contrast(1.4);
-}
-
-@keyframes corruption {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 1px); }
-    40% { transform: translate(2px, -1px); }
-    60% { transform: translate(-1px, -2px); }
-    80% { transform: translate(1px, 2px); }
-    100% { transform: translate(0); }
-}
-
-/* SECRET MESSAGE */
-
-#secret-message {
-    display: none;
-    position: fixed;
-    z-index: 4000;
-    inset: 0;
-    background: rgba(0,0,0,0.96);
-    color: #d5dddd;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 30px;
-}
-
-#secret-message.active {
-    display: flex;
-}
-
-#secret-message h2 {
-    font-family: var(--typewriter);
-    font-size: clamp(25px, 6vw, 55px);
-    color: var(--red);
-    margin-bottom: 25px;
-}
-
-#secret-message p {
-    line-height: 2;
-    color: #aab2ab;
-}
-
-/* EMERGENCY BANNER */
-
-.emergency-banner {
-    display: none;
-    padding: 15px;
-    background: #5c1010;
-    color: white;
-    text-align: center;
-    letter-spacing: 3px;
-    animation: alertFlash 0.8s infinite alternate;
-}
-
-.emergency-banner.active {
-    display: block;
-}
-
-/* FOOTER */
-
-footer {
-    padding: 45px 8%;
-    text-align: center;
-    border-top: 1px solid var(--border);
-    background: #050705;
-}
-
-footer p {
-    color: #626c64;
-    font-size: 11px;
-    letter-spacing: 2px;
-    line-height: 2;
-}
-
-footer a {
-    color: var(--green);
-}
-
-/* SCROLLBAR */
-
-::-webkit-scrollbar {
-    width: 7px;
-}
-
-::-webkit-scrollbar-track {
-    background: #070907;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #344238;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--green);
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 850px) {
-    header {
-        padding: 18px 5%;
-    }
-
-    nav {
-        gap: 13px;
-    }
-
-    nav a {
-        font-size: 10px;
-    }
-
-    .section {
-        padding: 85px 6%;
-    }
-
-    .about-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .camera-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .camera-controls {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    }
-
-    .camera-controls button {
-        text-align: center;
-    }
-}
-
-@media (max-width: 550px) {
-    header {
-        min-height: 65px;
-    }
-
-    .logo {
-        font-size: 14px;
-        letter-spacing: 2px;
-    }
-
-    nav {
-        display: none;
-    }
-
-    .hero {
-        padding: 120px 6% 70px;
-    }
-
-    .hero h1 {
-        font-size: 55px;
-    }
-
-    .hero p {
-        font-size: 12px;
-    }
-
-    .section {
-        padding: 75px 6%;
-    }
-
-    .section h2 {
-        font-size: 29px;
-    }
-
-    .camera-screen {
-        min-height: 240px;
-    }
-
-    .terminal {
-        padding: 15px;
-    }
-
-    .terminal-output {
-        height: 190px;
-    }
-
-    .archive-panel {
-        padding: 20px;
-    }
-
-    .elevator-buttons {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .phone-panel {
-        padding: 25px 15px;
-    }
-
-    .modal-content {
-        padding: 22px;
-    }
-}
-/* FIX: EMERGENCY BROADCAST OVERLAY */
-
-#broadcastAlert[hidden],
-#broadcastAlert:not(.active) {
-    display: none !important;
-}
-
-#broadcastAlert.active {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.88);
-}
-
-.broadcast-alert-inner {
-    position: relative;
-    width: 100%;
-    max-width: 550px;
-    padding: 40px 25px;
-    text-align: center;
-    background: #101612;
-    border: 1px solid #a52b2b;
-    box-shadow: 0 0 50px #000;
-}
-
-.broadcast-alert-inner button {
-    margin-top: 25px;
-    padding: 14px 25px;
-    background: #632424;
-    color: white;
-    border: 1px solid #e04444;
-    cursor: pointer;
-}
-
-/* ==========================================
-   EMERGENCY WARNING SYSTEM
-   ========================================== */
-
-#broadcastAlert[hidden] {
-    display: none !important;
-}
-
-#broadcastAlert.active {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.92);
-}
-
-.broadcast-alert-inner {
-    width: 100%;
-    max-width: 520px;
-    padding: 45px 30px;
-    text-align: center;
-    background: #0b0d0b;
-    border: 1px solid #a52b2b;
-    box-shadow: 0 0 60px rgba(180, 0, 0, 0.2);
-    animation: warningAppear 0.35s ease-out;
-}
-
-.alert-symbol {
-    color: #e04444;
-    font-size: 55px;
-    margin-bottom: 20px;
-}
-
-.alert-label {
-    color: #e04444;
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 5px;
-}
-
-.broadcast-alert-inner h2 {
-    color: white;
-    font-size: 25px;
-    letter-spacing: 3px;
-    margin: 20px 0;
-}
-
-#alertMessage {
-    color: #b8bdb8;
-    font-family: monospace;
-    font-size: 13px;
-    line-height: 2;
-}
-
-#closeBroadcastAlert {
-    margin-top: 30px;
-    padding: 15px 30px;
-    background: #671b1b;
-    color: white;
-    border: 1px solid #e04444;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 3px;
-}
-
-#closeBroadcastAlert:hover {
-    background: #a52b2b;
-}
-
-@keyframes warningAppear {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b09">
+  <meta name="description" content="The Abandoned — an interactive classified archive for a Roblox horror experience.">
+  <title>THE ABANDONED // CLASSIFIED FACILITY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__fog ambient__fog--one"></div>
+    <div class="ambient__fog ambient__fog--two"></div>
+    <div class="ambient__grid"></div>
+    <div class="ambient__noise"></div>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#home" id="logo" aria-label="The Abandoned home">THE<span>ABANDONED</span></a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="primaryNav">MENU</button>
+    <nav class="nav" id="primaryNav" aria-label="Main navigation">
+      <a href="#about">ABOUT</a>
+      <a href="#files">CLASSIFIED</a>
+      <a href="#cameras">CAMERAS</a>
+      <a href="#terminal">TERMINAL</a>
+    </nav>
+    <div class="header-actions">
+      <button class="button button--small button--danger" id="emergencyToggle" type="button" aria-pressed="false"><span class="status-light"></span> EMERGENCY MODE</button>
+      <a class="button button--small button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">PLAY GAME ↗</a>
+    </div>
+  </header>
+
+  <div class="emergency-banner" id="emergencyBanner" hidden role="alert">⚠ CONTAINMENT FAILURE // EMERGENCY PROTOCOL ACTIVE ⚠</div>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero__content">
+        <p class="eyebrow"><span class="status-light"></span> CLASSIFIED FACILITY // ACCESS RESTRICTED</p>
+        <h1 class="hero__title">THE<br><span>ABANDONED</span></h1>
+        <p class="hero__tagline">YOU WERE NEVER SUPPOSED TO WAKE UP.</p>
+        <p class="hero__description">An abandoned hospital. Unknown creatures. One mission: find a way out before the building finds you.</p>
+        <div class="hero__actions">
+          <a class="button button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">ENTER THE HOSPITAL ↗</a>
+          <a class="button button--outline" href="#about">INVESTIGATE ↓</a>
+        </div>
+        <p class="hero__warning">⚠ SURVIVAL IS NOT GUARANTEED</p>
+      </div>
+      <div class="hero__side" aria-hidden="true">
+        <span>FACILITY  //  013</span>
+        <span>EST. 03:17 AM</span>
+        <span class="hero__side-line"></span>
+        <span>STATUS: UNKNOWN</span>
+      </div>
+      <a class="scroll-cue" href="#about">SCROLL TO INVESTIGATE <span>↓</span></a>
+    </section>
+
+    <section class="section section--about reveal" id="about">
+      <div class="section-heading">
+        <p class="eyebrow">WELCOME TO YOUR WORST NIGHTMARE</p>
+        <h2>THERE IS NO <span>ESCAPE.</span></h2>
+        <p class="section-lead">The hospital was abandoned. The patients were not.</p>
+      </div>
+      <div class="about-grid">
+        <article class="about-card">
+          <span class="about-card__number">01 // SURVIVE</span>
+          <h3>THE BUILDING IS NOT EMPTY</h3>
+          <p>Explore the corridors, search for a way out and stay alert. Something is moving where nobody should be.</p>
+        </article>
+        <article class="about-card">
+          <span class="about-card__number">02 // INVESTIGATE</span>
+          <h3>THE RECORDS WERE ERASED</h3>
+          <p>Recover patient files, inspect the surveillance network and uncover what happened inside the facility.</p>
+        </article>
+        <article class="about-card">
+          <span class="about-card__number">03 // DO NOT TRUST</span>
+          <h3>NOTHING IS AS IT SEEMS</h3>
+          <p>Some messages are warnings. Some are bait. And some appear to know that you are reading them.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="files">
+      <div class="section-heading">
+        <p class="eyebrow">RESTRICTED INFORMATION // LEVEL 04</p>
+        <h2>CLASSIFIED <span>FILES</span></h2>
+        <p class="section-lead">Some things were never meant to be discovered.</p>
+      </div>
+      <div class="file-grid">
+        <article class="file-card">
+          <div class="file-card__top"><span>FILE #001</span><span class="classification">CLASSIFIED</span></div>
+          <div class="file-card__icon">▤</div>
+          <h3>PATIENT RECORDS</h3>
+          <p>Archived patient information. Several records are missing.</p>
+          <button class="text-button file-button" data-file="patient" type="button">OPEN FILE <span>↗</span></button>
+        </article>
+        <article class="file-card">
+          <div class="file-card__top"><span>FILE #002</span><span class="classification">TOP SECRET</span></div>
+          <div class="file-card__icon">◈</div>
+          <h3>EXPERIMENT LOG</h3>
+          <p>Unusual experiments were conducted beneath the hospital.</p>
+          <button class="text-button file-button" data-file="experiment" type="button">OPEN FILE <span>↗</span></button>
+        </article>
+        <article class="file-card">
+          <div class="file-card__top"><span>FILE #003</span><span class="classification">REDACTED</span></div>
+          <div class="file-card__icon">◉</div>
+          <h3>INCIDENT REPORT</h3>
+          <p>An incident occurred. Nobody agrees on what happened.</p>
+          <button class="text-button file-button" data-file="incident" type="button">OPEN FILE <span>↗</span></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="cameras">
+      <div class="section-heading">
+        <p class="eyebrow">LIVE SURVEILLANCE NETWORK</p>
+        <h2>SECURITY <span>CAMERAS</span></h2>
+        <p class="section-lead">The cameras are still running. Something is moving.</p>
+      </div>
+      <div class="monitor">
+        <div class="monitor__top">
+          <span><i class="status-light"></i> SURVEILLANCE SYSTEM</span>
+          <span id="cameraStatus">SYSTEM ONLINE</span>
+        </div>
+        <div class="camera-screen" id="cameraScreen" data-camera="0">
+          <div class="camera-screen__scan"></div>
+          <div class="camera-screen__meta"><span id="cameraName">CAM 01 // MAIN HALL</span><span id="cameraTime">REC ●</span></div>
+          <div class="camera-scene" aria-hidden="true">
+            <div class="scene-light"></div><div class="scene-hall"></div><div class="scene-door"></div><div class="scene-figure" id="sceneFigure"></div>
+          </div>
+          <div class="camera-message" id="cameraMessage">SIGNAL CONNECTED</div>
+          <div class="camera-screen__crosshair" aria-hidden="true">+</div>
+          <div class="camera-screen__corner camera-screen__corner--tl"></div>
+          <div class="camera-screen__corner camera-screen__corner--br"></div>
+        </div>
+        <div class="camera-controls" role="group" aria-label="Select security camera">
+          <button class="camera-button is-active" data-camera="0" type="button" aria-pressed="true">CAM 01</button>
+          <button class="camera-button" data-camera="1" type="button" aria-pressed="false">CAM 02</button>
+          <button class="camera-button" data-camera="2" type="button" aria-pressed="false">CAM 03</button>
+          <button class="camera-button" data-camera="3" type="button" aria-pressed="false">CAM 04</button>
+          <button class="camera-button camera-button--danger" data-camera="4" type="button" aria-pressed="false">CAM 05</button>
+        </div>
+        <div class="monitor__bottom"><span>WARNING: FEEDS ARE SIMULATED</span><button id="nightVisionToggle" class="text-button" type="button" aria-pressed="false">◉ NIGHT VISION: OFF</button></div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="terminal">
+      <div class="section-heading">
+        <p class="eyebrow">INTERNAL SYSTEM // ROOT ACCESS</p>
+        <h2>FACILITY <span>TERMINAL</span></h2>
+        <p class="section-lead">Someone left the terminal running. Maybe it knows something.</p>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-window__top"><span>◉ FACILITY_TERMINAL.exe</span><span>SECURE CONNECTION <i class="status-light"></i></span></div>
+        <div class="terminal-output" id="terminalOutput" role="log" aria-live="polite" aria-relevant="additions">
+          <p class="terminal-green">THE ABANDONED // INTERNAL SYSTEM</p>
+          <p>---------------------------------------------</p>
+          <p>Connection established...</p>
+          <p>Type <span class="terminal-green">help</span> for available commands.</p>
+        </div>
+        <form class="terminal-input-row" id="terminalForm">
+          <label for="terminalInput">GUEST@FACILITY:~$</label>
+          <input id="terminalInput" name="command" type="text" maxlength="80" autocomplete="off" spellcheck="false" placeholder="Enter command..." aria-label="Terminal command">
+          <button type="submit">EXECUTE ↵</button>
+        </form>
+      </div>
+      <p class="terminal-hint">TRY: HELP / STATUS / FILES / CAMERAS / PLAY / EMERGENCY</p>
+
+      <div class="live-feed">
+        <div class="live-feed__top"><span><i class="status-light"></i> LIVE SYSTEM FEED</span><time id="liveFeedClock">--:--:--</time></div>
+        <div class="live-feed__log" id="liveFeedLog" aria-live="polite">
+          <p><time>BOOT</time> SYSTEM MONITORING INITIALIZED.</p>
+          <p><time>BOOT</time> WAITING FOR FACILITY RESPONSE...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section hidden-archive reveal" id="ward13Archive" hidden>
+      <div class="section-heading">
+        <p class="eyebrow">UNAUTHORIZED ACCESS DETECTED</p>
+        <h2>WELCOME TO <span>WARD 13</span></h2>
+        <p class="section-lead">You found something that was never meant to be discovered.</p>
+      </div>
+      <div class="archive-document">
+        <span class="stamp">RESTRICTED</span>
+        <h3>PATIENT 013</h3>
+        <div class="document-grid"><span>STATUS</span><strong>UNKNOWN</strong><span>LOCATION</span><strong>WARD 13</strong><span>LAST SEEN</span><strong>03:17 AM</strong></div>
+        <hr>
+        <p class="danger-text">THE PATIENT IS STILL INSIDE.</p>
+        <button id="readSecret" class="button button--solid" type="button">READ FINAL ENTRY</button>
+        <div id="secretEntry" class="secret-entry" hidden>
+          <h3>FINAL PATIENT ENTRY</h3>
+          <p>I can hear them outside the door. The lights have stopped working. Nobody is answering the phone.</p>
+          <p>I thought I was alone. But something just whispered my name.</p>
+          <p class="danger-text">IF YOU ARE READING THIS, DO NOT OPEN THE DOOR.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section hidden-archive reveal" id="secretArchives" hidden>
+      <div class="section-heading">
+        <p class="eyebrow">CLASSIFIED // RESTRICTED ACCESS</p>
+        <h2>RECOVERED <span>FILES</span></h2>
+        <p class="section-lead">Five fragments. One classified project.</p>
+      </div>
+      <div class="secret-file-grid">
+        <article class="secret-file" id="filePatient" hidden><h3>THE PATIENT</h3><p>Audio recording recovered from Room 13.</p><p>“He keeps asking for a doctor. There are no doctors left.”</p><p class="danger-text">RECORDING TERMINATED.</p><strong>RECOVERED FRAGMENT: P</strong></article>
+        <article class="secret-file" id="fileNightshift" hidden><h3>NIGHT SHIFT LOG</h3><p>03:17 AM — Movement detected in the eastern hallway.</p><p>03:19 AM — Camera disconnected.</p><p>03:21 AM — Someone knocked on the security room door.</p><p class="danger-text">NO STAFF WERE SCHEDULED.</p><strong>RECOVERED FRAGMENT: R</strong></article>
+        <article class="secret-file" id="file0427" hidden><h3>FILE 0427</h3><p>Patient status: UNKNOWN.</p><p>Room: 0427.</p><p>Last known location: Basement.</p><p class="danger-text">DO NOT SEARCH FOR THIS PATIENT.</p><strong>RECOVERED FRAGMENT: O</strong></article>
+        <article class="secret-file" id="fileDontlook" hidden><h3>FINAL WARNING</h3><p>It is standing behind you.</p><p>Do not turn around.</p><p>It knows you are reading this.</p><p class="danger-text">DON'T LOOK.</p><strong>RECOVERED FRAGMENT: J</strong></article>
+        <article class="secret-file" id="fileStalker" hidden><h3>SUBJECT: THE STALKER</h3><p>It has been following patients throughout the facility.</p><p>It does not attack when watched.</p><p>It moves when the lights go out.</p><p class="danger-text">SUBJECT LOCATION: UNKNOWN.</p><strong>RECOVERED FRAGMENT: ECT</strong></article>
+      </div>
+    </section>
+
+    <section class="section hidden-archive reveal" id="projectAbandoned" hidden>
+      <div class="section-heading">
+        <p class="eyebrow">ULTRA CLASSIFIED // LEVEL 05</p>
+        <h2>PROJECT <span>ABANDONED</span></h2>
+        <p class="danger-text">WARNING: UNAUTHORIZED ACCESS DETECTED</p>
+      </div>
+      <div class="archive-document archive-document--red">
+        <span class="stamp stamp--red">TOP SECRET</span>
+        <h3>PROJECT REPORT // 000</h3>
+        <div class="document-grid"><span>PROJECT STATUS</span><strong>ACTIVE</strong><span>LOCATION</span><strong>UNKNOWN</strong><span>ALL STAFF</span><strong>MISSING</strong></div>
+        <hr>
+        <p>The hospital was never built to treat patients.</p><p>It was built to contain something.</p><p>The experiments were successful.</p><p>The containment was not.</p>
+        <hr>
+        <h3>FINAL MESSAGE</h3><p>If you found this file, you have gone too far.</p><p>They know you are here.</p><p class="danger-text">PROJECT ABANDONED IS NOT OVER.</p>
+      </div>
+    </section>
+
+    <section class="section final-cta reveal">
+      <p class="eyebrow">YOUR NIGHTMARE STARTS HERE</p>
+      <h2>WILL YOU <span>SURVIVE?</span></h2>
+      <p>The hospital is waiting for you.</p>
+      <a class="button button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">PLAY THE ABANDONED ↗</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="#home">THE<span>ABANDONED</span></a>
+    <p>A ROBLOX HORROR EXPERIENCE</p>
+    <p class="site-footer__copy">© 2026 THE ABANDONED. ALL RIGHTS RESERVED.</p>
+  </footer>
+
+  <div class="broadcast-overlay" id="broadcastAlert" hidden role="dialog" aria-modal="true" aria-labelledby="alertHeadline" aria-describedby="alertMessage">
+    <div class="broadcast-card">
+      <div class="broadcast-card__symbol">⚠</div>
+      <p class="eyebrow">EMERGENCY BROADCAST</p>
+      <h2 id="alertHeadline">FACILITY ALERT</h2>
+      <p id="alertMessage">PLEASE REMAIN CALM.</p>
+      <button id="closeBroadcastAlert" class="button button--danger" type="button">ACKNOWLEDGE</button>
+    </div>
+  </div>
+
+  <div class="file-modal" id="fileModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="file-modal__card">
+      <button class="modal-close" id="closeModal" type="button" aria-label="Close document">×</button>
+      <p class="eyebrow">CONFIDENTIAL DOCUMENT</p>
+      <h2 id="modalTitle">DOCUMENT</h2>
+      <div id="modalText" class="modal-text"></div>
+      <p class="danger-text modal-warning">UNAUTHORIZED ACCESS WILL BE REPORTED.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="secretMessage" role="status" aria-live="polite"></div>
+</body>
+</html>
