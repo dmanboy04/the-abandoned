@@ -1,272 +1,661 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#080b09">
-  <meta name="description" content="The Abandoned — an interactive classified archive for a Roblox horror experience.">
-  <title>THE ABANDONED // CLASSIFIED FACILITY</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Special+Elite&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
-</head>
-<body>
-  <div class="ambient" aria-hidden="true">
-    <div class="ambient__fog ambient__fog--one"></div>
-    <div class="ambient__fog ambient__fog--two"></div>
-    <div class="ambient__grid"></div>
-    <div class="ambient__noise"></div>
-  </div>
+:root {
+  --bg: #070a08;
+  --panel: #101812;
+  --green: #a9c9aa;
+  --green-bright: #d4ead5;
+  --red: #d65b60;
+  --text: #dce5dc;
+  --muted: #89968b;
+  --line: rgba(169,201,170,.2);
+  --mono: "Courier New", monospace;
+}
 
-  <header class="site-header">
-    <a class="brand" href="#home" id="logo" aria-label="The Abandoned home">THE<span>ABANDONED</span></a>
-    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="primaryNav">MENU</button>
-    <nav class="nav" id="primaryNav" aria-label="Main navigation">
-      <a href="#about">ABOUT</a>
-      <a href="#files">CLASSIFIED</a>
-      <a href="#cameras">CAMERAS</a>
-      <a href="#terminal">TERMINAL</a>
-    </nav>
-    <div class="header-actions">
-      <button class="button button--small button--danger" id="emergencyToggle" type="button" aria-pressed="false"><span class="status-light"></span> EMERGENCY MODE</button>
-      <a class="button button--small button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">PLAY GAME ↗</a>
-    </div>
-  </header>
+* { box-sizing: border-box; }
 
-  <div class="emergency-banner" id="emergencyBanner" hidden role="alert">⚠ CONTAINMENT FAILURE // EMERGENCY PROTOCOL ACTIVE ⚠</div>
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
 
-  <main>
-    <section class="hero" id="home">
-      <div class="hero__content">
-        <p class="eyebrow"><span class="status-light"></span> CLASSIFIED FACILITY // ACCESS RESTRICTED</p>
-        <h1 class="hero__title">THE<br><span>ABANDONED</span></h1>
-        <p class="hero__tagline">YOU WERE NEVER SUPPOSED TO WAKE UP.</p>
-        <p class="hero__description">An abandoned hospital. Unknown creatures. One mission: find a way out before the building finds you.</p>
-        <div class="hero__actions">
-          <a class="button button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">ENTER THE HOSPITAL ↗</a>
-          <a class="button button--outline" href="#about">INVESTIGATE ↓</a>
-        </div>
-        <p class="hero__warning">⚠ SURVIVAL IS NOT GUARANTEED</p>
-      </div>
-      <div class="hero__side" aria-hidden="true">
-        <span>FACILITY  //  013</span>
-        <span>EST. 03:17 AM</span>
-        <span class="hero__side-line"></span>
-        <span>STATUS: UNKNOWN</span>
-      </div>
-      <a class="scroll-cue" href="#about">SCROLL TO INVESTIGATE <span>↓</span></a>
-    </section>
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #17241a 0%, transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  line-height: 1.7;
+}
 
-    <section class="section section--about reveal" id="about">
-      <div class="section-heading">
-        <p class="eyebrow">WELCOME TO YOUR WORST NIGHTMARE</p>
-        <h2>THERE IS NO <span>ESCAPE.</span></h2>
-        <p class="section-lead">The hospital was abandoned. The patients were not.</p>
-      </div>
-      <div class="about-grid">
-        <article class="about-card">
-          <span class="about-card__number">01 // SURVIVE</span>
-          <h3>THE BUILDING IS NOT EMPTY</h3>
-          <p>Explore the corridors, search for a way out and stay alert. Something is moving where nobody should be.</p>
-        </article>
-        <article class="about-card">
-          <span class="about-card__number">02 // INVESTIGATE</span>
-          <h3>THE RECORDS WERE ERASED</h3>
-          <p>Recover patient files, inspect the surveillance network and uncover what happened inside the facility.</p>
-        </article>
-        <article class="about-card">
-          <span class="about-card__number">03 // DO NOT TRUST</span>
-          <h3>NOTHING IS AS IT SEEMS</h3>
-          <p>Some messages are warnings. Some are bait. And some appear to know that you are reading them.</p>
-        </article>
-      </div>
-    </section>
+button, input { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+[hidden] { display: none !important; }
 
-    <section class="section reveal" id="files">
-      <div class="section-heading">
-        <p class="eyebrow">RESTRICTED INFORMATION // LEVEL 04</p>
-        <h2>CLASSIFIED <span>FILES</span></h2>
-        <p class="section-lead">Some things were never meant to be discovered.</p>
-      </div>
-      <div class="file-grid">
-        <article class="file-card">
-          <div class="file-card__top"><span>FILE #001</span><span class="classification">CLASSIFIED</span></div>
-          <div class="file-card__icon">▤</div>
-          <h3>PATIENT RECORDS</h3>
-          <p>Archived patient information. Several records are missing.</p>
-          <button class="text-button file-button" data-file="patient" type="button">OPEN FILE <span>↗</span></button>
-        </article>
-        <article class="file-card">
-          <div class="file-card__top"><span>FILE #002</span><span class="classification">TOP SECRET</span></div>
-          <div class="file-card__icon">◈</div>
-          <h3>EXPERIMENT LOG</h3>
-          <p>Unusual experiments were conducted beneath the hospital.</p>
-          <button class="text-button file-button" data-file="experiment" type="button">OPEN FILE <span>↗</span></button>
-        </article>
-        <article class="file-card">
-          <div class="file-card__top"><span>FILE #003</span><span class="classification">REDACTED</span></div>
-          <div class="file-card__icon">◉</div>
-          <h3>INCIDENT REPORT</h3>
-          <p>An incident occurred. Nobody agrees on what happened.</p>
-          <button class="text-button file-button" data-file="incident" type="button">OPEN FILE <span>↗</span></button>
-        </article>
-      </div>
-    </section>
+.background-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .18;
+  background-image:
+    linear-gradient(rgba(170,210,175,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(170,210,175,.04) 1px, transparent 1px);
+  background-size: 65px 65px;
+}
 
-    <section class="section reveal" id="cameras">
-      <div class="section-heading">
-        <p class="eyebrow">LIVE SURVEILLANCE NETWORK</p>
-        <h2>SECURITY <span>CAMERAS</span></h2>
-        <p class="section-lead">The cameras are still running. Something is moving.</p>
-      </div>
-      <div class="monitor">
-        <div class="monitor__top">
-          <span><i class="status-light"></i> SURVEILLANCE SYSTEM</span>
-          <span id="cameraStatus">SYSTEM ONLINE</span>
-        </div>
-        <div class="camera-screen" id="cameraScreen" data-camera="0">
-          <div class="camera-screen__scan"></div>
-          <div class="camera-screen__meta"><span id="cameraName">CAM 01 // MAIN HALL</span><span id="cameraTime">REC ●</span></div>
-          <div class="camera-scene" aria-hidden="true">
-            <div class="scene-light"></div><div class="scene-hall"></div><div class="scene-door"></div><div class="scene-figure" id="sceneFigure"></div>
-          </div>
-          <div class="camera-message" id="cameraMessage">SIGNAL CONNECTED</div>
-          <div class="camera-screen__crosshair" aria-hidden="true">+</div>
-          <div class="camera-screen__corner camera-screen__corner--tl"></div>
-          <div class="camera-screen__corner camera-screen__corner--br"></div>
-        </div>
-        <div class="camera-controls" role="group" aria-label="Select security camera">
-          <button class="camera-button is-active" data-camera="0" type="button" aria-pressed="true">CAM 01</button>
-          <button class="camera-button" data-camera="1" type="button" aria-pressed="false">CAM 02</button>
-          <button class="camera-button" data-camera="2" type="button" aria-pressed="false">CAM 03</button>
-          <button class="camera-button" data-camera="3" type="button" aria-pressed="false">CAM 04</button>
-          <button class="camera-button camera-button--danger" data-camera="4" type="button" aria-pressed="false">CAM 05</button>
-        </div>
-        <div class="monitor__bottom"><span>WARNING: FEEDS ARE SIMULATED</span><button id="nightVisionToggle" class="text-button" type="button" aria-pressed="false">◉ NIGHT VISION: OFF</button></div>
-      </div>
-    </section>
+.header {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 76px;
+  padding: 15px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(5,9,6,.9);
+  backdrop-filter: blur(12px);
+}
 
-    <section class="section reveal" id="terminal">
-      <div class="section-heading">
-        <p class="eyebrow">INTERNAL SYSTEM // ROOT ACCESS</p>
-        <h2>FACILITY <span>TERMINAL</span></h2>
-        <p class="section-lead">Someone left the terminal running. Maybe it knows something.</p>
-      </div>
-      <div class="terminal-window">
-        <div class="terminal-window__top"><span>◉ FACILITY_TERMINAL.exe</span><span>SECURE CONNECTION <i class="status-light"></i></span></div>
-        <div class="terminal-output" id="terminalOutput" role="log" aria-live="polite" aria-relevant="additions">
-          <p class="terminal-green">THE ABANDONED // INTERNAL SYSTEM</p>
-          <p>---------------------------------------------</p>
-          <p>Connection established...</p>
-          <p>Type <span class="terminal-green">help</span> for available commands.</p>
-        </div>
-        <form class="terminal-input-row" id="terminalForm">
-          <label for="terminalInput">GUEST@FACILITY:~$</label>
-          <input id="terminalInput" name="command" type="text" maxlength="80" autocomplete="off" spellcheck="false" placeholder="Enter command..." aria-label="Terminal command">
-          <button type="submit">EXECUTE ↵</button>
-        </form>
-      </div>
-      <p class="terminal-hint">TRY: HELP / STATUS / FILES / CAMERAS / PLAY / EMERGENCY</p>
+.logo {
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 2px;
+}
 
-      <div class="live-feed">
-        <div class="live-feed__top"><span><i class="status-light"></i> LIVE SYSTEM FEED</span><time id="liveFeedClock">--:--:--</time></div>
-        <div class="live-feed__log" id="liveFeedLog" aria-live="polite">
-          <p><time>BOOT</time> SYSTEM MONITORING INITIALIZED.</p>
-          <p><time>BOOT</time> WAITING FOR FACILITY RESPONSE...</p>
-        </div>
-      </div>
-    </section>
+.logo span { color: var(--green); }
 
-    <section class="section hidden-archive reveal" id="ward13Archive" hidden>
-      <div class="section-heading">
-        <p class="eyebrow">UNAUTHORIZED ACCESS DETECTED</p>
-        <h2>WELCOME TO <span>WARD 13</span></h2>
-        <p class="section-lead">You found something that was never meant to be discovered.</p>
-      </div>
-      <div class="archive-document">
-        <span class="stamp">RESTRICTED</span>
-        <h3>PATIENT 013</h3>
-        <div class="document-grid"><span>STATUS</span><strong>UNKNOWN</strong><span>LOCATION</span><strong>WARD 13</strong><span>LAST SEEN</span><strong>03:17 AM</strong></div>
-        <hr>
-        <p class="danger-text">THE PATIENT IS STILL INSIDE.</p>
-        <button id="readSecret" class="button button--solid" type="button">READ FINAL ENTRY</button>
-        <div id="secretEntry" class="secret-entry" hidden>
-          <h3>FINAL PATIENT ENTRY</h3>
-          <p>I can hear them outside the door. The lights have stopped working. Nobody is answering the phone.</p>
-          <p>I thought I was alone. But something just whispered my name.</p>
-          <p class="danger-text">IF YOU ARE READING THIS, DO NOT OPEN THE DOOR.</p>
-        </div>
-      </div>
-    </section>
+.header nav {
+  display: flex;
+  gap: 25px;
+}
 
-    <section class="section hidden-archive reveal" id="secretArchives" hidden>
-      <div class="section-heading">
-        <p class="eyebrow">CLASSIFIED // RESTRICTED ACCESS</p>
-        <h2>RECOVERED <span>FILES</span></h2>
-        <p class="section-lead">Five fragments. One classified project.</p>
-      </div>
-      <div class="secret-file-grid">
-        <article class="secret-file" id="filePatient" hidden><h3>THE PATIENT</h3><p>Audio recording recovered from Room 13.</p><p>“He keeps asking for a doctor. There are no doctors left.”</p><p class="danger-text">RECORDING TERMINATED.</p><strong>RECOVERED FRAGMENT: P</strong></article>
-        <article class="secret-file" id="fileNightshift" hidden><h3>NIGHT SHIFT LOG</h3><p>03:17 AM — Movement detected in the eastern hallway.</p><p>03:19 AM — Camera disconnected.</p><p>03:21 AM — Someone knocked on the security room door.</p><p class="danger-text">NO STAFF WERE SCHEDULED.</p><strong>RECOVERED FRAGMENT: R</strong></article>
-        <article class="secret-file" id="file0427" hidden><h3>FILE 0427</h3><p>Patient status: UNKNOWN.</p><p>Room: 0427.</p><p>Last known location: Basement.</p><p class="danger-text">DO NOT SEARCH FOR THIS PATIENT.</p><strong>RECOVERED FRAGMENT: O</strong></article>
-        <article class="secret-file" id="fileDontlook" hidden><h3>FINAL WARNING</h3><p>It is standing behind you.</p><p>Do not turn around.</p><p>It knows you are reading this.</p><p class="danger-text">DON'T LOOK.</p><strong>RECOVERED FRAGMENT: J</strong></article>
-        <article class="secret-file" id="fileStalker" hidden><h3>SUBJECT: THE STALKER</h3><p>It has been following patients throughout the facility.</p><p>It does not attack when watched.</p><p>It moves when the lights go out.</p><p class="danger-text">SUBJECT LOCATION: UNKNOWN.</p><strong>RECOVERED FRAGMENT: ECT</strong></article>
-      </div>
-    </section>
+.header nav a {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
 
-    <section class="section hidden-archive reveal" id="projectAbandoned" hidden>
-      <div class="section-heading">
-        <p class="eyebrow">ULTRA CLASSIFIED // LEVEL 05</p>
-        <h2>PROJECT <span>ABANDONED</span></h2>
-        <p class="danger-text">WARNING: UNAUTHORIZED ACCESS DETECTED</p>
-      </div>
-      <div class="archive-document archive-document--red">
-        <span class="stamp stamp--red">TOP SECRET</span>
-        <h3>PROJECT REPORT // 000</h3>
-        <div class="document-grid"><span>PROJECT STATUS</span><strong>ACTIVE</strong><span>LOCATION</span><strong>UNKNOWN</strong><span>ALL STAFF</span><strong>MISSING</strong></div>
-        <hr>
-        <p>The hospital was never built to treat patients.</p><p>It was built to contain something.</p><p>The experiments were successful.</p><p>The containment was not.</p>
-        <hr>
-        <h3>FINAL MESSAGE</h3><p>If you found this file, you have gone too far.</p><p>They know you are here.</p><p class="danger-text">PROJECT ABANDONED IS NOT OVER.</p>
-      </div>
-    </section>
+.header nav a:hover { color: white; }
 
-    <section class="section final-cta reveal">
-      <p class="eyebrow">YOUR NIGHTMARE STARTS HERE</p>
-      <h2>WILL YOU <span>SURVIVE?</span></h2>
-      <p>The hospital is waiting for you.</p>
-      <a class="button button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">PLAY THE ABANDONED ↗</a>
-    </section>
-  </main>
+.emergency-button, .menu-button {
+  padding: 10px 13px;
+  border: 1px solid var(--red);
+  background: transparent;
+  color: #ef9a9d;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
 
-  <footer class="site-footer">
-    <a class="brand" href="#home">THE<span>ABANDONED</span></a>
-    <p>A ROBLOX HORROR EXPERIENCE</p>
-    <p class="site-footer__copy">© 2026 THE ABANDONED. ALL RIGHTS RESERVED.</p>
-  </footer>
+.menu-button { display: none; }
 
-  <div class="broadcast-overlay" id="broadcastAlert" hidden role="dialog" aria-modal="true" aria-labelledby="alertHeadline" aria-describedby="alertMessage">
-    <div class="broadcast-card">
-      <div class="broadcast-card__symbol">⚠</div>
-      <p class="eyebrow">EMERGENCY BROADCAST</p>
-      <h2 id="alertHeadline">FACILITY ALERT</h2>
-      <p id="alertMessage">PLEASE REMAIN CALM.</p>
-      <button id="closeBroadcastAlert" class="button button--danger" type="button">ACKNOWLEDGE</button>
-    </div>
-  </div>
+.emergency-button.active {
+  color: white;
+  background: #8d252a;
+  box-shadow: 0 0 20px rgba(210,50,60,.3);
+}
 
-  <div class="file-modal" id="fileModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="file-modal__card">
-      <button class="modal-close" id="closeModal" type="button" aria-label="Close document">×</button>
-      <p class="eyebrow">CONFIDENTIAL DOCUMENT</p>
-      <h2 id="modalTitle">DOCUMENT</h2>
-      <div id="modalText" class="modal-text"></div>
-      <p class="danger-text modal-warning">UNAUTHORIZED ACCESS WILL BE REPORTED.</p>
-    </div>
-  </div>
+.emergency-banner {
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 9px;
+  background: #9c252a;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 11px;
+  letter-spacing: 2px;
+  animation: flash 1s infinite;
+}
 
-  <div class="toast" id="secretMessage" role="status" aria-live="polite"></div>
-</body>
-</html>
+.hero {
+  min-height: 760px;
+  min-height: 100vh;
+  padding: 170px 9% 100px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg,rgba(4,8,5,.97),rgba(4,8,5,.7),rgba(4,8,5,.2)),
+    radial-gradient(ellipse at 80% 50%, #314b35, transparent 55%);
+}
+
+.hero::after {
+  content: "013";
+  position: absolute;
+  right: 5%;
+  top: 20%;
+  color: rgba(190,220,190,.045);
+  font-size: clamp(150px,30vw,390px);
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 750px;
+}
+
+.eyebrow {
+  color: var(--red);
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.hero h1 {
+  margin: 25px 0;
+  color: white;
+  font-size: clamp(60px,11vw,125px);
+  line-height: .9;
+  letter-spacing: -5px;
+}
+
+.hero h1 span { color: var(--red); }
+
+.hero h2 {
+  color: var(--green-bright);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.hero-content > p:not(.eyebrow):not(.warning-text) {
+  max-width: 500px;
+  color: #aab5ab;
+  font-size: 13px;
+}
+
+.main-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 23px;
+  border: 1px solid var(--green-bright);
+  background: var(--green-bright);
+  color: #071008;
+  font-weight: bold;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.main-button:hover {
+  background: #a9d1ad;
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(160,210,165,.2);
+}
+
+.warning-text {
+  color: #e77a7e;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.hero-code {
+  position: absolute;
+  right: 6%;
+  bottom: 65px;
+  color: #7e8d80;
+  font-size: 10px;
+  line-height: 2;
+  letter-spacing: 2px;
+}
+
+.section {
+  width: min(1120px, 90%);
+  margin: auto;
+  padding: 100px 0;
+}
+
+.section h2 {
+  margin: 8px 0;
+  color: var(--green-bright);
+  font-size: clamp(30px,5vw,48px);
+  line-height: 1.2;
+}
+
+.section h2 span { color: var(--red); }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 30px;
+}
+
+.three-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 17px;
+}
+
+.panel {
+  padding: 25px;
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg,#152119,#0a0e0b);
+  transition: .2s;
+}
+
+.panel:hover {
+  transform: translateY(-4px);
+  border-color: rgba(180,220,180,.5);
+}
+
+.panel small {
+  color: var(--red);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.panel h3 {
+  margin-top: 22px;
+  color: var(--green-bright);
+  font-size: 14px;
+}
+
+.panel p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.text-button {
+  padding: 9px 0;
+  border: 0;
+  background: none;
+  color: #e48b8e;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.text-button:hover { color: white; }
+
+.camera-box, .terminal, .live-feed {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #050806;
+}
+
+.camera-top, .camera-bottom, .terminal-top, .live-feed-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #111a13;
+  color: var(--green);
+  font-size: 10px;
+}
+
+.camera-screen {
+  position: relative;
+  min-height: 370px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(ellipse at center,#283b2b,#080d09 75%);
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      transparent 0 3px,
+      rgba(255,255,255,.04) 4px
+    ),
+    radial-gradient(ellipse,transparent 30%,rgba(0,0,0,.65));
+}
+
+.camera-scene {
+  position: absolute;
+  inset: 0;
+  perspective: 500px;
+}
+
+.hall-light {
+  position: absolute;
+  top: 10%;
+  left: 43%;
+  width: 14%;
+  height: 6%;
+  background: #d3ead0;
+  filter: blur(16px);
+}
+
+.hall-door {
+  position: absolute;
+  top: 27%;
+  left: 42%;
+  width: 16%;
+  height: 55%;
+  border: 2px solid rgba(180,210,180,.2);
+  background: rgba(0,0,0,.4);
+  box-shadow: inset 0 0 30px black;
+}
+
+.hall-figure {
+  display: none;
+  position: absolute;
+  left: 52%;
+  bottom: 13%;
+  width: 25px;
+  height: 115px;
+  border-radius: 50% 50% 10% 10%;
+  background: #020302;
+  box-shadow: 0 0 35px black;
+}
+
+.camera-scene.entity .hall-figure,
+.camera-scene.stalker .hall-figure {
+  display: block;
+}
+
+.camera-scene.dark {
+  filter: brightness(.12);
+}
+
+.camera-scene.wing .hall-door {
+  left: 23%;
+  width: 18%;
+}
+
+.camera-message {
+  position: relative;
+  z-index: 4;
+  color: #d0e8d0;
+  font-size: 17px;
+  letter-spacing: 3px;
+  text-align: center;
+  text-shadow: 0 0 15px #8cbd90;
+}
+
+.camera-label, .recording {
+  position: absolute;
+  z-index: 5;
+  top: 15px;
+  color: #d0e8d0;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.camera-label { left: 15px; }
+.recording { right: 15px; }
+
+.camera-buttons {
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 7px;
+  padding: 12px;
+}
+
+.camera-button {
+  padding: 13px 5px;
+  border: 1px solid var(--line);
+  background: #101812;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.camera-button.active {
+  border-color: var(--green);
+  background: #253b29;
+  color: white;
+}
+
+.camera-bottom {
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+  color: var(--muted);
+}
+
+.night-vision .camera-screen {
+  filter: grayscale(1) sepia(1) hue-rotate(65deg) saturate(4) brightness(1.5);
+}
+
+.terminal-top span, .live-feed-heading span { color: var(--muted); }
+
+.terminal-output {
+  min-height: 260px;
+  max-height: 340px;
+  padding: 20px;
+  overflow-y: auto;
+  color: #a6c9a8;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.terminal-output p { margin: 0 0 5px; }
+
+.green { color: #9de5a5; }
+.red { color: #f0787c; }
+
+.terminal-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  border-top: 1px solid var(--line);
+  background: #0b120d;
+}
+
+.terminal-form label {
+  color: var(--green-bright);
+  font-size: 11px;
+}
+
+.terminal-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 5px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: white;
+}
+
+.terminal-form button {
+  padding: 10px 14px;
+  border: 1px solid var(--green);
+  background: #18271b;
+  color: var(--green-bright);
+  font-size: 10px;
+}
+
+.terminal-hint {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.live-feed { margin-top: 25px; }
+
+#feedOutput {
+  padding: 10px 17px;
+  max-height: 170px;
+  overflow-y: auto;
+}
+
+#feedOutput p {
+  color: #91a095;
+  font-size: 10px;
+}
+
+.secret-section {
+  border-top: 1px solid rgba(200,70,70,.3);
+  background: rgba(80,20,20,.08);
+}
+
+.document {
+  max-width: 750px;
+  margin: auto;
+  padding: 35px;
+  border: 1px solid rgba(210,80,80,.4);
+  background: #0b100c;
+}
+
+.document h3 {
+  color: #e7a0a0;
+  font-size: 22px;
+}
+
+.document p {
+  color: #b6c0b7;
+  font-size: 13px;
+}
+
+.document hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 24px 0;
+}
+
+.secret-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+
+.secret-grid strong {
+  color: var(--red);
+  font-size: 11px;
+}
+
+.final-section { text-align: center; }
+
+.footer {
+  padding: 40px 15px;
+  border-top: 1px solid var(--line);
+  background: #050705;
+  color: var(--muted);
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.footer p { color: #59645b; }
+
+.modal {
+  position: fixed;
+  z-index: 500;
+  inset: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,.9);
+}
+
+.modal-content {
+  position: relative;
+  width: min(600px,100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 35px;
+  border: 1px solid var(--green);
+  background: #101812;
+}
+
+.modal-content h2 {
+  color: var(--green-bright);
+  font-size: 23px;
+}
+
+.modal-content p {
+  color: #b8c5b9;
+  font-size: 12px;
+  white-space: pre-line;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: 0;
+  background: none;
+  color: var(--red);
+  font-size: 28px;
+}
+
+.toast {
+  position: fixed;
+  z-index: 600;
+  left: 50%;
+  bottom: 25px;
+  transform: translate(-50%,20px);
+  padding: 13px 20px;
+  border: 1px solid var(--red);
+  background: #10110f;
+  color: #f1a0a0;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+  font-size: 11px;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%,0);
+}
+
+body.emergency {
+  filter: sepia(.15) hue-rotate(310deg);
+}
+
+@keyframes flash {
+  50% { opacity: .65; }
+}
+
+@media (max-width: 800px) {
+  .header { flex-wrap: wrap; }
+  .header nav { gap: 13px; }
+  .three-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+  .header { padding: 13px 17px; }
+  .menu-button { display: block; }
+  .header nav {
+    display: none;
+    width: 100%;
+    order: 3;
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+  .header nav.open { display: flex; }
+  .emergency-button { order: 2; }
+  .hero { min-height: 90vh; padding: 160px 24px 100px; }
+  .hero h1 { font-size: 65px; letter-spacing: -3px; }
+  .hero-code { font-size: 8px; }
+  .section { padding: 75px 0; }
+  .three-grid, .secret-grid { grid-template-columns: 1fr; }
+  .camera-screen { min-height: 260px; }
+  .camera-buttons { grid-template-columns: repeat(3,1fr); }
+  .terminal-form { flex-wrap: wrap; }
+  .terminal-form label { width: 100%; }
+  .terminal-form input { flex-basis: 55%; }
+  .document { padding: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
