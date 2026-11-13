@@ -186,7 +186,7 @@ No explanation was provided.
     document.body.classList.remove("has-overlay");
   }
 
-  $$(".file-button").forEach(button => {
+  $$("[data-file]").forEach(button => {
     button.addEventListener("click", () => openFile(button.dataset.file));
   });
 
