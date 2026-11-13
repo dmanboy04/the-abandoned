@@ -397,7 +397,7 @@ No explanation was provided.
   }
 
   // Ward 13 and final entry
-  const ward = $("#ward13Archive");
+ const ward = $("#ward13");
 
   function unlockWard13(shouldScroll = true) {
     if (!ward) {
@@ -439,7 +439,7 @@ No explanation was provided.
       return false;
     }
 
-    const project = $("#projectAbandoned");
+   const project = $("#projectArchive");
 
     if (!project) {
       printLine("PROJECT ARCHIVE NOT FOUND.", "terminal-red");
