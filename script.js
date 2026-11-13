@@ -350,7 +350,7 @@ No explanation was provided.
 
     if (!fileId) return false;
 
-    const archive = $("#secretArchives");
+    const archive = $("#secretFiles");
     const file = document.getElementById(fileId);
 
     if (!archive || !file) {
