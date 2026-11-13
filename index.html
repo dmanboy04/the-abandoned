@@ -1,272 +1,226 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080b09">
-  <meta name="description" content="The Abandoned — an interactive classified archive for a Roblox horror experience.">
-  <title>THE ABANDONED // CLASSIFIED FACILITY</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Special+Elite&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <title>THE ABANDONED // CLASSIFIED</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
 </head>
 <body>
-  <div class="ambient" aria-hidden="true">
-    <div class="ambient__fog ambient__fog--one"></div>
-    <div class="ambient__fog ambient__fog--two"></div>
-    <div class="ambient__grid"></div>
-    <div class="ambient__noise"></div>
-  </div>
+  <div class="background-grid"></div>
 
-  <header class="site-header">
-    <a class="brand" href="#home" id="logo" aria-label="The Abandoned home">THE<span>ABANDONED</span></a>
-    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="primaryNav">MENU</button>
-    <nav class="nav" id="primaryNav" aria-label="Main navigation">
+  <header class="header">
+    <a class="logo" href="#home">THE <span>ABANDONED</span></a>
+    <button id="menuButton" class="menu-button" type="button">MENU</button>
+    <nav id="navigation">
       <a href="#about">ABOUT</a>
-      <a href="#files">CLASSIFIED</a>
+      <a href="#files">FILES</a>
       <a href="#cameras">CAMERAS</a>
       <a href="#terminal">TERMINAL</a>
     </nav>
-    <div class="header-actions">
-      <button class="button button--small button--danger" id="emergencyToggle" type="button" aria-pressed="false"><span class="status-light"></span> EMERGENCY MODE</button>
-      <a class="button button--small button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">PLAY GAME ↗</a>
-    </div>
+    <button id="emergencyButton" class="emergency-button" type="button">⚠ EMERGENCY</button>
   </header>
 
-  <div class="emergency-banner" id="emergencyBanner" hidden role="alert">⚠ CONTAINMENT FAILURE // EMERGENCY PROTOCOL ACTIVE ⚠</div>
+  <div id="emergencyBanner" class="emergency-banner" hidden>
+    WARNING — CONTAINMENT FAILURE — EMERGENCY PROTOCOL ACTIVE
+  </div>
 
   <main>
-    <section class="hero" id="home">
-      <div class="hero__content">
-        <p class="eyebrow"><span class="status-light"></span> CLASSIFIED FACILITY // ACCESS RESTRICTED</p>
-        <h1 class="hero__title">THE<br><span>ABANDONED</span></h1>
-        <p class="hero__tagline">YOU WERE NEVER SUPPOSED TO WAKE UP.</p>
-        <p class="hero__description">An abandoned hospital. Unknown creatures. One mission: find a way out before the building finds you.</p>
-        <div class="hero__actions">
-          <a class="button button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">ENTER THE HOSPITAL ↗</a>
-          <a class="button button--outline" href="#about">INVESTIGATE ↓</a>
-        </div>
-        <p class="hero__warning">⚠ SURVIVAL IS NOT GUARANTEED</p>
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">CLASSIFIED FACILITY // ACCESS RESTRICTED</p>
+        <h1>THE<br><span>ABANDONED</span></h1>
+        <h2>YOU WERE NEVER SUPPOSED TO WAKE UP.</h2>
+        <p>An abandoned hospital. Unknown creatures. One mission: escape before the building finds you.</p>
+        <a class="main-button" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener">ENTER THE HOSPITAL ↗</a>
+        <p class="warning-text">⚠ SURVIVAL IS NOT GUARANTEED</p>
       </div>
-      <div class="hero__side" aria-hidden="true">
-        <span>FACILITY  //  013</span>
-        <span>EST. 03:17 AM</span>
-        <span class="hero__side-line"></span>
-        <span>STATUS: UNKNOWN</span>
-      </div>
-      <a class="scroll-cue" href="#about">SCROLL TO INVESTIGATE <span>↓</span></a>
+      <div class="hero-code">FACILITY 013<br>STATUS: UNKNOWN<br>TIME: 03:17 AM</div>
     </section>
 
-    <section class="section section--about reveal" id="about">
-      <div class="section-heading">
-        <p class="eyebrow">WELCOME TO YOUR WORST NIGHTMARE</p>
-        <h2>THERE IS NO <span>ESCAPE.</span></h2>
-        <p class="section-lead">The hospital was abandoned. The patients were not.</p>
-      </div>
-      <div class="about-grid">
-        <article class="about-card">
-          <span class="about-card__number">01 // SURVIVE</span>
+    <section id="about" class="section">
+      <p class="eyebrow">WELCOME TO YOUR WORST NIGHTMARE</p>
+      <h2>THERE IS NO <span>ESCAPE.</span></h2>
+      <p class="subtitle">The hospital was abandoned. The patients were not.</p>
+      <div class="three-grid">
+        <article class="panel">
+          <small>01 // SURVIVE</small>
           <h3>THE BUILDING IS NOT EMPTY</h3>
           <p>Explore the corridors, search for a way out and stay alert. Something is moving where nobody should be.</p>
         </article>
-        <article class="about-card">
-          <span class="about-card__number">02 // INVESTIGATE</span>
+        <article class="panel">
+          <small>02 // INVESTIGATE</small>
           <h3>THE RECORDS WERE ERASED</h3>
-          <p>Recover patient files, inspect the surveillance network and uncover what happened inside the facility.</p>
+          <p>Recover patient files, inspect surveillance cameras and uncover what happened inside the facility.</p>
         </article>
-        <article class="about-card">
-          <span class="about-card__number">03 // DO NOT TRUST</span>
+        <article class="panel">
+          <small>03 // DO NOT TRUST</small>
           <h3>NOTHING IS AS IT SEEMS</h3>
-          <p>Some messages are warnings. Some are bait. And some appear to know that you are reading them.</p>
+          <p>Some messages are warnings. Some are bait. And some know that you are reading them.</p>
         </article>
       </div>
     </section>
 
-    <section class="section reveal" id="files">
-      <div class="section-heading">
-        <p class="eyebrow">RESTRICTED INFORMATION // LEVEL 04</p>
-        <h2>CLASSIFIED <span>FILES</span></h2>
-        <p class="section-lead">Some things were never meant to be discovered.</p>
-      </div>
-      <div class="file-grid">
-        <article class="file-card">
-          <div class="file-card__top"><span>FILE #001</span><span class="classification">CLASSIFIED</span></div>
-          <div class="file-card__icon">▤</div>
+    <section id="files" class="section">
+      <p class="eyebrow">RESTRICTED INFORMATION // LEVEL 04</p>
+      <h2>CLASSIFIED <span>FILES</span></h2>
+      <p class="subtitle">Some things were never meant to be discovered.</p>
+      <div class="three-grid">
+        <article class="panel file-card">
+          <small>FILE #001 // CLASSIFIED</small>
           <h3>PATIENT RECORDS</h3>
           <p>Archived patient information. Several records are missing.</p>
-          <button class="text-button file-button" data-file="patient" type="button">OPEN FILE <span>↗</span></button>
+          <button class="text-button" data-file="patient" type="button">OPEN FILE ↗</button>
         </article>
-        <article class="file-card">
-          <div class="file-card__top"><span>FILE #002</span><span class="classification">TOP SECRET</span></div>
-          <div class="file-card__icon">◈</div>
+        <article class="panel file-card">
+          <small>FILE #002 // TOP SECRET</small>
           <h3>EXPERIMENT LOG</h3>
           <p>Unusual experiments were conducted beneath the hospital.</p>
-          <button class="text-button file-button" data-file="experiment" type="button">OPEN FILE <span>↗</span></button>
+          <button class="text-button" data-file="experiment" type="button">OPEN FILE ↗</button>
         </article>
-        <article class="file-card">
-          <div class="file-card__top"><span>FILE #003</span><span class="classification">REDACTED</span></div>
-          <div class="file-card__icon">◉</div>
+        <article class="panel file-card">
+          <small>FILE #003 // REDACTED</small>
           <h3>INCIDENT REPORT</h3>
           <p>An incident occurred. Nobody agrees on what happened.</p>
-          <button class="text-button file-button" data-file="incident" type="button">OPEN FILE <span>↗</span></button>
+          <button class="text-button" data-file="incident" type="button">OPEN FILE ↗</button>
         </article>
       </div>
     </section>
 
-    <section class="section reveal" id="cameras">
-      <div class="section-heading">
-        <p class="eyebrow">LIVE SURVEILLANCE NETWORK</p>
-        <h2>SECURITY <span>CAMERAS</span></h2>
-        <p class="section-lead">The cameras are still running. Something is moving.</p>
-      </div>
-      <div class="monitor">
-        <div class="monitor__top">
-          <span><i class="status-light"></i> SURVEILLANCE SYSTEM</span>
+    <section id="cameras" class="section">
+      <p class="eyebrow">LIVE SURVEILLANCE NETWORK</p>
+      <h2>SECURITY <span>CAMERAS</span></h2>
+      <p class="subtitle">The cameras are still running. Something is moving.</p>
+
+      <div class="camera-box">
+        <div class="camera-top">
+          <span>● SURVEILLANCE SYSTEM</span>
           <span id="cameraStatus">SYSTEM ONLINE</span>
         </div>
-        <div class="camera-screen" id="cameraScreen" data-camera="0">
-          <div class="camera-screen__scan"></div>
-          <div class="camera-screen__meta"><span id="cameraName">CAM 01 // MAIN HALL</span><span id="cameraTime">REC ●</span></div>
-          <div class="camera-scene" aria-hidden="true">
-            <div class="scene-light"></div><div class="scene-hall"></div><div class="scene-door"></div><div class="scene-figure" id="sceneFigure"></div>
+        <div id="cameraScreen" class="camera-screen">
+          <div class="camera-overlay"></div>
+          <div class="camera-label" id="cameraName">CAM 01 // MAIN HALL</div>
+          <div id="cameraScene" class="camera-scene">
+            <div class="hall-light"></div>
+            <div class="hall-door"></div>
+            <div class="hall-figure"></div>
           </div>
-          <div class="camera-message" id="cameraMessage">SIGNAL CONNECTED</div>
-          <div class="camera-screen__crosshair" aria-hidden="true">+</div>
-          <div class="camera-screen__corner camera-screen__corner--tl"></div>
-          <div class="camera-screen__corner camera-screen__corner--br"></div>
+          <div id="cameraMessage" class="camera-message">SIGNAL CONNECTED</div>
+          <div class="recording">REC ●</div>
         </div>
-        <div class="camera-controls" role="group" aria-label="Select security camera">
-          <button class="camera-button is-active" data-camera="0" type="button" aria-pressed="true">CAM 01</button>
-          <button class="camera-button" data-camera="1" type="button" aria-pressed="false">CAM 02</button>
-          <button class="camera-button" data-camera="2" type="button" aria-pressed="false">CAM 03</button>
-          <button class="camera-button" data-camera="3" type="button" aria-pressed="false">CAM 04</button>
-          <button class="camera-button camera-button--danger" data-camera="4" type="button" aria-pressed="false">CAM 05</button>
+        <div class="camera-buttons">
+          <button class="camera-button active" data-camera="0" type="button">CAM 01</button>
+          <button class="camera-button" data-camera="1" type="button">CAM 02</button>
+          <button class="camera-button" data-camera="2" type="button">CAM 03</button>
+          <button class="camera-button" data-camera="3" type="button">CAM 04</button>
+          <button class="camera-button" data-camera="4" type="button">CAM 05</button>
         </div>
-        <div class="monitor__bottom"><span>WARNING: FEEDS ARE SIMULATED</span><button id="nightVisionToggle" class="text-button" type="button" aria-pressed="false">◉ NIGHT VISION: OFF</button></div>
+        <div class="camera-bottom">
+          <span>SIMULATED SURVEILLANCE FEED</span>
+          <button id="nightVisionButton" class="text-button" type="button">NIGHT VISION: OFF</button>
+        </div>
       </div>
     </section>
 
-    <section class="section reveal" id="terminal">
-      <div class="section-heading">
-        <p class="eyebrow">INTERNAL SYSTEM // ROOT ACCESS</p>
-        <h2>FACILITY <span>TERMINAL</span></h2>
-        <p class="section-lead">Someone left the terminal running. Maybe it knows something.</p>
-      </div>
-      <div class="terminal-window">
-        <div class="terminal-window__top"><span>◉ FACILITY_TERMINAL.exe</span><span>SECURE CONNECTION <i class="status-light"></i></span></div>
-        <div class="terminal-output" id="terminalOutput" role="log" aria-live="polite" aria-relevant="additions">
-          <p class="terminal-green">THE ABANDONED // INTERNAL SYSTEM</p>
-          <p>---------------------------------------------</p>
+    <section id="terminal" class="section">
+      <p class="eyebrow">INTERNAL SYSTEM // ROOT ACCESS</p>
+      <h2>FACILITY <span>TERMINAL</span></h2>
+      <p class="subtitle">Someone left the terminal running. Maybe it knows something.</p>
+
+      <div class="terminal">
+        <div class="terminal-top">● FACILITY_TERMINAL.exe <span>SECURE CONNECTION</span></div>
+        <div id="terminalOutput" class="terminal-output" aria-live="polite">
+          <p class="green">THE ABANDONED // INTERNAL SYSTEM</p>
           <p>Connection established...</p>
-          <p>Type <span class="terminal-green">help</span> for available commands.</p>
+          <p>Type <span class="green">help</span> for available commands.</p>
         </div>
-        <form class="terminal-input-row" id="terminalForm">
+        <form id="terminalForm" class="terminal-form" action="#" method="get">
           <label for="terminalInput">GUEST@FACILITY:~$</label>
-          <input id="terminalInput" name="command" type="text" maxlength="80" autocomplete="off" spellcheck="false" placeholder="Enter command..." aria-label="Terminal command">
+          <input id="terminalInput" name="command" type="text" placeholder="Enter command..." autocomplete="off">
           <button type="submit">EXECUTE ↵</button>
         </form>
       </div>
-      <p class="terminal-hint">TRY: HELP / STATUS / FILES / CAMERAS / PLAY / EMERGENCY</p>
+      <p class="terminal-hint">TRY: HELP / STATUS / FILES / CAMERAS / WARD13</p>
 
       <div class="live-feed">
-        <div class="live-feed__top"><span><i class="status-light"></i> LIVE SYSTEM FEED</span><time id="liveFeedClock">--:--:--</time></div>
-        <div class="live-feed__log" id="liveFeedLog" aria-live="polite">
-          <p><time>BOOT</time> SYSTEM MONITORING INITIALIZED.</p>
-          <p><time>BOOT</time> WAITING FOR FACILITY RESPONSE...</p>
+        <div class="live-feed-heading">● LIVE SYSTEM FEED <span id="clock">--:--:--</span></div>
+        <div id="feedOutput">
+          <p>BOOT // SYSTEM MONITORING INITIALIZED.</p>
+          <p>BOOT // WAITING FOR FACILITY RESPONSE...</p>
         </div>
       </div>
     </section>
 
-    <section class="section hidden-archive reveal" id="ward13Archive" hidden>
-      <div class="section-heading">
-        <p class="eyebrow">UNAUTHORIZED ACCESS DETECTED</p>
-        <h2>WELCOME TO <span>WARD 13</span></h2>
-        <p class="section-lead">You found something that was never meant to be discovered.</p>
-      </div>
-      <div class="archive-document">
-        <span class="stamp">RESTRICTED</span>
+    <section id="ward13" class="section secret-section" hidden>
+      <p class="eyebrow">UNAUTHORIZED ACCESS DETECTED</p>
+      <h2>WELCOME TO <span>WARD 13</span></h2>
+      <div class="document">
         <h3>PATIENT 013</h3>
-        <div class="document-grid"><span>STATUS</span><strong>UNKNOWN</strong><span>LOCATION</span><strong>WARD 13</strong><span>LAST SEEN</span><strong>03:17 AM</strong></div>
+        <p>STATUS: UNKNOWN</p>
+        <p>LOCATION: WARD 13</p>
+        <p>LAST SEEN: 03:17 AM</p>
         <hr>
-        <p class="danger-text">THE PATIENT IS STILL INSIDE.</p>
-        <button id="readSecret" class="button button--solid" type="button">READ FINAL ENTRY</button>
-        <div id="secretEntry" class="secret-entry" hidden>
-          <h3>FINAL PATIENT ENTRY</h3>
-          <p>I can hear them outside the door. The lights have stopped working. Nobody is answering the phone.</p>
+        <p class="warning-text">THE PATIENT IS STILL INSIDE.</p>
+        <button id="readEntryButton" class="main-button" type="button">READ FINAL ENTRY</button>
+        <div id="finalEntry" hidden>
+          <p>I can hear them outside the door. The lights have stopped working.</p>
           <p>I thought I was alone. But something just whispered my name.</p>
-          <p class="danger-text">IF YOU ARE READING THIS, DO NOT OPEN THE DOOR.</p>
+          <p class="warning-text">IF YOU ARE READING THIS, DO NOT OPEN THE DOOR.</p>
         </div>
       </div>
     </section>
 
-    <section class="section hidden-archive reveal" id="secretArchives" hidden>
-      <div class="section-heading">
-        <p class="eyebrow">CLASSIFIED // RESTRICTED ACCESS</p>
-        <h2>RECOVERED <span>FILES</span></h2>
-        <p class="section-lead">Five fragments. One classified project.</p>
-      </div>
-      <div class="secret-file-grid">
-        <article class="secret-file" id="filePatient" hidden><h3>THE PATIENT</h3><p>Audio recording recovered from Room 13.</p><p>“He keeps asking for a doctor. There are no doctors left.”</p><p class="danger-text">RECORDING TERMINATED.</p><strong>RECOVERED FRAGMENT: P</strong></article>
-        <article class="secret-file" id="fileNightshift" hidden><h3>NIGHT SHIFT LOG</h3><p>03:17 AM — Movement detected in the eastern hallway.</p><p>03:19 AM — Camera disconnected.</p><p>03:21 AM — Someone knocked on the security room door.</p><p class="danger-text">NO STAFF WERE SCHEDULED.</p><strong>RECOVERED FRAGMENT: R</strong></article>
-        <article class="secret-file" id="file0427" hidden><h3>FILE 0427</h3><p>Patient status: UNKNOWN.</p><p>Room: 0427.</p><p>Last known location: Basement.</p><p class="danger-text">DO NOT SEARCH FOR THIS PATIENT.</p><strong>RECOVERED FRAGMENT: O</strong></article>
-        <article class="secret-file" id="fileDontlook" hidden><h3>FINAL WARNING</h3><p>It is standing behind you.</p><p>Do not turn around.</p><p>It knows you are reading this.</p><p class="danger-text">DON'T LOOK.</p><strong>RECOVERED FRAGMENT: J</strong></article>
-        <article class="secret-file" id="fileStalker" hidden><h3>SUBJECT: THE STALKER</h3><p>It has been following patients throughout the facility.</p><p>It does not attack when watched.</p><p>It moves when the lights go out.</p><p class="danger-text">SUBJECT LOCATION: UNKNOWN.</p><strong>RECOVERED FRAGMENT: ECT</strong></article>
+    <section id="secretFiles" class="section secret-section" hidden>
+      <p class="eyebrow">CLASSIFIED // RECOVERED DATA</p>
+      <h2>RECOVERED <span>FILES</span></h2>
+      <div class="secret-grid">
+        <article id="filePatient" class="panel" hidden><h3>THE PATIENT</h3><p>“He keeps asking for a doctor. There are no doctors left.”</p><strong>FRAGMENT: P</strong></article>
+        <article id="fileNightshift" class="panel" hidden><h3>NIGHT SHIFT LOG</h3><p>03:17 — Movement detected. 03:19 — Camera disconnected.</p><strong>FRAGMENT: R</strong></article>
+        <article id="file0427" class="panel" hidden><h3>FILE 0427</h3><p>Patient status: UNKNOWN. Last known location: Basement.</p><strong>FRAGMENT: O</strong></article>
+        <article id="fileDontlook" class="panel" hidden><h3>FINAL WARNING</h3><p>It is standing behind you. Do not turn around.</p><strong>FRAGMENT: J</strong></article>
+        <article id="fileStalker" class="panel" hidden><h3>THE STALKER</h3><p>It moves when the lights go out. It knows when you are watching.</p><strong>FRAGMENT: ECT</strong></article>
       </div>
     </section>
 
-    <section class="section hidden-archive reveal" id="projectAbandoned" hidden>
-      <div class="section-heading">
-        <p class="eyebrow">ULTRA CLASSIFIED // LEVEL 05</p>
-        <h2>PROJECT <span>ABANDONED</span></h2>
-        <p class="danger-text">WARNING: UNAUTHORIZED ACCESS DETECTED</p>
-      </div>
-      <div class="archive-document archive-document--red">
-        <span class="stamp stamp--red">TOP SECRET</span>
+    <section id="projectArchive" class="section secret-section" hidden>
+      <p class="eyebrow">ULTRA CLASSIFIED // LEVEL 05</p>
+      <h2>PROJECT <span>ABANDONED</span></h2>
+      <div class="document">
         <h3>PROJECT REPORT // 000</h3>
-        <div class="document-grid"><span>PROJECT STATUS</span><strong>ACTIVE</strong><span>LOCATION</span><strong>UNKNOWN</strong><span>ALL STAFF</span><strong>MISSING</strong></div>
+        <p>PROJECT STATUS: ACTIVE</p>
+        <p>LOCATION: UNKNOWN</p>
+        <p>ALL STAFF: MISSING</p>
         <hr>
-        <p>The hospital was never built to treat patients.</p><p>It was built to contain something.</p><p>The experiments were successful.</p><p>The containment was not.</p>
-        <hr>
-        <h3>FINAL MESSAGE</h3><p>If you found this file, you have gone too far.</p><p>They know you are here.</p><p class="danger-text">PROJECT ABANDONED IS NOT OVER.</p>
+        <p>The hospital was never built to treat patients.</p>
+        <p>It was built to contain something.</p>
+        <p>The experiments were successful.</p>
+        <p class="warning-text">THE CONTAINMENT WAS NOT.</p>
       </div>
     </section>
 
-    <section class="section final-cta reveal">
+    <section class="section final-section">
       <p class="eyebrow">YOUR NIGHTMARE STARTS HERE</p>
       <h2>WILL YOU <span>SURVIVE?</span></h2>
-      <p>The hospital is waiting for you.</p>
-      <a class="button button--solid" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener noreferrer">PLAY THE ABANDONED ↗</a>
+      <a class="main-button" href="https://www.roblox.com/games/116357638869409/The-Abandoned" target="_blank" rel="noopener">PLAY THE ABANDONED ↗</a>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a class="brand" href="#home">THE<span>ABANDONED</span></a>
-    <p>A ROBLOX HORROR EXPERIENCE</p>
-    <p class="site-footer__copy">© 2026 THE ABANDONED. ALL RIGHTS RESERVED.</p>
+  <footer class="footer">
+    THE ABANDONED // A ROBLOX HORROR EXPERIENCE
+    <p>© 2026 THE ABANDONED</p>
   </footer>
 
-  <div class="broadcast-overlay" id="broadcastAlert" hidden role="dialog" aria-modal="true" aria-labelledby="alertHeadline" aria-describedby="alertMessage">
-    <div class="broadcast-card">
-      <div class="broadcast-card__symbol">⚠</div>
-      <p class="eyebrow">EMERGENCY BROADCAST</p>
-      <h2 id="alertHeadline">FACILITY ALERT</h2>
-      <p id="alertMessage">PLEASE REMAIN CALM.</p>
-      <button id="closeBroadcastAlert" class="button button--danger" type="button">ACKNOWLEDGE</button>
-    </div>
-  </div>
-
-  <div class="file-modal" id="fileModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="file-modal__card">
-      <button class="modal-close" id="closeModal" type="button" aria-label="Close document">×</button>
+  <div id="fileModal" class="modal" hidden>
+    <div class="modal-content">
+      <button id="closeModal" class="close-button" type="button">×</button>
       <p class="eyebrow">CONFIDENTIAL DOCUMENT</p>
       <h2 id="modalTitle">DOCUMENT</h2>
-      <div id="modalText" class="modal-text"></div>
-      <p class="danger-text modal-warning">UNAUTHORIZED ACCESS WILL BE REPORTED.</p>
+      <div id="modalText"></div>
     </div>
   </div>
 
-  <div class="toast" id="secretMessage" role="status" aria-live="polite"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
