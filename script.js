@@ -419,10 +419,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (screen) screen.textContent = message;
 
-        if (alert) {
-            const text = alert.querySelector("p");
-            if (text) text.textContent = message;
-            alert.classList.add("active");
+       if (alert) {
+    const text = alert.querySelector("p");
+    if (text) text.textContent = message;
+
+    alert.hidden = false;
+    alert.classList.add("active");
+}
         }
 
         log("[EMERGENCY] Broadcast transmission received.");
